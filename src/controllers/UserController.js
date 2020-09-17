@@ -2,6 +2,21 @@ const User = require('../models/User');
 
 module.exports = {
 
+    async get(req, res) {
+        const { email, password} = req.body;
+
+        const user = await User.findOne({ where: { 
+            email: email,
+            password: password
+        }});
+
+        if(!user) {
+            return res.status(400).json({ error: 'User Not Found'});
+        }
+
+        return res.status(200).json(user);
+    },
+
     async create(req, res) {
         const { name, email, password, active = 1 } = req.body;
 

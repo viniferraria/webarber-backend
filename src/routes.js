@@ -9,6 +9,7 @@ routes.get('/', (req, res) => {
     });
 });
 
+routes.get('/users', UserController.get);
 routes.post('/users', UserController.create);
 routes.patch('/users/:user_id', UserController.update);
 routes.delete('/users/:user_id', UserController.delete);
