@@ -7,7 +7,7 @@
     "first": "yarn install && yarn sequelize db:create && yarn sequelize db:migrate",
     "dev": "nodemon src/server.js",
     "test": "jest --no-cache --forceExit",
-    "start": "yarn install && yarn sequelize db:migrate && node ./src/server.js"
+    "start": "node ./src/server.js"
   },
   "dependencies": {
     "dotenv": "^8.2.0",

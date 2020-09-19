@@ -4,7 +4,12 @@ module.exports = (sequelize, DataTypes) => {
             type: DataTypes.INTEGER,
             primaryKey: true
         },
-        tipoDescricao: DataTypes.STRING,
+        tipoDescricao: {
+            type: DataTypes.STRING,
+            allowNull: false
+        },
+    }, {
+        timestamps: false
     });
 
     return TipoUsuario;

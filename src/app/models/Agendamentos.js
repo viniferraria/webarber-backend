@@ -46,6 +46,8 @@ module.exports = (sequelize, DataTypes) => {
             }
         },
         icone: DataTypes.STRING.BINARY
+    }, {
+        timestamps: false
     });
 
     return Agendamentos;

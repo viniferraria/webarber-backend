@@ -22,6 +22,8 @@ module.exports = (sequelize, DataTypes) => {
             }
         },
         nota: DataTypes.FLOAT
+    }, {
+        timestamps: false
     });
 
     return AvaliacaoUsuario;

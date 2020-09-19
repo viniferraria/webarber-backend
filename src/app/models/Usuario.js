@@ -8,22 +8,38 @@ module.exports = (sequelize, DataTypes) => {
             type: DataTypes.INTEGER,
             primaryKey: true
         },
-        nome: DataTypes.STRING,
-        sobrenome: DataTypes.STRING,
-        email: DataTypes.STRING,
+        nome: {
+            type: DataTypes.STRING,
+            allowNull: false
+        },
+        sobrenome: {
+            type: DataTypes.STRING,
+            allowNull: false
+        },
+        email: {
+            type: DataTypes.STRING,
+            allowNull: false
+        },
         password: DataTypes.VIRTUAL,
-        password_hash: DataTypes.STRING,
-        ativo: Datatypes.BOOLEAN,
+        password_hash: {
+            type: DataTypes.STRING,
+            allowNull: false
+        },
+        ativo: {
+            type: Datatypes.BOOLEAN,
+            allowNull: false
+        },
         CNPJ: {
             type: Datatypes.STRING,
-            unique: true
+            unique: true,
         },
         CPF: {
             type: Datatypes.STRING,
-            unique: true
+            unique: true,
         },
         idTipo: {
             type: DataTypes.INTEGER,
+            allowNull: false,
             references: {
                 model: TipoUsuario,
                 key: 'idTipo'

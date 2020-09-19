@@ -7,8 +7,14 @@ module.exports = (sequelize, DataTypes) => {
             type: DataTypes.INTEGER,
             primaryKey: true
         },
-        data: DataTypes.DATE,
-        horarios: DataTypes.DATE,
+        data: {
+            type: DataTypes.DATE,
+            allowNull: false
+        },
+        horarios: {
+            type: DataTypes.DATE,
+            allowNull: false
+        },
         idBarbearia: {
             type: Datatypes.INTEGER,
             references: {
@@ -23,6 +29,8 @@ module.exports = (sequelize, DataTypes) => {
                 key: 'idServico'
             }
         },
+    }, {
+        updatedAt: false
     });
 
     return Agenda;

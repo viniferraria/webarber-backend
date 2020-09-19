@@ -4,7 +4,12 @@ module.exports = (sequelize, DataTypes) => {
             type: DataTypes.INTEGER,
             primaryKey: true
         },
-        nomeStatus: DataTypes.STRING,
+        nomeStatus: {
+            type: DataTypes.STRING,
+            allowNull: false
+        } 
+    }, {
+        timestamps: false
     });
 
     return StatusAgendamento;
