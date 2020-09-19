@@ -4,7 +4,7 @@ const TipoUsuario = require('./TipoUsuario');
 
 module.exports = (sequelize, DataTypes) => {
     const Usuario = sequelize.define("Usuario", {
-        idUsuario: {
+        id: {
             type: DataTypes.INTEGER,
             primaryKey: true
         },

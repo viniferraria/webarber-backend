@@ -2,7 +2,7 @@ const Agenda = require("./Agenda");
 
 module.exports = (sequelize, DataTypes) => {
     const Barbearia = sequelize.define("Barbearia", {
-        idBarbearia: {
+        id: {
             type: DataTypes.INTEGER,
             primaryKey: true
         },
