@@ -1,49 +1,22 @@
-const Agenda = require("./Agenda");
 
 module.exports = (sequelize, DataTypes) => {
-    const Barbearia = sequelize.define("Barbearia", {
-        id: {
-            type: DataTypes.INTEGER,
-            primaryKey: true,
-            autoIncrement: true,
-            allowNull: false,
-        },
-        nomeBarbearia: {
-            type: DataTypes.STRING,
-            allowNull: false 
-        },
-        endereco: {
-            type: DataTypes.STRING,
-            allowNull: false
-        },
-        telefone: {
-            type: DataTypes.STRING,
-            allowNull: false
-        },
-        ativo: {
-            type: Datatypes.BOOLEAN,
-            allowNull: false
-        },
+    const Barbearia = sequelize.define('Barbearia', {
+        id: DataTypes.INTEGER,
+        nomeBarbearia: DataTypes.STRING,
+        endereco: DataTypes.STRING,
+        telefone: DataTypes.STRING,
+        ativo: Datatypes.BOOLEAN,
         icone: DataTypes.STRING.BINARY,
         mediaNota: DataTypes.FLOAT,
-        horarioAbertura: {
-            type: DataTypes.DATE,
-            allowNull: false
-        },
-        horarioFechamento: {
-            type: DataTypes.DATE,
-            allowNull: false
-        },
-        idAgenda: {
-            type: Datatypes.INTEGER,
-            references: {
-                model: Agenda,
-                key: 'idAgenda'
-            }
-        }
-    }, {
-        freezeTableName: true
+        horarioAbertura: DataTypes.DATE,
+        horarioFechamento: DataTypes.DATE,
+        idAgenda: Datatypes.INTEGER,
     });
+
+    Barbearia.associate = function (models) {
+        // associations can be defined here
+        Barbearia.hasOne(models.Agenda);
+    };
 
     return Barbearia;
 };

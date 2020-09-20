@@ -1,52 +1,20 @@
 const bcrypt = require('bcryptjs');
 // const jwt = require('jsonwebtoken');
-const TipoUsuario = require('./TipoUsuario');
 
 module.exports = (sequelize, DataTypes) => {
     const Usuario = sequelize.define("Usuario", {
-        id: {
-            type: DataTypes.INTEGER,
-            primaryKey: true,
-            autoIncrement: true,
-        },
-        nome: {
-            type: DataTypes.STRING,
-            allowNull: false
-        },
-        sobrenome: {
-            type: DataTypes.STRING,
-            allowNull: false
-        },
-        email: {
-            type: DataTypes.STRING,
-            allowNull: false
-        },
+        id: DataTypes.INTEGER,
+        nome: DataTypes.STRING,
+        sobrenome: DataTypes.STRING,
+        email: DataTypes.STRING,
         password: DataTypes.VIRTUAL,
-        password_hash: {
-            type: DataTypes.STRING,
-            allowNull: false
-        },
-        ativo: {
-            type: Datatypes.BOOLEAN,
-            allowNull: false
-        },
-        CNPJ: {
-            type: Datatypes.STRING,
-            unique: true,
-        },
-        CPF: {
-            type: Datatypes.STRING,
-            unique: true,
-        },
-        idTipo: {
-            type: DataTypes.INTEGER,
-            allowNull: false,
-            references: {
-                model: TipoUsuario,
-                key: 'idTipo'
-            }
-        },
-        icone: DataTypes.STRING.BINARY
+        password_hash: DataTypes.STRING,
+        ativo: Datatypes.BOOLEAN,
+        CNPJ: Datatypes.STRING,
+        CPF: Datatypes.STRING,
+        idTipo: DataTypes.INTEGER,
+        icone: DataTypes.STRING.BINARY,
+        sessionToken: Datatypes.STRING
     }, {
         hooks: {
             beforeSave: async user => {
@@ -55,8 +23,12 @@ module.exports = (sequelize, DataTypes) => {
                 }
             }
         },
-        freezeTableName: true
     });
+
+    Usuario.associate = function (models) {
+        // associations can be defined here
+        Usuario.hasOne(models.TipoUsuario);
+    };
 
     Usuario.prototype.checkPassword = function(password) {
         return bcrypt.compare(password, this.password_hash);

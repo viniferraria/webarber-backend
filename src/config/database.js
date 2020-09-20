@@ -6,7 +6,7 @@ module.exports = {
     port: 7120,
     username: process.env.DB_USERNAME || 'docker',
     password: process.env.DB_PASSWORD || 'docker',
-    database: process.env.DB_NAME || 'nodeauth',
+    database: process.env.DB_NAME || 'learning',
     define: {
         timestamps: true, 
         underscored: true

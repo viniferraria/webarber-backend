@@ -3,30 +3,10 @@ const Usuario = require("./Usuario");
 
 module.exports = (sequelize, DataTypes) => {
     const AvaliacaoUsuario = sequelize.define("AvaliacaoUsuario", {
-        idAvaliacao: {
-            type: DataTypes.INTEGER,
-            primaryKey: true,
-            autoIncrement: true,
-            allowNull: false,
-        },
-        idUsuario: {
-            type: DataTypes.INTEGER,
-            references: {
-                model: Usuario,
-                key: 'idUsuario'
-            }
-        },
-        idBarbearia: {
-            type: DataTypes.INTEGER,
-            references: {
-                model: Barbearia,
-                key: 'idBarbearia'
-            }
-        },
+        id: DataTypes.INTEGER,
+        idUsuario: DataTypes.INTEGER,
+        idBarbearia: DataTypes.INTEGER,
         nota: DataTypes.FLOAT
-    }, {
-        timestamps: false,
-        freezeTableName: true
     });
 
     return AvaliacaoUsuario;

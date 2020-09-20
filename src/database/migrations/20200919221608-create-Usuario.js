@@ -1,13 +1,12 @@
 'use strict';
-
-const Usuario = require('../../app/models/Usuario');
-
 module.exports = {
   up: async (queryInterface, Sequelize) => {
-    await queryInterface.createTable("Usuario", {
+    await queryInterface.createTable('Usuario', {
       id: {
         type: Sequelize.INTEGER,
-        primaryKey: true
+        primaryKey: true,
+        autoIncrement: true,
+        allowNull: false
       },
       nome: {
         type: Sequelize.STRING,
@@ -44,10 +43,13 @@ module.exports = {
           model: {
             tableName: 'TipoUsuario',
           },
-          key: 'idTipo'
+          key: 'id'
         }
       },
-      icone: Sequelize.STRING.BINARY
+      icone: Sequelize.STRING.BINARY,
+      sessionToken: Sequelize.STRING,
+    }, {
+      freezeTableName: true
     });
   },
   down: async (queryInterface, Sequelize) => {
