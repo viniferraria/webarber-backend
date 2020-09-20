@@ -8,7 +8,9 @@ module.exports = (sequelize, DataTypes) => {
     const Agendamentos = sequelize.define("Agendamentos", {
         idAgendamento: {
             type: DataTypes.INTEGER,
-            primaryKey: true
+            primaryKey: true,
+            autoIncrement: true,
+            allowNull: false,
         },
         idBarbearia: {
             type: DataTypes.INTEGER,

@@ -5,7 +5,9 @@ module.exports = (sequelize, DataTypes) => {
     const Agenda = sequelize.define("Agenda", {
         idAgenda: {
             type: DataTypes.INTEGER,
-            primaryKey: true
+            primaryKey: true,
+            autoIncrement: true,
+            allowNull: false,
         },
         data: {
             type: DataTypes.DATE,

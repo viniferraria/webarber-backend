@@ -4,7 +4,9 @@ module.exports = (sequelize, DataTypes) => {
     const Barbearia = sequelize.define("Barbearia", {
         id: {
             type: DataTypes.INTEGER,
-            primaryKey: true
+            primaryKey: true,
+            autoIncrement: true,
+            allowNull: false,
         },
         nomeBarbearia: {
             type: DataTypes.STRING,
