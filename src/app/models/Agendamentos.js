@@ -10,11 +10,11 @@ module.exports = (sequelize, DataTypes) => {
     });
 
     Agendamentos.associate = function (models) {
+        Agendamentos.belongsTo(models.Agenda);
         Agendamentos.hasOne(models.Barbearia);
         Agendamentos.hasOne(models.Usuario);
         Agendamentos.hasOne(models.StatusAgendamento);
         Agendamentos.hasOne(models.ServicoBarbearia);
-        Agendamentos.hasOne(models.Agenda);
     };
 
 

@@ -5,6 +5,12 @@ module.exports = (sequelize, DataTypes) => {
         preco: DataTypes.STRING,
     });
 
+    ServicoBarbearia.associate = function (models) {
+        // associations can be defined here
+        ServicoBarbearia.belongsTo(models.Agendamentos);
+        ServicoBarbearia.belongsTo(models.ServicoBarbearia);
+    };
+
     return ServicoBarbearia;
 };
 

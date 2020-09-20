@@ -4,5 +4,10 @@ module.exports = (sequelize, DataTypes) => {
         nomeStatus: DataTypes.STRING,
     });
 
+    StatusAgendamento.associate = function (models) {
+        // associations can be defined here
+        StatusAgendamento.belongsTo(models.Agendamentos);
+    };
+
     return StatusAgendamento;
 };

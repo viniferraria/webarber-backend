@@ -9,5 +9,10 @@ module.exports = (sequelize, DataTypes) => {
         nota: DataTypes.FLOAT
     });
 
+    // AvaliacaoUsuario.associate = function (models) {
+    //     AvaliacaoUsuario.hasOne(models.Usuario);
+    //     AvaliacaoUsuario.hasOne(models.Barbearia);
+    // };
+
     return AvaliacaoUsuario;
 };

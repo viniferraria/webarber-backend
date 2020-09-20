@@ -16,6 +16,9 @@ module.exports = (sequelize, DataTypes) => {
     Barbearia.associate = function (models) {
         // associations can be defined here
         Barbearia.hasOne(models.Agenda);
+        Barbearia.belongsToMany(models.Agendamentos);
+        Barbearia.belongsToMany(models.AvaliacaoUsuario);
+        
     };
 
     return Barbearia;

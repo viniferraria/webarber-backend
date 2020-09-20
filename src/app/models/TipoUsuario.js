@@ -4,5 +4,10 @@ module.exports = (sequelize, DataTypes) => {
         tipoDescricao: DataTypes.STRING,
     });
 
+    TipoUsuario.associate = function (models) {
+        // associations can be defined here
+        TipoUsuario.belongsTo(models.Usuario);
+    };
+
     return TipoUsuario;
 };

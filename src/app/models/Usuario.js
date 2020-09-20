@@ -28,6 +28,8 @@ module.exports = (sequelize, DataTypes) => {
     Usuario.associate = function (models) {
         // associations can be defined here
         Usuario.hasOne(models.TipoUsuario);
+        Usuario.belongsToMany(models.Agendamentos);
+        Usuario.belongsToMany(models.AvaliacaoUsuario);
     };
 
     Usuario.prototype.checkPassword = function(password) {

@@ -7,5 +7,11 @@ module.exports = (sequelize, DataTypes) => {
         idServicoBarbearia: Datatypes.INTEGER,
     });
 
+    Agenda.associate = function (models) {
+        Agenda.belongsTo(models.Barbearia);
+        Agenda.hasMany(models.ServicoBarbearia);
+        Agenda.hasMany(models.Agendamentos)
+    };
+
     return Agenda;
 };
