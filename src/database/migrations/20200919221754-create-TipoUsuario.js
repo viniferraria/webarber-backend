@@ -1,18 +1,10 @@
 'use strict';
+
+const TipoUsuario = require('../../app/models/TipoUsuario');
+
 module.exports = {
     up: async (queryInterface, Sequelize) => {
-        await queryInterface.createTable("TipoUsuario", {
-            id: {
-                type: DataTypes.INTEGER,
-                primaryKey: true
-            },
-            tipoDescricao: {
-                type: DataTypes.STRING,
-                allowNull: false
-            },
-        }, {
-            timestamps: false
-        });
+        await queryInterface.createTable("TipoUsuario", TipoUsuario);
     },
     down: async (queryInterface, Sequelize) => {
         await queryInterface.dropTable('TipoUsuario');

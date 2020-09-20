@@ -30,7 +30,8 @@ module.exports = (sequelize, DataTypes) => {
             }
         },
     }, {
-        updatedAt: false
+        updatedAt: false,
+        freezeTableName: true
     });
 
     return Agenda;

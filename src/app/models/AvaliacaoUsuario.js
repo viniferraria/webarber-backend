@@ -23,7 +23,8 @@ module.exports = (sequelize, DataTypes) => {
         },
         nota: DataTypes.FLOAT
     }, {
-        timestamps: false
+        timestamps: false,
+        freezeTableName: true
     });
 
     return AvaliacaoUsuario;

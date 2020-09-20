@@ -1,5 +1,5 @@
 const bcrypt = require('bcryptjs');
-const jwt = require('jsonwebtoken');
+// const jwt = require('jsonwebtoken');
 const TipoUsuario = require('./TipoUsuario');
 
 module.exports = (sequelize, DataTypes) => {
@@ -53,7 +53,8 @@ module.exports = (sequelize, DataTypes) => {
                     user.password_hash = await bcrypt.hash(user.password, 8);
                 }
             }
-        }
+        },
+        freezeTableName: true
     });
 
     Usuario.prototype.checkPassword = function(password) {

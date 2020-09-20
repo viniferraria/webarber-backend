@@ -39,6 +39,8 @@ module.exports = (sequelize, DataTypes) => {
                 key: 'idAgenda'
             }
         }
+    }, {
+        freezeTableName: true
     });
 
     return Barbearia;

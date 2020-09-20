@@ -9,7 +9,8 @@ module.exports = (sequelize, DataTypes) => {
             allowNull: false
         } 
     }, {
-        timestamps: false
+        timestamps: false,
+        freezeTableName: true
     });
 
     return StatusAgendamento;

@@ -47,7 +47,8 @@ module.exports = (sequelize, DataTypes) => {
         },
         icone: DataTypes.STRING.BINARY
     }, {
-        timestamps: false
+        timestamps: false,
+        freezeTableName: true
     });
 
     return Agendamentos;
