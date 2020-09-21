@@ -10,6 +10,8 @@ module.exports = (sequelize, DataTypes) => {
         horarios: DataTypes.DATE,
         idBarbearia: DataTypes.INTEGER,
         idServicoBarbearia: DataTypes.INTEGER,
+    }, {
+        updatedAt: false
     });
 
     // Agenda.associate = function (models) {
