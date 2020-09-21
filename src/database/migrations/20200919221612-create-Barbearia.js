@@ -34,13 +34,14 @@ module.exports = {
                 type: Sequelize.DATE,
                 allowNull: false
             },
-            // idAgenda: {
-            //     type: Sequelize.INTEGER,
-            //     references: {
-            //         model: 'Agenda',
-            //         key: 'id'
-            //     }
-            // }
+            createdAt: {
+                allowNull: false,
+                type: Sequelize.DATE
+            },
+            updatedAt: {
+                allowNull: false,
+                type: Sequelize.DATE
+            }
         }, {
             freezeTableName: true
         });

@@ -48,6 +48,14 @@ module.exports = {
       },
       icone: Sequelize.STRING.BINARY,
       sessionToken: Sequelize.STRING,
+      createdAt: {
+        allowNull: false,
+        type: Sequelize.DATE
+      },
+      updatedAt: {
+        allowNull: false,
+        type: Sequelize.DATE
+      }
     }, {
       freezeTableName: true
     });

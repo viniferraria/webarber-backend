@@ -10,7 +10,9 @@ module.exports = {
       password_hash: 'asdasdasd',
       ativo: true,
       CPF: '231.123.183-99',
-      idTipo: 1
+      idTipo: 1,
+      createdAt: new Date(),
+      updatedAt: new Date()
     }]);
   },
 
