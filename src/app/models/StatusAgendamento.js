@@ -1,13 +1,18 @@
 module.exports = (sequelize, DataTypes) => {
     const StatusAgendamento = sequelize.define("StatusAgendamento", {
-        id: DataTypes.INTEGER,
+        id: {
+            type: DataTypes.INTEGER,
+            primaryKey: true,
+            autoIncrement: true,
+            allowNull: false,
+        },
         nomeStatus: DataTypes.STRING,
     });
 
-    StatusAgendamento.associate = function (models) {
-        // associations can be defined here
-        StatusAgendamento.belongsTo(models.Agendamentos);
-    };
+    // StatusAgendamento.associate = function (models) {
+    //     // associations can be defined here
+    //     StatusAgendamento.belongsTo(models.Agendamentos);
+    // };
 
     return StatusAgendamento;
 };

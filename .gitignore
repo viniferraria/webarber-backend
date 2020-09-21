@@ -284,3 +284,6 @@ dist
 
 # TernJS port file
 .tern-port
+
+
+/home/morgan/Projects/Node/webarber-backend/src/database/seeders/20200920213009-Usuario.js
