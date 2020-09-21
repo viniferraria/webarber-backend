@@ -4,5 +4,7 @@ const { DatabaseError } = require('sequelize');
 
 module.exports = {
     config: path.resolve(__dirname, 'src', 'config', 'database.js'),
+    'models-path': path.resolve('src', 'app', 'models'),
+	'seeders-path': path.resolve('src', 'database', 'seeders'),
     'migrations-path': path.resolve(__dirname, 'src', 'database', 'migrations')
 };
