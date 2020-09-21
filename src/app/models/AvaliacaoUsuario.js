@@ -12,6 +12,8 @@ module.exports = (sequelize, DataTypes) => {
         idUsuario: DataTypes.INTEGER,
         idBarbearia: DataTypes.INTEGER,
         nota: DataTypes.FLOAT
+    }, {
+        timestamps: false
     });
 
     // AvaliacaoUsuario.associate = function (models) {

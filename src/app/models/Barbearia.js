@@ -16,6 +16,8 @@ module.exports = (sequelize, DataTypes) => {
         horarioAbertura: DataTypes.DATE,
         horarioFechamento: DataTypes.DATE,
         idAgenda: DataTypes.INTEGER,
+    }, {
+        timestamps: false
     });
 
     // Barbearia.associate = function (models) {

@@ -7,6 +7,8 @@ module.exports = (sequelize, DataTypes) => {
             allowNull: false,
         },
         nomeStatus: DataTypes.STRING,
+    }, {
+        timestamps: false
     });
 
     // StatusAgendamento.associate = function (models) {
