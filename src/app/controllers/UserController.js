@@ -89,5 +89,23 @@ module.exports = {
         // }})
 
         return res.status(200).json({ message: "User deleted"});
+    },
+
+    async login(req, res) {
+        const { email, password } = req.params;
+        const user = await Usuario.findOne({ where: email });
+
+        try {
+            let equals = user.checkPassword(password);
+            if (equals) {
+                return res.status(200).json({  message: 'Login!' });
+            } else {
+                throw new Error('Wrong password');
+            }
+        } catch (err) {
+            res.status(400).json({ message: 'Wrong password' });
+        }
+
+
     }
 };

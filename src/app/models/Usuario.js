@@ -33,9 +33,10 @@ module.exports = (sequelize, DataTypes) => {
         },
     });
 
-    // Usuario.prototype.checkPassword = function(password) {
-    //     return bcrypt.compare(password, this.password_hash);
-    // }
+    Usuario.prototype.checkPassword = async function(password) {
+        let equals =  await bcrypt.compare(password, this.password_hash);
+        return equals;
+    }
     
     // Usuario.prototype.generateToken = function() {
     //     return jwt.sign({ id: this.id }, process.env.APP_SECRET);
