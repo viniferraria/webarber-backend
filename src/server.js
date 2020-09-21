@@ -8,6 +8,7 @@ require('./database');
 const app = express();
 
 app.use(cors());
+app.option('*', cors());
 app.use(express.json());
 app.use(routes);
 
