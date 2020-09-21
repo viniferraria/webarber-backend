@@ -2,7 +2,7 @@ const express = require('express');
 const routes = express.Router();
 
 const UserController = require('./app/controllers/UserController');
-const { TipoUsuario } = require('../models');
+const { TipoUsuario } = require('./app/models');
 
 routes.get('/', (req, res) => {
     return res.status(200).json({
@@ -10,7 +10,7 @@ routes.get('/', (req, res) => {
     });
 });
 
-routers.get('/tipos', async (req, res) => {
+routes.get('/tipos', async (req, res) => {
     let tipos = await TipoUsuario.findAll({
         order: [
             ['id', 'ASC']

@@ -35,13 +35,6 @@ module.exports = (sequelize, DataTypes) => {
         },
     });
 
-    Usuario.associate = function (models) {
-        // associations can be defined here
-        Usuario.hasOne(models.TipoUsuario);
-    //     Usuario.belongsTo(models.Agendamentos);
-    //     Usuario.belongsTo(models.AvaliacaoUsuario);
-    };
-
     // Usuario.prototype.checkPassword = function(password) {
     //     return bcrypt.compare(password, this.password_hash);
     // }

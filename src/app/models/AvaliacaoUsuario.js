@@ -12,6 +12,9 @@ module.exports = (sequelize, DataTypes) => {
         idUsuario: DataTypes.INTEGER,
         idBarbearia: DataTypes.INTEGER,
         nota: DataTypes.FLOAT
+    }, {
+        freezeTableName: true,
+        timestamps: false
     });
 
     // AvaliacaoUsuario.associate = function (models) {

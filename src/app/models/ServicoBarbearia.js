@@ -8,6 +8,12 @@ module.exports = (sequelize, DataTypes) => {
         },
         titulo: DataTypes.STRING,
         preco: DataTypes.STRING,
+    }, {
+        freezeTableName: true,
+        timestamps: false
+    }, {
+        freezeTableName: true,
+        timestamps: false
     });
 
     // ServicoBarbearia.associate = function (models) {

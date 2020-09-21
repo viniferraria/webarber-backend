@@ -12,6 +12,9 @@ module.exports = (sequelize, DataTypes) => {
         idServico: DataTypes.INTEGER,
         idAgenda: DataTypes.INTEGER,
         icone: DataTypes.STRING.BINARY
+    }, {
+        freezeTableName: true,
+        timestamps: false
     });
 
     // Agendamentos.associate = function (models) {
