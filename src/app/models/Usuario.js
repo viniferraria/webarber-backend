@@ -24,8 +24,6 @@ module.exports = (sequelize, DataTypes) => {
         icone: DataTypes.STRING.BINARY,
         sessionToken: DataTypes.STRING
     }, {
-        freezeTableName: true,
-        underscored: false,
         hooks: {
             beforeSave: async user => {
                 if (user.password) {
@@ -35,16 +33,9 @@ module.exports = (sequelize, DataTypes) => {
         },
     });
 
-    Usuario.associate = function (models) {
-        // associations can be defined here
-        Usuario.hasOne(models.TipoUsuario);
-    //     Usuario.belongsTo(models.Agendamentos);
-    //     Usuario.belongsTo(models.AvaliacaoUsuario);
-    };
-
-    // Usuario.prototype.checkPassword = function(password) {
-    //     return bcrypt.compare(password, this.password_hash);
-    // }
+    Usuario.prototype.checkPassword = function(password) {
+        return bcrypt.compare(password, this.password_hash);
+    }
     
     // Usuario.prototype.generateToken = function() {
     //     return jwt.sign({ id: this.id }, process.env.APP_SECRET);

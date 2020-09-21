@@ -9,6 +9,7 @@ module.exports = {
     database: process.env.DB_NAME || 'db',
     define: {
         timestamps: true, 
-        underscored: true
+        underscored: false,
+        freezeTableName: true
     }
 };
