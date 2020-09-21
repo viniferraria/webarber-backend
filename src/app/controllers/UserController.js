@@ -92,20 +92,21 @@ module.exports = {
     },
 
     async login(req, res) {
-        const { email, password } = req.params;
-        const user = await Usuario.findOne({ where: email });
-
+        const { email, password } = req.body;
         try {
-            let equals = user.checkPassword(password);
-            if (equals) {
-                return res.status(200).json({  message: 'Login!' });
-            } else {
-                throw new Error('Wrong password');
-            }
-        } catch (err) {
-            res.status(400).json({ message: 'Wrong password' });
+            const user = await Usuario.findOne({ where: { email } });
+            // Usuario.findOne({ where: { email: email }})
+            
+            if(!user)
+                res.status(401).json({ message: 'User not found' });
+            
+            if (!(await user.checkPassword(password))) 
+                return res.status(400).json({ message: 'Incorrect password' });
+            
+            return res.status(200).json({ message: 'Login!' });
+        } catch(err) {
+            console.log(err);
+            res.status(404).json({ message: `Error`});
         }
-
-
     }
 };
