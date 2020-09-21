@@ -13,7 +13,6 @@ module.exports = (sequelize, DataTypes) => {
         idAgenda: DataTypes.INTEGER,
         icone: DataTypes.STRING.BINARY
     }, {
-        freezeTableName: true,
         timestamps: false
     });
 

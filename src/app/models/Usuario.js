@@ -24,8 +24,6 @@ module.exports = (sequelize, DataTypes) => {
         icone: DataTypes.STRING.BINARY,
         sessionToken: DataTypes.STRING
     }, {
-        freezeTableName: true,
-        underscored: false,
         hooks: {
             beforeSave: async user => {
                 if (user.password) {

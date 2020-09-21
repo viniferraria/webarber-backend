@@ -17,7 +17,6 @@ module.exports = (sequelize, DataTypes) => {
         horarioFechamento: DataTypes.DATE,
         idAgenda: DataTypes.INTEGER,
     }, {
-        freezeTableName: true,
         timestamps: false
     });
 

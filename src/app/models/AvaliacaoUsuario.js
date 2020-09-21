@@ -13,7 +13,6 @@ module.exports = (sequelize, DataTypes) => {
         idBarbearia: DataTypes.INTEGER,
         nota: DataTypes.FLOAT
     }, {
-        freezeTableName: true,
         timestamps: false
     });
 

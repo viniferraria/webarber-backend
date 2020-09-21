@@ -8,7 +8,6 @@ module.exports = (sequelize, DataTypes) => {
         },
         tipoDescricao: DataTypes.STRING,
     }, {
-        freezeTableName: true,
         timestamps: false
     });
 

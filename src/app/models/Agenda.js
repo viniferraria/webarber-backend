@@ -11,7 +11,6 @@ module.exports = (sequelize, DataTypes) => {
         idBarbearia: DataTypes.INTEGER,
         idServicoBarbearia: DataTypes.INTEGER,
     }, {
-        freezeTableName: true,
         updatedAt: false
     });
 
