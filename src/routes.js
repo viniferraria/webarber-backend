@@ -20,6 +20,7 @@ routes.get('/tipos', async (req, res) => {
 })
 
 
+routes.post('/login', UserController.login)
 routes.get('/users', UserController.getAll);
 routes.get('/users/:user_id', UserController.get);
 routes.post('/users', UserController.create);
