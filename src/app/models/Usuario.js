@@ -3,19 +3,29 @@ const bcrypt = require('bcryptjs');
 
 module.exports = (sequelize, DataTypes) => {
     const Usuario = sequelize.define("Usuario", {
-        id: DataTypes.INTEGER,
+        id: {
+            type: DataTypes.INTEGER,
+            primaryKey: true,
+            autoIncrement: true,
+            allowNull: false,
+        },
         nome: DataTypes.STRING,
         sobrenome: DataTypes.STRING,
         email: DataTypes.STRING,
         password: DataTypes.VIRTUAL,
         password_hash: DataTypes.STRING,
-        ativo: Datatypes.BOOLEAN,
-        CNPJ: Datatypes.STRING,
-        CPF: Datatypes.STRING,
+        ativo: {
+            type: DataTypes.BOOLEAN,
+            defaultValue: true
+        },
+        CNPJ: DataTypes.STRING,
+        CPF: DataTypes.STRING,
         idTipo: DataTypes.INTEGER,
         icone: DataTypes.STRING.BINARY,
-        sessionToken: Datatypes.STRING
+        sessionToken: DataTypes.STRING
     }, {
+        freezeTableName: true,
+        underscored: false,
         hooks: {
             beforeSave: async user => {
                 if (user.password) {
@@ -28,13 +38,13 @@ module.exports = (sequelize, DataTypes) => {
     Usuario.associate = function (models) {
         // associations can be defined here
         Usuario.hasOne(models.TipoUsuario);
-        Usuario.belongsToMany(models.Agendamentos);
-        Usuario.belongsToMany(models.AvaliacaoUsuario);
+    //     Usuario.belongsTo(models.Agendamentos);
+    //     Usuario.belongsTo(models.AvaliacaoUsuario);
     };
 
-    Usuario.prototype.checkPassword = function(password) {
-        return bcrypt.compare(password, this.password_hash);
-    }
+    // Usuario.prototype.checkPassword = function(password) {
+    //     return bcrypt.compare(password, this.password_hash);
+    // }
     
     // Usuario.prototype.generateToken = function() {
     //     return jwt.sign({ id: this.id }, process.env.APP_SECRET);

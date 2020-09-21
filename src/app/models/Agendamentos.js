@@ -1,6 +1,11 @@
 module.exports = (sequelize, DataTypes) => {
     const Agendamentos = sequelize.define('Agendamentos', {
-        id: DataTypes.INTEGER,
+        id: {
+            type: DataTypes.INTEGER,
+            primaryKey: true,
+            autoIncrement: true,
+            allowNull: false,
+        },
         idBarbearia: DataTypes.INTEGER,
         idUsuario: DataTypes.INTEGER,
         idStatus: DataTypes.INTEGER,
@@ -9,13 +14,13 @@ module.exports = (sequelize, DataTypes) => {
         icone: DataTypes.STRING.BINARY
     });
 
-    Agendamentos.associate = function (models) {
-        Agendamentos.belongsTo(models.Agenda);
-        Agendamentos.hasOne(models.Barbearia);
-        Agendamentos.hasOne(models.Usuario);
-        Agendamentos.hasOne(models.StatusAgendamento);
-        Agendamentos.hasOne(models.ServicoBarbearia);
-    };
+    // Agendamentos.associate = function (models) {
+    //     Agendamentos.belongsTo(models.Agenda);
+        // Agendamentos.hasOne(models.Barbearia);
+        // Agendamentos.hasOne(models.Usuario);
+        // Agendamentos.hasOne(models.StatusAgendamento);
+        // Agendamentos.hasOne(models.ServicoBarbearia);
+    // };
 
 
     return Agendamentos;
