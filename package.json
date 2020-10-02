@@ -6,7 +6,7 @@
   "scripts": {
     "first": "yarn install && yarn sequelize db:create && yarn sequelize db:migrate && yarn sequelize db:seed:all",
     "dev": "nodemon src/server.js",
-    "test": "jest --no-cache --forceExit",
+    "test": "jest",
     "heroku-postbuild": "yarn sequelize db:migrate",
     "start": "node ./src/server.js"
   },
