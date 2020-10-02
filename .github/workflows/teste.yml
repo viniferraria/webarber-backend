@@ -1,0 +1,71 @@
+name: Docker Image CI
+on:
+  push:
+    branches: [features/**, master, develop]
+  pull_request:
+    branches: [master, develop]
+
+jobs:
+  # Label of the container job
+  container-job:
+    # Containers must run in Linux based operating systems
+    runs-on: ubuntu-latest
+    # Docker Hub image that `container-job` executes in
+    container: node:10.18-jessie
+    # Service containers to run with `container-job`
+    services:
+      # Label used to access the service container
+      postgres:
+        # Docker Hub image
+        image: postgres
+        # Provide the password for postgres
+        env:
+          POSTGRES_DB: webarber
+          POSTGRES_USER: webarber
+          POSTGRES_PASSWORD: webarber
+        # Set health checks to wait until postgres has started
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+
+    steps:
+      # Downloads a copy of the code in your repository before running CI tests
+      - name: Check out repository code
+        uses: actions/checkout@v2
+
+      # Performs a clean installation of all dependencies in the `package.json` file
+      - name: Install dependencies
+        uses: borales/actions-yarn@v2.0.0
+        with:
+          cmd: install --production=false # will run `yarn install` command
+
+      - name: Run migrations
+        uses: borales/actions-yarn@v2.0.0
+        with:
+          cmd: sequelize db:migrate
+      
+      - name: Run seeds
+        uses: borales/actions-yarn@v2.0.0
+        with:
+          cmd: sequelize db:seed:all
+
+      - name: run test
+        uses: borales/actions-yarn@v2.0.0
+        with:
+          cmd: test # will run `yarn test` command
+
+      - name: Connect to PostgreSQL
+        # Runs a script that creates a PostgreSQL client, populates
+        # the client with data, and retrieves data
+        run: node client.js
+        # Environment variable used by the `client.js` script to create a new PostgreSQL client.
+        env:
+          # The hostname used to communicate with the PostgreSQL service container
+          DB_HOST: localhost
+          # The default PostgreSQL port
+          DB_PORT: 5432
+          DB_USERNAME: webarber
+          DB_PASSWORD: webarber
+          DB_NAME: webarber
