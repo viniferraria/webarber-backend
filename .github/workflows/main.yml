@@ -20,9 +20,7 @@ jobs:
         image: postgres
         # Provide the password for postgres
         env:
-          POSTGRES_DB: webarber
-          POSTGRES_USER: webarber
-          POSTGRES_PASSWORD: webarber
+          POSTGRES_PASSWORD: postgres
         # Set health checks to wait until postgres has started
         options: >-
           --health-cmd pg_isready
@@ -66,6 +64,6 @@ jobs:
           DB_HOST: localhost
           # The default PostgreSQL port
           DB_PORT: 5432
-          DB_USERNAME: webarber
-          DB_PASSWORD: webarber
-          DB_NAME: webarber
+          DB_USERNAME: postgres
+          DB_PASSWORD: postgres
+          DB_NAME: postgres
