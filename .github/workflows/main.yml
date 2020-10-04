@@ -39,15 +39,19 @@ jobs:
         uses: actions/checkout@v2
 
       # Performs a clean installation of all dependencies in the `package.json` file
-      - name: Install dependencies
+      - name: Use Node.js
         uses: actions/setup-node@v1
+        with:
+          node-version: '10.x'
+
+      - name: Install dependencies
         run: yarn --production=false --frozen-lockfile # will run `yarn install` command
 
       - name: Run migrations
         uses: borales/actions-yarn@v2.0.0
         with:
           cmd: sequelize db:migrate
-      
+        
       - name: Run seeds
         uses: borales/actions-yarn@v2.0.0
         with:
@@ -58,7 +62,6 @@ jobs:
         with:
           cmd: test # will run `yarn test` command
 
-      - name: Connect to PostgreSQL
         env:
           # Environment variable used by the `client.js` script to create a new PostgreSQL client.
           DB_HOST: localhost
