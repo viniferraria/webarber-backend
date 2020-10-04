@@ -4,7 +4,7 @@
   "main": "server.js",
   "license": "MIT",
   "scripts": {
-    "first": "yarn install && yarn sequelize db:create && yarn sequelize db:migrate && yarn sequelize db:seed:all",
+    "first": "yarn install && yarn sequelize db:migrate && yarn sequelize db:seed:all",
     "dev": "nodemon src/server.js",
     "test": "jest",
     "heroku-postbuild": "yarn sequelize db:migrate",
