@@ -52,6 +52,15 @@ jobs:
         with:
           cmd: sequelize db:migrate
         
+        env:
+          # Environment variable used by the `client.js` script to create a new PostgreSQL client.
+          DB_HOST: localhost
+          # The default PostgreSQL port
+          DB_PORT: 5432
+          DB_NAME: webarber
+          DB_USERNAME: webarber
+          DB_PASSWORD: webarber
+
       - name: Run seeds
         uses: borales/actions-yarn@v2.0.0
         with:
