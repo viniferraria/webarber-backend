@@ -11,7 +11,7 @@ jobs:
     # Containers must run in Linux based operating systems
     runs-on: ubuntu-latest
     # Docker Hub image that `runner-job` executes in
-    container: node:10.18-jessie
+    # container: node:10.18-jessie
     # Service containers to run with `runner-job`
     services:
       # Label used to access the service container
@@ -45,9 +45,6 @@ jobs:
 
       - name: Install dependencies
         run: yarn --production=false --frozen-lockfile
-
-      - name: Run migrations
-        run: yarn first
 
       - name: Run test
         run: yarn test
