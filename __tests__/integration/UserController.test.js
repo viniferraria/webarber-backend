@@ -1,6 +1,5 @@
 const request = require("supertest");
 const app = require("../../src/app");
-const truncate = require("../utils/truncate");
 
 var id;
 var user = {
@@ -13,7 +12,6 @@ var user = {
 };
 
 describe('User controller', () => {
-    // beforeEach(async() => await truncate());
 
     test('it should create an account', async () =>{
         const response = await request(app)
