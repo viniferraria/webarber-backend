@@ -10,9 +10,9 @@ jobs:
   runner-job:
     # Containers must run in Linux based operating systems
     runs-on: ubuntu-latest
-    # Docker Hub image that `container-job` executes in
-    # container: node:10.18-jessie
-    # Service containers to run with `container-job`
+    # Docker Hub image that `runner-job` executes in
+    container: node:10.18-jessie
+    # Service containers to run with `runner-job`
     services:
       # Label used to access the service container
       postgres:
@@ -38,37 +38,21 @@ jobs:
       - name: Check out repository code
         uses: actions/checkout@v2
 
-      # Performs a clean installation of all dependencies in the `package.json` file
       - name: Use Node.js
         uses: actions/setup-node@v1
         with:
           node-version: '10.x'
 
       - name: Install dependencies
-        run: yarn --production=false --frozen-lockfile # will run `yarn install` command
+        run: yarn --production=false --frozen-lockfile
 
-      - name: Run migrations and test
+      - name: Run migrations
         run: yarn first
-        env:
-          # Environment variable used by the `client.js` script to create a new PostgreSQL client.
-          DB_HOST: localhost
-          # The default PostgreSQL port
-          DB_PORT: 5432
-          DB_NAME: webarber
-          DB_USERNAME: webarber
-          DB_PASSWORD: webarber
 
-      # - name: Run migrations
-      #   uses: borales/actions-yarn@v2.0.0
-      #   with:
-      #     cmd: sequelize db:migrate
-
-      - name: run test
+      - name: Run test
         run: yarn test
         env:
-          # Environment variable used by the `client.js` script to create a new PostgreSQL client.
           DB_HOST: localhost
-          # The default PostgreSQL port
           DB_PORT: 5432
           DB_NAME: webarber
           DB_USERNAME: webarber
