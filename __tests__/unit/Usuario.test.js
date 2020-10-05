@@ -1,7 +1,7 @@
 const { Usuario } = require('../../src/app/models');
 const bcrypt = require('bcryptjs');
 
-describe( 'User', async () => {} );
+describe( 'User', () => {} );
 
 it('should encrypt user password', async () => {
     const user = await Usuario.create({
