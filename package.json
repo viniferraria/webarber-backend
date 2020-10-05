@@ -4,12 +4,12 @@
   "main": "server.js",
   "license": "MIT",
   "scripts": {
-    "first": "yarn install",
+    "first": "install",
     "dev": "nodemon .src/server.js --ignore __tests__",
     "pretest": "sequelize db:migrate && sequelize db:seed:all",
     "test": "jest",
-    "posttest": "sequelize db:migrate:undo:all",
-    "prestart": "sequelize db:migrate",
+    "posttest": "sequelize db:migrate:undo:all && sequelize-cli db:seed:undo:all",
+    "prestart": "sequelize db:migrate && db:seed:all",
     "start": "node ./src/server.js",
     "heroku-postbuild": "sequelize db:migrate"
   },

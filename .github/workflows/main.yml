@@ -10,8 +10,6 @@ jobs:
   runner-job:
     # Containers must run in Linux based operating systems
     runs-on: ubuntu-latest
-    # Docker Hub image that `runner-job` executes in
-    # container: node:10.18-jessie
     # Service containers to run with `runner-job`
     services:
       # Label used to access the service container
