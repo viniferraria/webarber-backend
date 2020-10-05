@@ -71,7 +71,7 @@ describe('User controller', () => {
         .send(user)
 
         expect(response.status).toBe(400);
-        expect(response.error).toBe('User Not Found');
+        expect(response.body.error).toBe('User Not Found');
     });
 
     test("It should delete the user", async () => {
@@ -79,7 +79,7 @@ describe('User controller', () => {
         .delete("/users/" + id)
 
         expect(response.status).toBe(200);
-        expect(response.message).toBe('User deleted');
+        expect(response.body.message).toBe('User deleted');
     });
 
     // test("It should not patch the deleted user", async () => {
