@@ -1,5 +1,5 @@
 module.exports = (sequelize, DataTypes) => {
-    const ServicoBarbearia = sequelize.define("ServicoBarbearia", {
+    const Servico = sequelize.define("Servico", {
         id: {
             type: DataTypes.INTEGER,
             primaryKey: true,
@@ -7,7 +7,7 @@ module.exports = (sequelize, DataTypes) => {
             allowNull: false,
         },
         titulo: DataTypes.STRING,
-        preco: DataTypes.STRING,
+        preco: DataTypes.FLOAT,
     }, {
         freezeTableName: true,
         timestamps: false
@@ -21,6 +21,6 @@ module.exports = (sequelize, DataTypes) => {
     //     ServicoBarbearia.belongsTo(models.ServicoBarbearia);
     // };
 
-    return ServicoBarbearia;
+    return Servico;
 };
 

@@ -8,7 +8,7 @@ module.exports = {
                 autoIncrement: true,
                 allowNull: false,
             },
-            nomeBarbearia: {
+            nome: {
                 type: Sequelize.STRING,
                 allowNull: false 
             },
@@ -22,10 +22,10 @@ module.exports = {
             },
             ativo: {
                 type: Sequelize.BOOLEAN,
-                allowNull: false
+                allowNull: false,
+                defaultValue: true
             },
             icone: Sequelize.STRING.BINARY,
-            mediaNota: Sequelize.FLOAT,
             horarioAbertura: {
                 type: Sequelize.DATE,
                 allowNull: false
