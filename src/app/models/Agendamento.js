@@ -1,5 +1,5 @@
 module.exports = (sequelize, DataTypes) => {
-    const Agendamentos = sequelize.define('Agendamentos', {
+    const Agendamento = sequelize.define('Agendamento', {
         id: {
             type: DataTypes.INTEGER,
             primaryKey: true,
@@ -10,8 +10,7 @@ module.exports = (sequelize, DataTypes) => {
         idUsuario: DataTypes.INTEGER,
         idStatus: DataTypes.INTEGER,
         idServico: DataTypes.INTEGER,
-        idAgenda: DataTypes.INTEGER,
-        icone: DataTypes.STRING.BINARY
+        data: DataTypes.DATE
     }, {
         timestamps: false
     });
@@ -25,5 +24,5 @@ module.exports = (sequelize, DataTypes) => {
     // };
 
 
-    return Agendamentos;
+    return Agendamento;
 };
