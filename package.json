@@ -9,8 +9,8 @@
     "pretest": "sequelize db:migrate",
     "test": "jest",
     "posttest": "sequelize db:migrate:undo:all",
-    "prestart": "sequelize db:migrate",
-    "start": "node ./src/server.js"
+    "start": "node ./src/server.js",
+    "heroku-postbuild": "sequelize db:migrate"
   },
   "dependencies": {
     "bcryptjs": "^2.4.3",
