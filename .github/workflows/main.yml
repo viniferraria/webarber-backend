@@ -1,10 +1,10 @@
 name: Docker Image CI
 on:
   push:
-    branches: [feature(s)?/**, master, develop]
+    branches: [feature/**,features/**, master, develop]
   pull_request:
-    branches: [master, develop]  
-  
+    branches: [master, develop]
+
 jobs:
   # job label
   runner-job:
