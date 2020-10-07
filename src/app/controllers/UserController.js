@@ -1,53 +1,60 @@
-const { Usuario, sequelize } = require('../models');
+const { Usuario } = require('../models');
 
 module.exports = {
 
-    async getAll(req, res) {
-        const user = await Usuario.findAll({
-            order: [
-                ['id', 'ASC']
-            ]
-        })
-
-        if(!user) {
-            return res.status(400).json({ error: 'No Users Found'});
+    async getAll(_, res) {
+        try {
+            const users = await Usuario.findAll({
+                order: [
+                    ['id', 'ASC']
+                ]
+            })
+    
+            if (!users) {
+                return res.status(400).json({ message: 'No Users found'});
+            }
+    
+            return res.status(200).json(users);
+        } catch(error) {
+            console.log(error);
+            return res.status(400).json({ message: 'Error while fetching users' });
         }
-
-        return res.status(200).json(user);
     },
 
     async get(req, res) {
-        const { user_id } = req.params;
-        // const { email, password} = req.body;
-
-        const user = await Usuario.findOne({ where: { 
-            id: user_id
-        }});
-
-        if(!user) {
-            return res.status(400).json({ error: 'User Not Found'});
+        try {
+            const { user_id } = req.params;
+            const user = await Usuario.findOne({ where: { 
+                id: user_id
+            }});
+            
+            if(!user) {
+                return res.status(400).json({ message: 'User Not Found'});
+            }
+            
+            return res.status(200).json(user);
+        } catch (error) {
+            console.log(error);
+            return res.status(400).json({ message: 'Error while fetching user' });
         }
-
-        return res.status(200).json(user);
     },
 
     async create(req, res) {
-        const { nome, sobrenome, email, password, CNPJ, CPF, idTipo, icone } = req.body;
-
         try {
+            const { nome, sobrenome, email, password, CNPJ, CPF, idTipo, icone } = req.body;
             const user = await Usuario.findOne({ where: { email: email }});
             
             if (user) {
-                return res.status(400).json({ error: 'Error while creating new User'});
+                return res.status(400).json({ message: 'Error while creating new User'});
             }
 
             const newUser = await Usuario.create({ nome, sobrenome, email, password, CNPJ, CPF, idTipo, icone });
-            res.status(201).json(newUser);
-        } catch (err) {
-            if (err.name === 'SequelizeUniqueConstraintError') {
-                res.status(400).json({ error: 'CPF is already registered'})
+            return res.status(201).json(newUser);
+        } catch (error) {
+            if (error.name === 'SequelizeUniqueConstraintError') {
+                return res.status(400).json({ message: 'CPF is already registered'})
             } else {
-                res.status(400).json({ error: err });
+                return res.status(400).json({ message: error });
             }
         }
 
@@ -60,7 +67,7 @@ module.exports = {
         const user = await Usuario.findByPk(user_id);
 
         if (!user) {
-            return res.status(400).json({ error: 'User Not Found'});
+            return res.status(400).json({ message: 'User Not Found'});
         }
 
         const updatedUser = await user.update({
@@ -78,32 +85,38 @@ module.exports = {
     },
 
     async delete(req, res) {
-        const { user_id } = req.params;
-        const user = await Usuario.findByPk(user_id);
+        try {
 
-        if (!user) {
-            return res.status(400).json({ error: 'User not found' });
+            const { user_id } = req.params;
+            const user = await Usuario.findByPk(user_id);
+
+            if (!user) {
+                return res.status(400).json({ message: 'User not found' });
+            }
+
+            await user.update({ 
+                ativo: false
+            })
+            // await Usuario.destroy({ where: {
+            //     id: user_id
+            // }})
+    
+            return res.status(200).json({ message: "User deleted"});
+        } catch(error) {
+            console.log(error);
+            return res.status(400).json({ message: 'Error while deleting user' });
         }
 
-        await user.update({ 
-            ativo: false
-        })
-
-        // await Usuario.destroy({ where: {
-        //     id: user_id
-        // }})
-
-        return res.status(200).json({ message: "User deleted"});
     },
 
     async login(req, res) {
-        const { email, password } = req.body;
         try {
+            const { email, password } = req.body;
             const user = await Usuario.findOne({ where: { email } });
             // Usuario.findOne({ where: { email: email }})
             
             if(!user)
-                res.status(401).json({ message: 'User not found' });
+                return res.status(401).json({ message: 'User not found' });
             
             if (!(await user.checkPassword(password))) 
                 return res.status(400).json({ message: 'Incorrect password' });
@@ -111,7 +124,7 @@ module.exports = {
             return res.status(200).json({ message: 'Login!' });
         } catch(err) {
             console.log(err);
-            res.status(404).json({ message: `Error`});
+            return res.status(404).json({ message: `Error`});
         }
     }
 };

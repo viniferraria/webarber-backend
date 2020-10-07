@@ -1,15 +1,20 @@
-const { TipoUsuario, sequelize } = require('../models');
+const { TipoUsuario } = require('../models');
 
 module.exports = {
 
+    async getAll(_, res) {
+        try {
 
-    async getAll(req, res) {
-        let tipos = await TipoUsuario.findAll({
-            order: [
-                ['id', 'ASC']
-            ]
-        })
-        res.json(tipos);
+            let tipos = await TipoUsuario.findAll({
+                order: [
+                    ['id', 'ASC']
+                ]
+            })
+            return res.status(200).json(tipos);
+        } catch (error) {
+            console.log(error);
+            return res.status(400).json({ message: 'Error while fetching' });
+        }
     }
 
 }
