@@ -38,7 +38,7 @@ describe('User controller', () => {
         .send(user);
 
         expect(response.status).toBe(400);
-        expect(response.body.error).toBe('Error while creating new User')
+        expect(response.body.message).toBe('Error while creating new User')
     });
 
     test("It should not allow users to share the same CPF", async () => {
@@ -48,7 +48,7 @@ describe('User controller', () => {
         .send(user);
 
         expect(response.status).toBe(400);
-        expect(response.body.error).toBe('CPF is already registered')
+        expect(response.body.message).toBe('CPF is already registered')
     });
 
     test("It should patch the user", async () => {
@@ -69,7 +69,7 @@ describe('User controller', () => {
         .send(user)
 
         expect(response.status).toBe(400);
-        expect(response.body.error).toBe('User Not Found');
+        expect(response.body.message).toBe('User Not Found');
     });
 
     test("It should delete the user", async () => {
