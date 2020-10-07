@@ -37,15 +37,12 @@ jobs:
         uses: actions/setup-node@v1
         with:
           node-version: '10.x'
-        
-      - name: Echo yarn cache folder
-        run: yarn cache dir
 
       - name: Cache node_modules
         uses: actions/cache@v2
         with:
           path: ~/.cache/yarn/v6
-          key: ${{ runner.OS }}-webarber-node-${{ hashFiles('**/package-lock.json') }}
+          key: ${{ runner.OS }}-webarber-yarn-${{ hashFiles('yarn.lock') }}
 
       - name: Install dependencies
         run: yarn --production=false --frozen-lockfile
