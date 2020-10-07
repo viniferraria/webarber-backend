@@ -4,9 +4,9 @@ module.exports = {
     dialect: process.env.DB_DIALECT || 'postgres',
     host: process.env.DB_HOST || 'localhost',
     port: process.env.DB_PORT || 5432,
-    username: process.env.DB_USERNAME || 'docker',
-    password: process.env.DB_PASSWORD || 'docker',
-    database: process.env.DB_NAME || 'nodeauth',
+    username: process.env.DB_USERNAME || 'webarber',
+    password: process.env.DB_PASSWORD || 'webarber',
+    database: process.env.DB_NAME || 'webarber',
     define: {
         timestamps: true, 
         underscored: false,

@@ -4,11 +4,13 @@
   "main": "server.js",
   "license": "MIT",
   "scripts": {
-    "first": "yarn install && yarn sequelize db:create && yarn sequelize db:migrate && yarn sequelize db:seed:all",
-    "dev": "nodemon src/server.js",
-    "test": "jest --no-cache --forceExit",
-    "heroku-postbuild": "yarn sequelize db:migrate",
-    "start": "node ./src/server.js"
+    "first": "install",
+    "dev": "nodemon .src/server.js --ignore __tests__",
+    "pretest": "sequelize db:migrate && sequelize db:seed:all",
+    "test": "jest",
+    "prestart": "sequelize db:migrate && db:seed:all",
+    "start": "node ./src/server.js",
+    "heroku-postbuild": "sequelize db:migrate"
   },
   "dependencies": {
     "bcryptjs": "^2.4.3",

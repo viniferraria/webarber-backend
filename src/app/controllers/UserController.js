@@ -1,4 +1,4 @@
-const { Usuario } = require('../models');
+const { Usuario, sequelize } = require('../models');
 
 module.exports = {
 
@@ -33,17 +33,22 @@ module.exports = {
 
     async create(req, res) {
         const { nome, sobrenome, email, password, CNPJ, CPF, idTipo, icone } = req.body;
-        console.log(req.body);
-        const user = await Usuario.findOne({ where: { email: email }});
-        
-        if (user) {
-            return res.status(400).json({ error: 'Error while creating new User'});
-        }
+
         try {
+            const user = await Usuario.findOne({ where: { email: email }});
+            
+            if (user) {
+                return res.status(400).json({ error: 'Error while creating new User'});
+            }
+
             const newUser = await Usuario.create({ nome, sobrenome, email, password, CNPJ, CPF, idTipo, icone });
             res.status(201).json(newUser);
         } catch (err) {
-            res.status(400).json({ error: err });
+            if (err.name === 'SequelizeUniqueConstraintError') {
+                res.status(400).json({ error: 'CPF is already registered'})
+            } else {
+                res.status(400).json({ error: err });
+            }
         }
 
     },
