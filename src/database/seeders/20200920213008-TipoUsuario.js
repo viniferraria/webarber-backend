@@ -5,11 +5,11 @@ module.exports = {
     await queryInterface.bulkInsert('TipoUsuario', [
       {
         id: 1,
-        tipoDescricao: "Consumidor"
+        nome: "Consumidor"
       },
       {
         id: 2,
-        tipoDescricao: "Moderador"
+        nome: "Moderador"
     }]);
   },
 

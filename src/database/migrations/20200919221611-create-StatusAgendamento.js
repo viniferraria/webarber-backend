@@ -8,7 +8,7 @@ module.exports = {
                 autoIncrement: true,
                 allowNull: false,
             },
-            nomeStatus: {
+            nome: {
                 type: Sequelize.STRING,
                 allowNull: false
             } 

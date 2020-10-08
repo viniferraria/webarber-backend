@@ -8,7 +8,7 @@ module.exports = {
                 autoIncrement: true,
                 allowNull: false,
             },
-            tipoDescricao: {
+            nome: {
                 type: Sequelize.STRING,
                 allowNull: false
             },
@@ -16,6 +16,15 @@ module.exports = {
             timestamps: false,
             freezeTableName: true
         });
+        await queryInterface.bulkInsert('TipoUsuario', [
+            {
+                id: 1,
+                nome: "Consumidor"
+            },
+            {
+                id: 2,
+                nome: "Moderador"
+            }]);
     },
     down: async (queryInterface, Sequelize) => {
         await queryInterface.dropTable('TipoUsuario');
