@@ -9,6 +9,7 @@
     "pretest": "sequelize db:migrate",
     "test": "jest",
     "posttest": "sequelize db:migrate:undo:all",
+    "heroku-postbuild": "sequelize db:migrate"
     "prestart": "sequelize db:migrate",
     "start": "node ./src/server.js"
   },

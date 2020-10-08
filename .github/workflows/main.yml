@@ -1,14 +1,13 @@
 name: Docker Image CI
 on:
   push:
-    branches: [features/**, master, develop]
+    branches: [feature/**,features/**, master, develop]
   pull_request:
     branches: [master, develop]
 
 jobs:
-  # Label of the runner job
+  # job label
   runner-job:
-    # Containers must run in Linux based operating systems
     runs-on: ubuntu-latest
     # Service containers to run with `runner-job`
     services:
@@ -16,7 +15,6 @@ jobs:
       postgres:
         # Docker Hub image
         image: postgres
-        # Provide the password for postgres
         env:
           POSTGRES_DB: webarber
           POSTGRES_USER: webarber
@@ -32,7 +30,6 @@ jobs:
           --health-retries 5
 
     steps:
-      # Downloads a copy of the code in your repository before running CI tests
       - name: Check out repository code
         uses: actions/checkout@v2
 
@@ -40,6 +37,12 @@ jobs:
         uses: actions/setup-node@v1
         with:
           node-version: '10.x'
+
+      - name: Cache node_modules
+        uses: actions/cache@v2
+        with:
+          path: ~/.cache/yarn/v6
+          key: ${{ runner.OS }}-webarber-yarn-${{ hashFiles('yarn.lock') }}
 
       - name: Install dependencies
         run: yarn --production=false --frozen-lockfile
