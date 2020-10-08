@@ -33,10 +33,16 @@ module.exports = (sequelize, DataTypes) => {
         },
     });
 
-    Usuario.prototype.checkPassword = function(password) {
+    Usuario.associate = function (models) {
+        Usuario.hasOne(models.TipoUsuario, {
+            foreignKey: 'id'
+        });
+    };
+
+    Usuario.prototype.checkPassword = function (password) {
         return bcrypt.compare(password, this.password_hash);
     }
-    
+
     // Usuario.prototype.generateToken = function() {
     //     return jwt.sign({ id: this.id }, process.env.APP_SECRET);
     // }
