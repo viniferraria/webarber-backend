@@ -18,7 +18,8 @@ module.exports = {
       },
       email: {
         type: Sequelize.STRING,
-        allowNull: false
+        allowNull: false,
+        unique: true
       },
       password_hash: {
         type: Sequelize.STRING,
@@ -26,7 +27,8 @@ module.exports = {
       },
       ativo: {
         type: Sequelize.BOOLEAN,
-        allowNull: false
+        allowNull: false,
+        defaultValue: true
       },
       CNPJ: {
         type: Sequelize.STRING,
@@ -40,9 +42,7 @@ module.exports = {
         type: Sequelize.INTEGER,
         allowNull: false,
         references: {
-          model: {
-            tableName: 'TipoUsuario',
-          },
+          model: 'TipoUsuario',
           key: 'id'
         }
       },

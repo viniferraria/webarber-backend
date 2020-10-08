@@ -1,0 +1,57 @@
+name: Docker Image CI
+on:
+  push:
+    branches: [feature/**,features/**, master, develop]
+  pull_request:
+    branches: [master, develop]
+
+jobs:
+  # job label
+  runner-job:
+    runs-on: ubuntu-latest
+    # Service containers to run with `runner-job`
+    services:
+      # Label used to access the service container
+      postgres:
+        # Docker Hub image
+        image: postgres
+        env:
+          POSTGRES_DB: webarber
+          POSTGRES_USER: webarber
+          POSTGRES_PASSWORD: webarber
+        
+        ports:
+          - 5432:5432
+        # Set health checks to wait until postgres has started
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+
+    steps:
+      - name: Check out repository code
+        uses: actions/checkout@v2
+
+      - name: Use Node.js
+        uses: actions/setup-node@v1
+        with:
+          node-version: '10.x'
+
+      - name: Cache node_modules
+        uses: actions/cache@v2
+        with:
+          path: ~/.cache/yarn/v6
+          key: ${{ runner.OS }}-webarber-yarn-${{ hashFiles('yarn.lock') }}
+
+      - name: Install dependencies
+        run: yarn --production=false --frozen-lockfile
+
+      - name: Run test
+        run: yarn test
+        env:
+          DB_HOST: localhost
+          DB_PORT: 5432
+          DB_NAME: webarber
+          DB_USERNAME: webarber
+          DB_PASSWORD: webarber

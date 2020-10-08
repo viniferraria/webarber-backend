@@ -4,10 +4,13 @@
   "main": "server.js",
   "license": "MIT",
   "scripts": {
-    "first": "yarn install && yarn sequelize db:create && yarn sequelize db:migrate && yarn sequelize db:seed:all",
-    "dev": "nodemon src/server.js",
-    "test": "jest --no-cache --forceExit",
-    "heroku-postbuild": "yarn sequelize db:migrate",
+    "first": "install",
+    "dev": "nodemon ./src/server.js --ignore __tests__",
+    "pretest": "sequelize db:migrate",
+    "test": "jest",
+    "posttest": "sequelize db:migrate:undo:all",
+    "heroku-postbuild": "sequelize db:migrate",
+    "prestart": "sequelize db:migrate",
     "start": "node ./src/server.js"
   },
   "dependencies": {
@@ -15,6 +18,7 @@
     "cors": "^2.8.5",
     "dotenv": "^8.2.0",
     "express": "^4.17.1",
+    "helmet": "^4.1.1",
     "jsonwebtoken": "^8.5.1",
     "pg": "^8.3.3",
     "pg-hstore": "^2.3.3",
