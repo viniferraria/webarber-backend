@@ -21,12 +21,12 @@
     "jsonwebtoken": "^8.5.1",
     "pg": "^8.3.3",
     "pg-hstore": "^2.3.3",
-    "sequelize": "^6.3.5"
+    "sequelize": "^6.3.5",
+    "sequelize-cli": "^6.2.0"
   },
   "devDependencies": {
     "jest": "^26.4.2",
     "nodemon": "^2.0.4",
-    "sequelize-cli": "^6.2.0",
     "supertest": "^4.0.2"
   }
 }
