@@ -1,15 +1,13 @@
-# version: "3.6"
+version: "3.8"
 services:
-  database:
+  db:
     image: postgres
     environment:
       POSTGRES_DB: webarber
       POSTGRES_USER: webarber
       POSTGRES_PASSWORD: webarber
-    expose:
-        - '5432'
     ports:
-      - '5432:5432'
+      - "3232:5432"
     volumes:
       - type: tmpfs
         target: /var/lib/postgresql/data
@@ -18,17 +16,32 @@ services:
         tmpfs:
           size: 104857600
 
+  migration:
+    build: .
+    command: sh -c "./wait-for-it.sh db:5432 -- yarn sequelize db:migrate"
+    environment:
+      DB_HOST: db
+      DB_PORT: 5432
+      DB_NAME: webarber
+      DB_USERNAME: webarber
+      DB_PASSWORD: webarber
+    links:
+      - db
+    depends_on:
+      - db
+
   api:
     build: .
-    volumes:
-      - .:/usr/src/webarber
     ports:
-      - '8080:3000'
+      - "8080:3000"
+    volumes:
+      - ./src:/webarber/src
+    command: sh -c "yarn dev"
     environment:
-      DB_HOST: database
+      DB_HOST: db
       DB_PORT: 5432
       DB_NAME: webarber
       DB_USERNAME: webarber
       DB_PASSWORD: webarber
     depends_on:
-      - database
+      - migration
