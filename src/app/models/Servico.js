@@ -8,6 +8,7 @@ module.exports = (sequelize, DataTypes) => {
         },
         titulo: DataTypes.STRING,
         preco: DataTypes.FLOAT,
+        ativo: DataTypes.BOOLEAN
     }, {
         freezeTableName: true,
         timestamps: false
