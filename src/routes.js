@@ -4,6 +4,7 @@ const routes = express.Router();
 const UserController = require('./app/controllers/UserController');
 const TipoUsuarioController = require('./app/controllers/TipoUsuarioController');
 const BarbeariaController = require('./app/controllers/BarbeariaController');
+const ServicoController = require('./app/controllers/ServicoController');
 
 // Rotas Tipo
 routes.get('/tipos', TipoUsuarioController.getAll)
@@ -22,5 +23,12 @@ routes.get('/barbearias/:barbearia_id', BarbeariaController.get);
 routes.post('/barbearias', BarbeariaController.create);
 routes.patch('/barbearias/:barbearia_id', BarbeariaController.update);
 routes.delete('/barbearias/:barbearia_id', BarbeariaController.delete);
+
+// Rotas serviço
+routes.get('/servicos', ServicoController.getAll);
+routes.get('/servicos/:servico_id', ServicoController.get);
+routes.post('/servicos', ServicoController.create);
+routes.patch('/servicos/:servico_id', ServicoController.update);
+routes.delete('/servicos/:servico_id', ServicoController.delete);
 
 module.exports = routes;
