@@ -1,10 +1,15 @@
 const { Barbearia } = require('../models');
+const Sequelize = require('sequelize');
+const Op = Sequelize.Op;
 
 module.exports = {
 
-    async getAll(_, res) {
+    async getAll(req, res) {
         try {
             const barbearias = await Barbearia.findAll({
+                where: {
+                    ativo: true
+                },
                 order: [
                     ['id', 'ASC']
                 ]
@@ -23,9 +28,9 @@ module.exports = {
 
     async get(req, res) {
         try {
-            const { barbearia_id } = req.params;
+            const { barbearia_nome } = req.params;
             const barbearia = await Barbearia.findOne({ where: { 
-                id: barbearia_id
+                nome:  { [Op.like]: '%'+barbearia_nome.replace('+', ' ')+'%' }
             }});
             
             if(!barbearia) {
@@ -39,16 +44,34 @@ module.exports = {
         }
     },
 
+    async getMyBarbearias(req, res) {
+        try {
+            const { user_id } = req.params;
+            const barbearia = await Barbearia.findOne({ where: { 
+                user_id: user_id
+            }});
+            
+            if(!barbearia) {
+                return res.status(400).json({ message: 'Nenhuma barberia encontrada'});
+            }
+            
+            return res.status(200).json(barbearia);
+        } catch (error) {
+            console.log(error);
+            return res.status(400).json({ message: 'Erro ao buscar barberias' });
+        }
+    },
+
     async create(req, res) {
         try {
-            const { nome, endereco, telefone, horarioAbertura, horarioFechamento, icone } = req.body;
+            const { nome, endereco, telefone, horarioAbertura, horarioFechamento, icone, user_id } = req.body;
             const barberia = await Barbearia.findOne({ where: { nome: nome }});
             
             if (barberia) {
                 return res.status(400).json({ message: 'Já existe uma barbearia com este nome'});
             }
 
-            const novaBarbearia = await Barbearia.create({ nome, endereco, telefone, horarioAbertura, horarioFechamento });
+            const novaBarbearia = await Barbearia.create({ nome, endereco, telefone, horarioAbertura, horarioFechamento, icone, user_id });
             return res.status(201).json(novaBarbearia);
         } catch (error) {
             console.log(error);
@@ -93,7 +116,7 @@ module.exports = {
                 ativo: false
             })
     
-            return res.status(200).json({ message: "Barbearia deletada"});
+            return res.status(200).json({ message: 'Barbearia deletada' });
         } catch(error) {
             console.log(error);
             return res.status(400).json({ message: 'Erro ao deletar barberia' });

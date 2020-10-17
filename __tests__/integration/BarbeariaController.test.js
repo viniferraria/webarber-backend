@@ -7,7 +7,8 @@ var barberia = {
     "endereco": "Testing",
     "telefone": "(11)9999999",
     "horarioAbertura": "2020-10-29T16:34:00.000Z",
-    "horarioFechamento": "2020-10-29T16:34:00.000Z"
+    "horarioFechamento": "2020-10-29T16:34:00.000Z",
+    "user_id": 1
 };
 
 describe('Barberia controller', () => {
@@ -25,6 +26,7 @@ describe('Barberia controller', () => {
         expect(response.body.telefone).toBe(barberia.telefone);
         expect(response.body.horarioAbertura).toBe(barberia.horarioAbertura);
         expect(response.body.horarioFechamento).toBe(barberia.horarioFechamento);
+        expect(response.body.user_id).toBe(barberia.user_id);
         expect(response.body.ativo).toBe(true);
     });
 
