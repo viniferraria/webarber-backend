@@ -1,10 +1,14 @@
 const { Servico } = require('../models');
+const { Barbearia } = require('../models');
 
 module.exports = {
 
     async getAll(_, res) {
         try {
             const servicos = await Servico.findAll({
+                where: {
+                    ativo: true
+                },
                 order: [
                     ['id', 'ASC']
                 ]
@@ -41,14 +45,21 @@ module.exports = {
 
     async create(req, res) {
         try {
-            const { titulo, preco } = req.body;
-            const servico = await Servico.findOne({ where: { titulo: titulo }});
+            const { titulo, preco, barbearia_id } = req.body;
+            const servico = await Servico.findOne({ where: { titulo: titulo, barbearia_id: barbearia_id }});
+            const barbearia = await Barbearia.findOne({ where: { 
+                id: barbearia_id
+            }});
             
-            if (servico) {
-                return res.status(400).json({ message: 'Já existe um serviço com este nome'});
+            if(!barbearia) {
+                return res.status(400).json({ message: 'Barbearia não encontrada'});
+            }
+            
+            if(servico) {
+                return res.status(400).json({ message: 'Já existe um serviço com este nome para esta barbearia'});
             }
 
-            const novoServico = await Servico.create({ titulo, preco });
+            const novoServico = await Servico.create({ titulo, preco, barbearia_id });
             return res.status(201).json(novoServico);
         } catch (error) {
             console.log(error);
@@ -59,7 +70,7 @@ module.exports = {
 
     async update(req, res) {
         const { servico_id } = req.params;
-        const { titulo, preco } = req.body;
+        const { titulo, preco, ativo } = req.body;
 
         const servico = await Servico.findByPk(servico_id);
 
