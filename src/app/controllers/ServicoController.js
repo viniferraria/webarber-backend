@@ -29,7 +29,8 @@ module.exports = {
         try {
             const { servico_id } = req.params;
             const servico = await Servico.findOne({ where: { 
-                id: servico_id
+                id: servico_id,
+                ativo: true
             }});
             
             if(!servico) {
