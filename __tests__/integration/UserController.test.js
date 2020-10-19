@@ -32,6 +32,33 @@ describe('User controller', () => {
         expect(response.body.idTipo).toBe(user.idTipo);
     });
 
+    test("It should authenticate user", async () => {
+        const response = await request(app)
+        .post("/login")
+        .send({ email: user.email, password: user.password })
+
+        expect(response.status).toBe(200)
+        expect(response.body.message).toBe('Login!');
+    });
+
+    test("It should not authenticate user with wrong password", async () => {
+        const response = await request(app)
+        .post("/login")
+        .send({ email: user.email, password: "lalala" })
+
+        expect(response.status).toBe(400)
+        expect(response.body.message).toBe('Incorrect password');
+    });
+    
+    test("It should not authenticate unregistered user", async () => {
+        const response = await request(app)
+        .post("/login")
+        .send({ email: "fake@mail.com", password: "lalala" })
+
+        expect(response.status).toBe(401)
+        expect(response.body.message).toBe('User not found');
+    });
+
     test("It should not allow accounts to share the same email", async () => {
         const response = await request(app)
         .post('/users')
@@ -79,16 +106,5 @@ describe('User controller', () => {
         expect(response.status).toBe(200);
         expect(response.body.message).toBe('User deleted');
     });
-
-    // test("It should not patch the deleted user", async () => {
-    //     user.nome = "deletedName";
-    //     user.sobrenome = "deletedLastName";
-    //     const response = await request(app)
-    //     .patch("/users/" + id)
-    //     .send(user)
-
-    //     expect(response.status).toBe(400)
-    //     expect(response.error).toBe('User Not Found');
-    // });
 
 })
