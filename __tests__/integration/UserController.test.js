@@ -38,7 +38,7 @@ describe('User controller', () => {
         .send({ email: user.email, password: user.password })
 
         expect(response.status).toBe(200)
-        expect(response.body.message).toBe('Login!');
+        expect(response.body.message).toHaveProperty('id');
     });
 
     test("It should not authenticate user with wrong password", async () => {

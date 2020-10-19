@@ -111,7 +111,7 @@ module.exports = {
             const { email, password } = req.body;
             const user = await Usuario.findOne({ where: { email } });
             
-                if (!user)
+            if (!user)
                 return res.status(401).json({ message: 'User not found' });
             
             if (!(await user.checkPassword(password))) 
@@ -120,7 +120,7 @@ module.exports = {
             if (!user.ativo)
                 return res.status(400).json({ message: 'Credenciais inválidas' });
             
-            return res.status(200).json({ message: 'Login!' });
+            return res.status(200).json(user);
         } catch(err) {
             console.log(err);
             return res.status(404).json({ message: `Error`});
