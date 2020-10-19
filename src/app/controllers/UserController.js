@@ -97,9 +97,6 @@ module.exports = {
             await user.update({ 
                 ativo: false
             })
-            // await Usuario.destroy({ where: {
-            //     id: user_id
-            // }})
     
             return res.status(200).json({ message: "User deleted"});
         } catch(error) {
@@ -114,11 +111,14 @@ module.exports = {
             const { email, password } = req.body;
             const user = await Usuario.findOne({ where: { email } });
             
-            if(!user)
+                if (!user)
                 return res.status(401).json({ message: 'User not found' });
             
             if (!(await user.checkPassword(password))) 
-                return res.status(400).json({ message: 'Incorrect password' });
+                return res.status(400).json({ message: 'Credenciais inválidas' });
+                
+            if (!user.ativo)
+                return res.status(400).json({ message: 'Credenciais inválidas' });
             
             return res.status(200).json({ message: 'Login!' });
         } catch(err) {
