@@ -8,8 +8,6 @@ module.exports = (sequelize, DataTypes) => {
         },
         titulo: DataTypes.STRING,
         preco: DataTypes.FLOAT,
-        ativo: DataTypes.BOOLEAN,
-        barbearia_id: DataTypes.INTEGER
     }, {
         freezeTableName: true,
         timestamps: false
@@ -17,15 +15,11 @@ module.exports = (sequelize, DataTypes) => {
         timestamps: false
     });
 
-    Servico.associate = function (models) {
-        // associations can be defined here
-        // ServicoBarbearia.belongsTo(models.Agendamentos);
-        // ServicoBarbearia.belongsTo(models.ServicoBarbearia);
-
-        Servico.hasOne(models.Barbearia, {
-            foreignKey: 'id'
-        });
-    };
+    // ServicoBarbearia.associate = function (models) {
+    //     // associations can be defined here
+    //     ServicoBarbearia.belongsTo(models.Agendamentos);
+    //     ServicoBarbearia.belongsTo(models.ServicoBarbearia);
+    // };
 
     return Servico;
 };
