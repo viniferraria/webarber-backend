@@ -113,7 +113,6 @@ module.exports = {
         try {
             const { email, password } = req.body;
             const user = await Usuario.findOne({ where: { email } });
-            // Usuario.findOne({ where: { email: email }})
             
             if(!user)
                 return res.status(401).json({ message: 'User not found' });
