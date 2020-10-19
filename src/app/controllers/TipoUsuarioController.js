@@ -4,7 +4,6 @@ module.exports = {
 
     async getAll(_, res) {
         try {
-
             let tipos = await TipoUsuario.findAll({
                 order: [
                     ['id', 'ASC']

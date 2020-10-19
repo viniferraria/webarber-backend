@@ -5,11 +5,26 @@ var id;
 var servico = {
     "titulo": "Testing",
     "preco": 9.99,
-    "barbearia_id":1
+    "barbearia_id": 1
 };
 
-module.exports = () => describe('Serviço controller', () => {
+describe('Serviço controller', () => {
+    test('Não deve criar um serviço para uma barbearia inválida', async () =>{
+            const response = await request(app)
+            .post('/servicos')
+            .send({ ...servico, barbearia_id: 123123});
 
+            expect(response.status).toBe(201);
+            expect(response.body).toHaveProperty('id');
+            id = response.body.id;
+            expect(response.body.titulo).toBe(servico.titulo);
+            expect(response.body.preco).toBe(servico.preco);
+            expect(response.body.barbearia_id).toBe(servico.barbearia_id);
+            expect(response.body.ativo).toBe(true);
+    });
+})
+
+module.exports = () => describe('Criação do serviço para uma barbearia existente', () => {
     test('Deve criar um serviço', async () =>{
         const response = await request(app)
         .post('/servicos')
