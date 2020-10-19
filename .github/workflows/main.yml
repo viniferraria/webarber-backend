@@ -1,7 +1,7 @@
 name: Docker Image CI
 on:
   push:
-    branches: [feature/**, features/**, master, develop, hotfix/**]
+    branches: ['**', '!master', '!develop']
   pull_request:
     branches: [master, develop]
 
