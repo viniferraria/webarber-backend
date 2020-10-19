@@ -8,7 +8,7 @@ var servico = {
     "barbearia_id":1
 };
 
-describe('Serviço controller', () => {
+module.exports = () => describe('Serviço controller', () => {
 
     test('Deve criar um serviço', async () =>{
         const response = await request(app)
