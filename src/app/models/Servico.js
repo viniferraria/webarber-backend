@@ -17,12 +17,14 @@ module.exports = (sequelize, DataTypes) => {
         timestamps: false
     });
 
-    Servico.associate = function (models) {
-        // associations can be defined here
-        // ServicoBarbearia.belongsTo(models.Agendamentos);
-        // ServicoBarbearia.belongsTo(models.ServicoBarbearia);
+    // ServicoBarbearia.associate = function (models) {
+    //     // associations can be defined here
+    //     ServicoBarbearia.belongsTo(models.Agendamentos);
+    //     ServicoBarbearia.belongsTo(models.ServicoBarbearia);
+    // };
 
-        Servico.hasOne(models.Barbearia, {
+    Servico.associate = function (models) {
+            Servico.hasOne(models.Barbearia, {
             foreignKey: 'id'
         });
     };
