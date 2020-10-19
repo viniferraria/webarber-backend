@@ -26,7 +26,7 @@ routes.patch('/barbearias/:barbearia_id', BarbeariaController.update);
 routes.delete('/barbearias/:barbearia_id', BarbeariaController.delete);
 
 // Rotas serviço
-routes.get('/servicos', ServicoController.getAll);
+routes.get('/servicos/barbearia/:barbearia_id', ServicoController.getAllBarbearia);
 routes.get('/servicos/:servico_id', ServicoController.get);
 routes.post('/servicos', ServicoController.create);
 routes.patch('/servicos/:servico_id', ServicoController.update);

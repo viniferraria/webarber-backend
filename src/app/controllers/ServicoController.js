@@ -3,25 +3,30 @@ const { Barbearia } = require('../models');
 
 module.exports = {
 
-    async getAll(_, res) {
+    async getAllBarbearia(req, res) {
         try {
-            const servicos = await Servico.findAll({
-                where: {
-                    ativo: true
-                },
-                order: [
-                    ['id', 'ASC']
-                ]
-            })
-    
-            if (!servicos) {
-                return res.status(400).json({ message: 'Nenhum serviço encontrado'});
+            const { barbearia_id } = req.params;
+        
+            const barbearia = await Barbearia.findOne({ where: { 
+                id: barbearia_id
+            }});
+            
+            if(!barbearia) {
+                return res.status(400).json({ message: 'Barbearia não encontrada'});
             }
-    
-            return res.status(200).json(servicos);
-        } catch(error) {
+            const servico = await Servico.findAll({ where: { 
+                barbearia_id: barbearia_id,
+                ativo: true
+            }});
+
+            if(!servico) {
+                return res.status(400).json({ message: 'Não há serviços'});
+            }
+            
+            return res.status(200).json(servico);
+        } catch (error) {
             console.log(error);
-            return res.status(400).json({ message: 'Erro ao buscar serviços' });
+            return res.status(400).json({ message: 'Erro ao buscar serviços da barbearia' });
         }
     },
 
