@@ -47,7 +47,7 @@ describe('User controller', () => {
         .send({ email: user.email, password: "lalala" })
 
         expect(response.status).toBe(400)
-        expect(response.body.message).toBe('Incorrect password');
+        expect(response.body.message).toBe('Credenciais inválidas');
     });
     
     test("It should not authenticate unregistered user", async () => {
@@ -58,7 +58,7 @@ describe('User controller', () => {
         expect(response.status).toBe(401)
         expect(response.body.message).toBe('User not found');
     });
-
+    
     test("It should not allow accounts to share the same email", async () => {
         const response = await request(app)
         .post('/users')
@@ -105,6 +105,15 @@ describe('User controller', () => {
 
         expect(response.status).toBe(200);
         expect(response.body.message).toBe('User deleted');
+    });
+
+    test("It should not authenticate inactive user", async () => {
+        const response = await request(app)
+        .post("/login")
+        .send({ email: user.email, password: user.password })
+
+        expect(response.status).toBe(400)
+        expect(response.body.message).toBe('Credenciais inválidas');
     });
 
 })
