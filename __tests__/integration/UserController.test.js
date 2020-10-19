@@ -112,7 +112,7 @@ describe('User controller', () => {
         .post("/login")
         .send({ email: user.email, password: user.password })
 
-        expect(response.status).toBe(401)
+        expect(response.status).toBe(400)
         expect(response.body.message).toBe('Credenciais inválidas');
     });
 
