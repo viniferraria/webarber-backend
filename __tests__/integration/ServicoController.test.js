@@ -4,11 +4,21 @@ const app = require("../../src/app");
 var id;
 var servico = {
     "titulo": "Testing",
-    "preco": 9.99
+    "preco": 9.99,
+    "barbearia_id": 1
 };
 
 describe('Serviço controller', () => {
+    test('Não deve criar um serviço para uma barbearia inválida', async () =>{
+            const response = await request(app)
+            .post('/servicos')
+            .send({ ...servico, barbearia_id: 123123});
 
+            expect(response.status).toBe(400);
+    });
+})
+
+module.exports = () => describe('Criação do serviço para uma barbearia existente', () => {
     test('Deve criar um serviço', async () =>{
         const response = await request(app)
         .post('/servicos')
@@ -19,16 +29,29 @@ describe('Serviço controller', () => {
         id = response.body.id;
         expect(response.body.titulo).toBe(servico.titulo);
         expect(response.body.preco).toBe(servico.preco);
+        expect(response.body.barbearia_id).toBe(servico.barbearia_id);
         expect(response.body.ativo).toBe(true);
     });
 
-    test("Não deve permitir um serviço com o mesmo nome", async () => {
+    test("Deve resgatar o serviço com este id", async () => {
+        const response = await request(app)
+        .get('/servicos/'+id)
+
+        expect(response.status).toBe(200);
+        expect(response.body).toHaveProperty('id');
+        expect(response.body.titulo).toBe(servico.titulo);
+        expect(response.body.preco).toBe(servico.preco);
+        expect(response.body.barbearia_id).toBe(servico.barbearia_id);
+        expect(response.body.ativo).toBe(true);
+    });
+
+    test("Não deve permitir um serviço com o mesmo nome na mesma barbearia", async () => {
         const response = await request(app)
         .post('/servicos')
         .send(servico);
 
         expect(response.status).toBe(400);
-        expect(response.body.message).toBe('Já existe um serviço com este nome');
+        expect(response.body.message).toBe('Já existe um serviço com este nome para esta barbearia');
     });
 
     test("Deve atualizar um serviço", async () => {

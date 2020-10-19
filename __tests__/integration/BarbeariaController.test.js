@@ -1,5 +1,6 @@
 const request = require("supertest");
 const app = require("../../src/app");
+const servicosTeste = require("./ServicoController.test");
 
 var id;
 var barberia = {
@@ -11,8 +12,7 @@ var barberia = {
     "user_id": 1
 };
 
-describe('Barberia controller', () => {
-
+describe("Barberia controller", () => {
     test('Deve criar uma barberia', async () =>{
         const response = await request(app)
         .post('/barbearias')
@@ -74,5 +74,7 @@ describe('Barberia controller', () => {
 
         expect(response.status).toBe(400);
         expect(response.body.message).toBe('Barbearia não encontrada');
-    });
+    });  
 })
+
+describe("Criando serviços para barbearia", () => servicosTeste());
