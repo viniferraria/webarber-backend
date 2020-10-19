@@ -14,13 +14,7 @@ describe('Serviço controller', () => {
             .post('/servicos')
             .send({ ...servico, barbearia_id: 123123});
 
-            expect(response.status).toBe(201);
-            expect(response.body).toHaveProperty('id');
-            id = response.body.id;
-            expect(response.body.titulo).toBe(servico.titulo);
-            expect(response.body.preco).toBe(servico.preco);
-            expect(response.body.barbearia_id).toBe(servico.barbearia_id);
-            expect(response.body.ativo).toBe(true);
+            expect(response.status).toBe(400);
     });
 })
 
