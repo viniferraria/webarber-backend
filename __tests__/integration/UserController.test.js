@@ -107,18 +107,4 @@ describe('User controller', () => {
         expect(response.body.message).toBe('User deleted');
     });
 
-<<<<<<< HEAD
-=======
-    // test("It should not patch the deleted user", async () => {
-    //     user.nome = "deletedName";
-    //     user.sobrenome = "deletedLastName";
-    //     const response = await request(app)
-    //     .patch("/users/" + id)
-    //     .send(user)
-
-    //     expect(response.status).toBe(400)
-    //     expect(response.error).toBe('User Not Found');
-    // });
-
->>>>>>> b09129473e985e6bf4144f3c294b2586b01b7fb1
 })
