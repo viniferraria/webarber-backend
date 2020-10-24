@@ -29,7 +29,7 @@ module.exports = {
     async get(req, res) {
         try {
             const { barbearia_nome } = req.params;
-            const barbearia = await Barbearia.findOne({ where: { 
+            const barbearia = await Barbearia.findAll({ where: { 
                 nome:  { [Op.like]: '%'+barbearia_nome.replace('+', ' ')+'%' }
             }});
             
@@ -47,7 +47,7 @@ module.exports = {
     async getMyBarbearias(req, res) {
         try {
             const { user_id } = req.params;
-            const barbearia = await Barbearia.findOne({ where: { 
+            const barbearia = await Barbearia.findAll({ where: { 
                 user_id: user_id
             }});
             
