@@ -59,23 +59,13 @@ describe('User controller', () => {
         expect(response.body.message).toBe('User not found');
     });
     
-    test("It should not allow accounts to share the same email", async () => {
+    test("It should not allow accounts to share the same email or CPF/CNPJ", async () => {
         const response = await request(app)
         .post('/users')
         .send(user);
 
         expect(response.status).toBe(400);
         expect(response.body.message).toBe('Error while creating new User')
-    });
-
-    test("It should not allow users to share the same CPF", async () => {
-        user.email = "testando@teste.com"
-        const response = await request(app)
-        .post('/users')
-        .send(user);
-
-        expect(response.status).toBe(400);
-        expect(response.body.message).toBe('CPF is already registered')
     });
 
     test("It should patch the user", async () => {

@@ -3,7 +3,7 @@ const app = require("../../src/app");
 const servicosTeste = require("./ServicoController.test");
 
 var id;
-var barberia = {
+var barbearia = {
     "nome": "Testing",
     "endereco": "Testing",
     "telefone": "(11)9999999",
@@ -16,32 +16,33 @@ describe("Barberia controller", () => {
     test('Deve criar uma barberia', async () =>{
         const response = await request(app)
         .post('/barbearias')
-        .send(barberia);
+        .send(barbearia);
 
         expect(response.status).toBe(201);
         expect(response.body).toHaveProperty('id');
         id = response.body.id;
-        expect(response.body.nome).toBe(barberia.nome);
-        expect(response.body.endereco).toBe(barberia.endereco);
-        expect(response.body.telefone).toBe(barberia.telefone);
-        expect(response.body.horarioAbertura).toBe(barberia.horarioAbertura);
-        expect(response.body.horarioFechamento).toBe(barberia.horarioFechamento);
-        expect(response.body.user_id).toBe(barberia.user_id);
+        expect(response.body.nome).toBe(barbearia.nome);
+        expect(response.body.endereco).toBe(barbearia.endereco);
+        expect(response.body.telefone).toBe(barbearia.telefone);
+        expect(response.body.horarioAbertura).toBe(barbearia.horarioAbertura);
+        expect(response.body.horarioFechamento).toBe(barbearia.horarioFechamento);
+        expect(response.body.user_id).toBe(barbearia.user_id);
         expect(response.body.ativo).toBe(true);
     });
 
     test("Não deve permitir uma barberia com o mesmo nome", async () => {
         const response = await request(app)
         .post('/barbearias')
-        .send(barberia);
+        .send(barbearia);
 
         expect(response.status).toBe(400);
         expect(response.body.message).toBe('Já existe uma barbearia com este nome');
     });
 
-    test("Deve retornar a barbearia com id igual à 1", async () => {
+    test("Deve retornar uma certa barbearia", async () => {
+        let query = "testing";
         const response = await request(app)
-        .get(`/barbearias/${barbearia.id}`)
+        .get(`/barbearias?nome=${query}`);
         
         expect(response.status).toBe(200);
         expect(response.body).toBe(barbearia);
@@ -49,18 +50,41 @@ describe("Barberia controller", () => {
 
     test("Ao buscar uma barbearia inexistente, deve retornar barbearia não encontrada", async () => {
         const response = await request(app)
-        .get(`/barbearias/${999}`)
+        .get(`/barbearias?nome=${999}`);
         
         expect(response.status).toBe(400);
         expect(response.body.message).toBe('Barbearia não encontrada');
     });
 
+    test("Deve retornar uma lista com todas as barberias", async () => {
+        const response = await request(app)
+        .get("/barbearias/")
+        expect(response.status).toBe(200);
+        expect(response.body).toContainEqual(barbearia);
+        expect(response.body.length).toBeGreaterThanOrEqual(1);
+    });
+    
+    test("Deve retornar uma lista com as barberias do moderador", async () => {
+        const response = await request(app)
+        .get("/barbearias/moderador/1")
+        expect(response.status).toBe(200);
+        expect(response.body).toContainEqual(barbearia);
+        expect(response.body.length).toBe(1);
+    });
+    
+    test("Deve retornar uma lista vazia para moderadores sem barbearia ou moderadores inexistentes", async () => {
+        const response = await request(app)
+        .get("/barbearias/moderador/222")
+        expect(response.status).toBe(200);
+        expect(response.body.length).toBe(0);
+    });
+
     test("Deve atualizar uma barbearia", async () => {
-        barberia.nome = "Barbearia atualizada";
-        barberia.endereco = "Novo endereço";
+        barbearia.nome = "Barbearia atualizada";
+        barbearia.endereco = "Novo endereço";
         const response = await request(app)
         .patch("/barbearias/" + id)
-        .send(barberia)
+        .send(barbearia)
 
         expect(response.status).toBe(200)
         expect(response.body.nome).toBe('Barbearia atualizada');
@@ -70,7 +94,7 @@ describe("Barberia controller", () => {
     test("Deve retornar uma barbearia inválida", async () => {
         const response = await request(app)
         .patch("/barbearias/9999")
-        .send(barberia)
+        .send(barbearia)
 
         expect(response.status).toBe(400);
         expect(response.body.message).toBe('Barbearia não encontrada');
@@ -91,38 +115,6 @@ describe("Barberia controller", () => {
         expect(response.status).toBe(400);
         expect(response.body.message).toBe('Barbearia não encontrada');
     });  
-
-    test("Deve retornar uma lista com todas as barberias", async () => {
-        const response = await request(app)
-        .get("/barbearias/")
-        expect(response.status).toBe(200);
-        expect(response.body).toContainEqual(barbearia);
-        expect(response.body.length).toBeGreaterThanOrEqual(1);
-    });
-    
-    test("Deve retornar uma lista com as barberias do moderador", async () => {
-        const response = await request(app)
-        .get("/barbearias/moderador/1")
-        expect(response.status).toBe(200);
-        expect(response.body).toContainEqual(barbearia);
-        expect(response.body.length).toBe(1);
-    });
-
-    test("Deve retornar uma lista vazia para moderadores sem barbearia ou moderadores inexistentes", async () => {
-        const response = await request(app)
-        .get("/barbearias/moderador/222")
-        expect(response.status).toBe(200);
-        expect(response.body).toBe([]);
-        expect(response.body.length).toBe(0);
-    });
-
-    // test("Deve retornar uma lista com as barbearias que possuem o nome próximo ao da query ", async () => {
-    //     const response = await request(app)
-    //     .get("/barbearias/moderador/2")
-    //     expect(response.status).toBe(200);
-    //     expect(response.body).toContainEqual(barbearia);
-    //     expect(response.body.length).toBe(0);
-    // });
 
     // test("Deve retornar Acesso recusado para usuários que não são moderadores", async () => {
     //     const response = await request(app)

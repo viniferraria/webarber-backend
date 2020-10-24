@@ -1,6 +1,6 @@
 const { Barbearia } = require('../models');
 const Sequelize = require('sequelize');
-const Op = Sequelize.Op;
+const { Op } = Sequelize;
 
 module.exports = {
 
@@ -29,11 +29,15 @@ module.exports = {
     async get(req, res) {
         try {
             const { nome } = req.query;
-            const barbearia = await Barbearia.findAll({ where: { 
-                nome:  { [Op.like]: `%${barbearia_nome.replace('+', ' ')}%` }
-            }});
+            const barbearia = await Barbearia.findAll({
+                where: { 
+                    nome:  { 
+                        [Op.iLike]: `%${nome.replace('+', ' ')}%`
+                    }
+                }
+            });
             
-            if(!barbearia) {
+            if (!barbearia) {
                 return res.status(400).json({ message: 'Barbearia não encontrada'});
             }
             
@@ -47,11 +51,13 @@ module.exports = {
     async getMyBarbearias(req, res) {
         try {
             const { user_id } = req.params;
-            const barbearia = await Barbearia.findAll({ where: { 
-                user_id: user_id
-            }});
+            const barbearia = await Barbearia.findAll({
+                where: { 
+                    user_id: user_id
+                }
+            });
             
-            if(!barbearia) {
+            if (!barbearia) {
                 return res.status(400).json({ message: 'Nenhuma barberia encontrada'});
             }
             
@@ -65,7 +71,13 @@ module.exports = {
     async create(req, res) {
         try {
             const { nome, endereco, telefone, horarioAbertura, horarioFechamento, icone, user_id } = req.body;
-            const barberia = await Barbearia.findOne({ where: { nome: nome }});
+            const barberia = await Barbearia.findOne({ 
+                where: { 
+                    nome:  { 
+                        [Op.iLike]: `%${nome}%`
+                    }
+                }
+            });
             
             if (barberia) {
                 return res.status(400).json({ message: 'Já existe uma barbearia com este nome'});

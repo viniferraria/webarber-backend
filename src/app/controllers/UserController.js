@@ -1,4 +1,6 @@
 const { Usuario } = require('../models');
+const Sequelize = require('sequelize');
+const { Op } = Sequelize;
 
 module.exports = {
 
@@ -28,7 +30,7 @@ module.exports = {
                 id: user_id
             }});
             
-            if(!user) {
+            if (!user) {
                 return res.status(400).json({ message: 'User Not Found'});
             }
             
@@ -42,51 +44,59 @@ module.exports = {
     async create(req, res) {
         try {
             const { nome, sobrenome, email, password, CNPJ, CPF, idTipo, icone } = req.body;
-            const user = await Usuario.findOne({ where: { email: email }});
+            const user = await Usuario.findOne({
+                where: {
+                    [Op.or]: [
+                        { email },
+                        { CPF },
+                        { CNPJ }
+                    ]
+                }
+            });
             
             if (user) {
+                console.log("Duplicate fields");
                 return res.status(400).json({ message: 'Error while creating new User'});
             }
 
             const newUser = await Usuario.create({ nome, sobrenome, email, password, CNPJ, CPF, idTipo, icone });
             return res.status(201).json(newUser);
         } catch (error) {
-            if (error.name === 'SequelizeUniqueConstraintError') {
-                return res.status(400).json({ message: 'CPF is already registered'})
-            } else {
-                return res.status(400).json({ message: error });
-            }
+            console.log(error);
+            return res.status(400).json({ message: error });
         }
 
     },
 
     async update(req, res) {
-        const { user_id } = req.params;
-        const { nome, sobrenome, email, password, CNPJ, CPF, idTipo, icone } = req.body;
+        try {
+            const { user_id } = req.params;
+            const { nome, sobrenome, email, password, CNPJ, CPF, idTipo, icone } = req.body;
+            const user = await Usuario.findByPk(user_id);    
+            if (!user) {
+                return res.status(400).json({ message: 'User Not Found'});
+            }
 
-        const user = await Usuario.findByPk(user_id);
+            const updatedUser = await user.update({
+                nome: nome || user.nome,
+                sobrenome: sobrenome || user.sobrenome,
+                email: email || user.email,
+                password: password || user.password,
+                CNPJ: CNPJ || user.CNPJ,
+                CPF: CPF || user.CPF,
+                idTipo: idTipo || user.idTipo,
+                icone: icone || user.icone,
+            })
 
-        if (!user) {
-            return res.status(400).json({ message: 'User Not Found'});
+            return res.status(200).json(updatedUser);
+        } catch (err) {
+            console.log(err.message);
+            return res.status(400).json({message: "Erro ao atualizar informações"});
         }
-
-        const updatedUser = await user.update({
-            nome: nome || user.nome,
-            sobrenome: sobrenome || user.sobrenome,
-            email: email || user.email,
-            password: password || user.password,
-            CNPJ: CNPJ || user.CNPJ,
-            CPF: CPF || user.CPF,
-            idTipo: idTipo || user.idTipo,
-            icone: icone || user.icone,
-        })
-
-        return res.status(200).json(updatedUser);
     },
-
+    
     async delete(req, res) {
         try {
-
             const { user_id } = req.params;
             const user = await Usuario.findByPk(user_id);
 
