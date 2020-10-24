@@ -1,6 +1,7 @@
 const request = require("supertest");
 const app = require("../../src/app");
 const servicosTeste = require("./ServicoController.test");
+const { user, moderator } = require("./1UserController.test");
 
 var id;
 var barbearia = {
@@ -9,11 +10,28 @@ var barbearia = {
     "telefone": "(11)9999999",
     "horarioAbertura": "2020-10-29T16:34:00.000Z",
     "horarioFechamento": "2020-10-29T16:34:00.000Z",
-    "user_id": 1
+    "user_id": moderator.id
 };
 
 describe("Barberia controller", () => {
-    test('Deve criar uma barberia', async () =>{
+    test('Não deve permitir que um usuário crie uma barberia', async () =>{
+        const response = await request(app)
+        .post('/barbearias')
+        .send({...barbearia, user_id: user.id});
+
+        expect(response.status).toBe(201);
+        expect(response.body).toHaveProperty('id');
+        id = response.body.id;
+        expect(response.body.nome).toBe(barbearia.nome);
+        expect(response.body.endereco).toBe(barbearia.endereco);
+        expect(response.body.telefone).toBe(barbearia.telefone);
+        expect(response.body.horarioAbertura).toBe(barbearia.horarioAbertura);
+        expect(response.body.horarioFechamento).toBe(barbearia.horarioFechamento);
+        expect(response.body.user_id).toBe(barbearia.user_id);
+        expect(response.body.ativo).toBe(true);
+    });
+
+    test('Deve permitir que um moderador crie uma barberia', async () =>{
         const response = await request(app)
         .post('/barbearias')
         .send(barbearia);
@@ -52,7 +70,7 @@ describe("Barberia controller", () => {
         const response = await request(app)
         .get(`/barbearias?nome=${999}`);
         
-        expect(response.status).toBe(400);
+        expect(response.status).toBe(200);
         expect(response.body.message).toBe('Barbearia não encontrada');
     });
 
@@ -60,7 +78,7 @@ describe("Barberia controller", () => {
         const response = await request(app)
         .get("/barbearias/")
         expect(response.status).toBe(200);
-        expect(response.body).toContainEqual(barbearia);
+        expect(response.body).toContainEqual({ativo: true, ...barbearia});
         expect(response.body.length).toBeGreaterThanOrEqual(1);
     });
     

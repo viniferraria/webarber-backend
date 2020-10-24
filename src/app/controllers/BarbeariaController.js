@@ -1,10 +1,10 @@
-const { Barbearia } = require('../models');
+const { Barbearia, Usuario } = require('../models');
 const Sequelize = require('sequelize');
 const { Op } = Sequelize;
 
 module.exports = {
 
-    async getAll(req, res) {
+    async getAll(_, res) {
         try {
             const barbearias = await Barbearia.findAll({
                 where: {
@@ -82,6 +82,17 @@ module.exports = {
             if (barberia) {
                 return res.status(400).json({ message: 'Já existe uma barbearia com este nome'});
             }
+            
+            if (!user_id) {
+                console.log('É necessário o id do moderador para associar uma barbearia');
+                return res.status(400).json({ message: 'É necessário informar o moderador'});
+            }
+
+            let usuario = await Usuario.findByPk(user_id);
+            if (usuario.idTipo === '1') {
+                console.log('É necessário ser um moderador para criar uma barbearia');
+                return req.status(404).json({ message: 'É necessário ser um moderador para criar uma barbearia' });
+            }
 
             const novaBarbearia = await Barbearia.create({ nome, endereco, telefone, horarioAbertura, horarioFechamento, icone, user_id });
             return res.status(201).json(novaBarbearia);
@@ -93,25 +104,29 @@ module.exports = {
     },
 
     async update(req, res) {
-        const { barbearia_id } = req.params;
-        const { nome, endereco, telefone, horarioAbertura, horarioFechamento, icone } = req.body;
-
-        const barberia = await Barbearia.findByPk(barbearia_id);
-
-        if (!barberia) {
-            return res.status(400).json({ message: 'Barbearia não encontrada'});
+        try {
+            const { barbearia_id } = req.params;
+            const { nome, endereco, telefone, horarioAbertura, horarioFechamento, icone } = req.body;
+            const barberia = await Barbearia.findByPk(barbearia_id);
+            
+            if (!barberia) {
+                return res.status(400).json({ message: 'Barbearia não encontrada'});
+            }
+            
+            const barbeariaAtualizada = await barberia.update({
+                nome: nome || barberia.nome,
+                endereco: endereco || barberia.endereco,
+                telefone: telefone || barberia.telefone,
+                horarioAbertura: horarioAbertura || barberia.horarioAbertura,
+                horarioFechamento: horarioFechamento || barberia.horarioFechamento,
+                icone: icone || barberia.icone,
+            })
+            
+            return res.status(200).json(barbeariaAtualizada);
+        } catch (err) {
+            console.log(error);
+            return res.status(400).json({ message: 'Erro ao atualizar barbearia'})
         }
-
-        const barbeariaAtualizada = await barberia.update({
-            nome: nome || barberia.nome,
-            endereco: endereco || barberia.endereco,
-            telefone: telefone || barberia.telefone,
-            horarioAbertura: horarioAbertura || barberia.horarioAbertura,
-            horarioFechamento: horarioFechamento || barberia.horarioFechamento,
-            icone: icone || barberia.icone,
-        })
-
-        return res.status(200).json(barbeariaAtualizada);
     },
 
     async delete(req, res) {
@@ -133,6 +148,5 @@ module.exports = {
             console.log(error);
             return res.status(400).json({ message: 'Erro ao deletar barberia' });
         }
-
     }
 };

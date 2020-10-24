@@ -42,6 +42,10 @@ module.exports = {
     },
 
     async create(req, res) {
+        function validaDocumento(documento) {
+            return documento.match(/^(\d{3}\.?){2}(\d{3})-?(\d{2})$|^\d{2}\.?\d{3}\.?\d{3}\/?\d{4}\-?\d{2}$/);
+        }
+
         try {
             const { nome, sobrenome, email, password, CNPJ, CPF, idTipo, icone } = req.body;
             const user = await Usuario.findOne({
@@ -59,6 +63,19 @@ module.exports = {
                 return res.status(400).json({ message: 'Error while creating new User'});
             }
 
+            if (idTipo == 1 && !CPF && CNPJ) {
+                console.log(CNPJ? "passou CNPJ e não CPF" : "não passo CPF");
+                return res.status(400).json({ message: 'É necessário informar um CPF para criar uma conta' });
+            }
+
+            if (idTipo == 2 && !CPF) {
+                console.log(CPF? "passou CPF e não CNPJ" : "não passo CNPJ");
+                return res.status(400).json({ message: 'É necessário informar um CPF para criar uma conta' });
+            }
+
+            if (!validaDocumento(CPF || CNPJ))
+                return res.status(400).json({ message: 'Documento inválido' });
+
             const newUser = await Usuario.create({ nome, sobrenome, email, password, CNPJ, CPF, idTipo, icone });
             return res.status(201).json(newUser);
         } catch (error) {
@@ -73,6 +90,7 @@ module.exports = {
             const { user_id } = req.params;
             const { nome, sobrenome, email, password, CNPJ, CPF, idTipo, icone } = req.body;
             const user = await Usuario.findByPk(user_id);    
+            
             if (!user) {
                 return res.status(400).json({ message: 'User Not Found'});
             }
