@@ -39,6 +39,22 @@ describe("Barberia controller", () => {
         expect(response.body.message).toBe('Já existe uma barbearia com este nome');
     });
 
+    test("Deve retornar a barbearia com id igual à 1", async () => {
+        const response = await request(app)
+        .get(`/barbearias/${barbearia.id}`)
+        
+        expect(response.status).toBe(200);
+        expect(response.body).toBe(barbearia);
+    });
+
+    test("Ao buscar uma barbearia inexistente, deve retornar barbearia não encontrada", async () => {
+        const response = await request(app)
+        .get(`/barbearias/${999}`)
+        
+        expect(response.status).toBe(400);
+        expect(response.body.message).toBe('Barbearia não encontrada');
+    });
+
     test("Deve atualizar uma barbearia", async () => {
         barberia.nome = "Barbearia atualizada";
         barberia.endereco = "Novo endereço";
@@ -75,6 +91,45 @@ describe("Barberia controller", () => {
         expect(response.status).toBe(400);
         expect(response.body.message).toBe('Barbearia não encontrada');
     });  
+
+    test("Deve retornar uma lista com todas as barberias", async () => {
+        const response = await request(app)
+        .get("/barbearias/")
+        expect(response.status).toBe(200);
+        expect(response.body).toContainEqual(barbearia);
+        expect(response.body.length).toBeGreaterThanOrEqual(1);
+    });
+    
+    test("Deve retornar uma lista com as barberias do moderador", async () => {
+        const response = await request(app)
+        .get("/barbearias/moderador/1")
+        expect(response.status).toBe(200);
+        expect(response.body).toContainEqual(barbearia);
+        expect(response.body.length).toBe(1);
+    });
+
+    test("Deve retornar uma lista vazia para moderadores sem barbearia ou moderadores inexistentes", async () => {
+        const response = await request(app)
+        .get("/barbearias/moderador/222")
+        expect(response.status).toBe(200);
+        expect(response.body).toBe([]);
+        expect(response.body.length).toBe(0);
+    });
+
+    // test("Deve retornar uma lista com as barbearias que possuem o nome próximo ao da query ", async () => {
+    //     const response = await request(app)
+    //     .get("/barbearias/moderador/2")
+    //     expect(response.status).toBe(200);
+    //     expect(response.body).toContainEqual(barbearia);
+    //     expect(response.body.length).toBe(0);
+    // });
+
+    // test("Deve retornar Acesso recusado para usuários que não são moderadores", async () => {
+    //     const response = await request(app)
+    //     .get("/barbearias/moderador/2")
+    //     expect(response.body).toContainEqual(barbearia);
+    //     expect(response.body.length).toBe(1);
+    // }); 
 })
 
 describe("Criando serviços para barbearia", () => servicosTeste());

@@ -28,9 +28,9 @@ module.exports = {
 
     async get(req, res) {
         try {
-            const { barbearia_nome } = req.params;
+            const { nome } = req.query;
             const barbearia = await Barbearia.findAll({ where: { 
-                nome:  { [Op.like]: '%'+barbearia_nome.replace('+', ' ')+'%' }
+                nome:  { [Op.like]: `%${barbearia_nome.replace('+', ' ')}%` }
             }});
             
             if(!barbearia) {
