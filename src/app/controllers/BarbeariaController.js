@@ -4,41 +4,42 @@ const { Op } = Sequelize;
 
 module.exports = {
 
-    async getAll(_, res) {
-        try {
-            const barbearias = await Barbearia.findAll({
-                where: {
-                    ativo: true
-                },
-                order: [
-                    ['id', 'ASC']
-                ]
-            })
+    // async getAll(_, res) {
+    //     try {
+    //         const barbearias = await Barbearia.findAll({
+    //             where: {
+    //                 ativo: true
+    //             },
+    //             order: [
+    //                 ['id', 'ASC']
+    //             ]
+    //         })
     
-            if (!barbearias) {
-                return res.status(400).json({ message: 'Nenhuma barberia encontrada'});
-            }
+    //         if (!barbearias) {
+    //             return res.status(400).json({ message: ''});
+    //         }
     
-            return res.status(200).json(barbearias);
-        } catch(error) {
-            console.log(error);
-            return res.status(400).json({ message: 'Erro ao buscar barberias' });
-        }
-    },
+    //         return res.status(200).json(barbearias);
+    //     } catch(error) {
+    //         console.log(error);
+    //         return res.status(400).json({ message: 'Erro ao buscar barberias' });
+    //     }
+    // },
 
     async get(req, res) {
         try {
-            const { nome } = req.query;
+            let { nome } = req.query;
+            nome = (nome)? nome.replace('+', ' ') : '';
             const barbearia = await Barbearia.findAll({
                 where: { 
                     nome:  { 
-                        [Op.iLike]: `%${nome.replace('+', ' ')}%`
+                        [Op.iLike]: `%${nome}%`
                     }
                 }
             });
             
             if (!barbearia) {
-                return res.status(400).json({ message: 'Barbearia não encontrada'});
+                return res.status(400).json({ message: 'Nenhuma barberia encontrada'});
             }
             
             return res.status(200).json(barbearia);
@@ -91,7 +92,7 @@ module.exports = {
             let usuario = await Usuario.findByPk(user_id);
             if (usuario.idTipo === '1') {
                 console.log('É necessário ser um moderador para criar uma barbearia');
-                return req.status(404).json({ message: 'É necessário ser um moderador para criar uma barbearia' });
+                return req.status(400).json({ message: 'É necessário informar um moderador para criar uma barbearia' });
             }
 
             const novaBarbearia = await Barbearia.create({ nome, endereco, telefone, horarioAbertura, horarioFechamento, icone, user_id });

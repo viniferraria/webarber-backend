@@ -16,7 +16,7 @@ var moderator = {
     "sobrenome": "123",
     "email": "4queijos@gmail.com",
     "password": "asdasdasd",
-    "CPF": "999.999.999-11",
+    "CNPJ": "999.999.999-11",
     "idTipo": 2,
 };
 
@@ -27,10 +27,10 @@ describe('User controller', () => {
         .post('/users')
         .send(user);
 
+        user.id = response.body.id;
         expect(response.status).toBe(201);
         // expect(response.type).toBe('Content-Type', /json/)
         expect(response.body).toHaveProperty('id');
-        this.usuario.id = response.body.id;
         expect(response.body.nome).toBe(user.nome);
         expect(response.body.sobrenome).toBe(user.sobrenome);
         expect(response.body.email).toBe(user.email);
@@ -45,12 +45,18 @@ describe('User controller', () => {
         const response = await request(app)
         .post('/users')
         .send(moderator);
+
+        moderator.id = response.body.id;
         expect(response.status).toBe(201);
-        // expect(response.type).toBe('Content-Type', /json/)
         expect(response.body).toHaveProperty('id');
-        this.moderador.id = response.body.id;
-        expect(response.body).toContainEqual(moderator);
-        expect(response.body).toBe(moderator);
+        expect(response.body.nome).toBe(moderator.nome);
+        expect(response.body.sobrenome).toBe(moderator.sobrenome);
+        expect(response.body.email).toBe(moderator.email);
+        expect(response.body.password).toBe(moderator.password);
+        expect(response.body.ativo).toBe(true);
+        expect(response.body.CPF).toBe(moderator.CPF || null);
+        expect(response.body.CNPJ).toBe(moderator.CNPJ || null);
+        expect(response.body.idTipo).toBe(moderator.idTipo);
     });
 
     test("It should authenticate user", async () => {
@@ -93,7 +99,7 @@ describe('User controller', () => {
         user.nome = "updatedName";
         user.sobrenome = "updatedLastName";
         const response = await request(app)
-        .patch(`/users/${usuario.id}`)
+        .patch(`/users/${user.id}`)
         .send(user)
 
         expect(response.status).toBe(200)
@@ -112,7 +118,7 @@ describe('User controller', () => {
 
     test("It should delete the user", async () => {
         const response = await request(app)
-        .delete(`/users/${usuario.id}`)
+        .delete(`/users/${user.id}`)
 
         expect(response.status).toBe(200);
         expect(response.body.message).toBe('User deleted');

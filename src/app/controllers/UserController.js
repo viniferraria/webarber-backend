@@ -52,8 +52,8 @@ module.exports = {
                 where: {
                     [Op.or]: [
                         { email },
-                        { CPF },
-                        { CNPJ }
+                        // { CPF },
+                        // { CNPJ }
                     ]
                 }
             });
@@ -63,12 +63,12 @@ module.exports = {
                 return res.status(400).json({ message: 'Error while creating new User'});
             }
 
-            if (idTipo == 1 && !CPF && CNPJ) {
+            if (idTipo == 1 && !CPF) {
                 console.log(CNPJ? "passou CNPJ e não CPF" : "não passo CPF");
                 return res.status(400).json({ message: 'É necessário informar um CPF para criar uma conta' });
             }
 
-            if (idTipo == 2 && !CPF) {
+            if (idTipo == 2 && !CNPJ) {
                 console.log(CPF? "passou CPF e não CNPJ" : "não passo CNPJ");
                 return res.status(400).json({ message: 'É necessário informar um CPF para criar uma conta' });
             }

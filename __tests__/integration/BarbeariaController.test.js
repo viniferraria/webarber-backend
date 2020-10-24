@@ -1,7 +1,7 @@
 const request = require("supertest");
 const app = require("../../src/app");
 const servicosTeste = require("./ServicoController.test");
-const { user, moderator } = require("./1UserController.test");
+// const { user, moderator } = require("./1UserController.test");
 
 var id;
 var barbearia = {
@@ -10,7 +10,7 @@ var barbearia = {
     "telefone": "(11)9999999",
     "horarioAbertura": "2020-10-29T16:34:00.000Z",
     "horarioFechamento": "2020-10-29T16:34:00.000Z",
-    "user_id": moderator.id
+    "user_id": 2
 };
 
 describe("Barberia controller", () => {
@@ -19,16 +19,9 @@ describe("Barberia controller", () => {
         .post('/barbearias')
         .send({...barbearia, user_id: user.id});
 
-        expect(response.status).toBe(201);
-        expect(response.body).toHaveProperty('id');
-        id = response.body.id;
-        expect(response.body.nome).toBe(barbearia.nome);
-        expect(response.body.endereco).toBe(barbearia.endereco);
-        expect(response.body.telefone).toBe(barbearia.telefone);
-        expect(response.body.horarioAbertura).toBe(barbearia.horarioAbertura);
-        expect(response.body.horarioFechamento).toBe(barbearia.horarioFechamento);
-        expect(response.body.user_id).toBe(barbearia.user_id);
-        expect(response.body.ativo).toBe(true);
+        expect(response.status).toBe(400);
+        expect(response.body).toHaveProperty('message');
+        expect(response.body.message).toBe('É necessário informar um moderador para criar uma barbearia');
     });
 
     test('Deve permitir que um moderador crie uma barberia', async () =>{
@@ -58,12 +51,11 @@ describe("Barberia controller", () => {
     });
 
     test("Deve retornar uma certa barbearia", async () => {
-        let query = "testing";
         const response = await request(app)
-        .get(`/barbearias?nome=${query}`);
+        .get(`/barbearias?nome=${barbearia.nome}`);
         
         expect(response.status).toBe(200);
-        expect(response.body).toBe(barbearia);
+        expect(response.body).toContainEqual(barbearia);
     });
 
     test("Ao buscar uma barbearia inexistente, deve retornar barbearia não encontrada", async () => {
@@ -71,7 +63,7 @@ describe("Barberia controller", () => {
         .get(`/barbearias?nome=${999}`);
         
         expect(response.status).toBe(200);
-        expect(response.body.message).toBe('Barbearia não encontrada');
+        expect(response.body.length).toBe(0);
     });
 
     test("Deve retornar uma lista com todas as barberias", async () => {
@@ -84,7 +76,7 @@ describe("Barberia controller", () => {
     
     test("Deve retornar uma lista com as barberias do moderador", async () => {
         const response = await request(app)
-        .get("/barbearias/moderador/1")
+        .get(`/barbearias/moderador/${moderador.id}`)
         expect(response.status).toBe(200);
         expect(response.body).toContainEqual(barbearia);
         expect(response.body.length).toBe(1);
@@ -101,7 +93,7 @@ describe("Barberia controller", () => {
         barbearia.nome = "Barbearia atualizada";
         barbearia.endereco = "Novo endereço";
         const response = await request(app)
-        .patch("/barbearias/" + id)
+        .patch(`/barbearias/${id}`)
         .send(barbearia)
 
         expect(response.status).toBe(200)

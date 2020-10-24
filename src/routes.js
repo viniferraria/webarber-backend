@@ -18,7 +18,6 @@ routes.patch('/users/:user_id', UserController.update);
 routes.delete('/users/:user_id', UserController.delete);
 
 // Rotas barbearia
-routes.get('/barbearias', BarbeariaController.getAll);
 routes.get('/barbearias', BarbeariaController.get);
 routes.get('/barbearias/moderador/:user_id', BarbeariaController.getMyBarbearias);
 routes.post('/barbearias', BarbeariaController.create);
