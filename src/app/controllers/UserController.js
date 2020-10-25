@@ -2,6 +2,10 @@ const { Usuario } = require('../models');
 const Sequelize = require('sequelize');
 const { Op } = Sequelize;
 
+function validaDocumento(documento) {
+    return documento.match(/^(\d{3}\.?){2}(\d{3})-?(\d{2})$|^\d{2}\.?\d{3}\.?\d{3}\/?\d{4}\-?\d{2}$/);
+}
+
 module.exports = {
 
     async getAll(_, res) {
@@ -42,45 +46,46 @@ module.exports = {
     },
 
     async create(req, res) {
-        function validaDocumento(documento) {
-            return documento.match(/^(\d{3}\.?){2}(\d{3})-?(\d{2})$|^\d{2}\.?\d{3}\.?\d{3}\/?\d{4}\-?\d{2}$/);
-        }
-
         try {
-            const { nome, sobrenome, email, password, CNPJ, CPF, idTipo, icone } = req.body;
+            let { nome, sobrenome, email, password, CNPJ, CPF, idTipo, icone } = req.body;
+            if (!email)
+                return res.status(400).json({ message: 'É necessário informar um email para criar uma conta' });
+            
+
+            if (idTipo == 1 && !CPF) {
+                return res.status(400).json({ message: 'É necessário informar um CPF para criar uma conta' });
+            }
+
+            if (idTipo == 2 && !CNPJ) {
+                return res.status(400).json({ message: 'É necessário informar um CNPJ para criar uma conta de moderador' });
+            }
+
+            if (!validaDocumento(CPF || CNPJ))
+                return res.status(400).json({ message: 'Documento inválido' });
+
+            CPF = (idTipo == 2)? null : CPF;
+            CNPJ = (idTipo == 1)? null : CNPJ;
+            
             const user = await Usuario.findOne({
                 where: {
                     [Op.or]: [
                         { email },
-                        // { CPF },
-                        // { CNPJ }
+                        { CPF: CPF || '' },
+                        { CNPJ: CNPJ || '' }
                     ]
                 }
             });
             
             if (user) {
                 console.log("Duplicate fields");
-                return res.status(400).json({ message: 'Error while creating new User'});
+                return res.status(400).json({ message: 'Erro ao criar uma conta'});
             }
-
-            if (idTipo == 1 && !CPF) {
-                console.log(CNPJ? "passou CNPJ e não CPF" : "não passo CPF");
-                return res.status(400).json({ message: 'É necessário informar um CPF para criar uma conta' });
-            }
-
-            if (idTipo == 2 && !CNPJ) {
-                console.log(CPF? "passou CPF e não CNPJ" : "não passo CNPJ");
-                return res.status(400).json({ message: 'É necessário informar um CPF para criar uma conta' });
-            }
-
-            if (!validaDocumento(CPF || CNPJ))
-                return res.status(400).json({ message: 'Documento inválido' });
 
             const newUser = await Usuario.create({ nome, sobrenome, email, password, CNPJ, CPF, idTipo, icone });
             return res.status(201).json(newUser);
         } catch (error) {
             console.log(error);
-            return res.status(400).json({ message: error });
+            return res.status(400).json({ message: 'Erro ao criar uma conta' });
         }
 
     },
@@ -88,28 +93,54 @@ module.exports = {
     async update(req, res) {
         try {
             const { user_id } = req.params;
-            const { nome, sobrenome, email, password, CNPJ, CPF, idTipo, icone } = req.body;
-            const user = await Usuario.findByPk(user_id);    
-            
-            if (!user) {
-                return res.status(400).json({ message: 'User Not Found'});
+            let { nome, sobrenome, email, password, CNPJ, CPF, idTipo, icone } = req.body;
+
+            if (!email) {
+                return res.status(400).json({ message: 'É necessário informar um email para criar uma conta' });
+            } else if (idTipo == 1 && !CPF) {
+                return res.status(400).json({ message: 'É necessário informar um CPF para criar uma conta' });
+            } else if (idTipo == 2 && !CNPJ) {
+                return res.status(400).json({ message: 'É necessário informar um CNPJ para criar uma conta de moderador' });
+            } else if (!validaDocumento(CPF || CNPJ)) {
+                return res.status(400).json({ message: 'Documento inválido' });
             }
+
+            let user = await Usuario.findByPk(user_id);
+            if (!user) {
+                return res.status(404).json({ message: 'Usuário não encontrado'});
+            }
+
+            // TODO validar se o cpf, ou CPNJ ou email já estão associados a outro usuário
+            const repetido = await Usuario.findOne({
+                where: {
+                    [Op.or]: [
+                        { email },
+                        { CPF: CPF || '' },
+                        { CNPJ: CNPJ || '' }
+                    ]
+                }
+            });
+
+            if ((repetido && repetido.id) != user_id)
+                return res.status(400).json({ message: 'Erro ao atualizar documentos|email'});
 
             const updatedUser = await user.update({
                 nome: nome || user.nome,
                 sobrenome: sobrenome || user.sobrenome,
                 email: email || user.email,
                 password: password || user.password,
-                CNPJ: CNPJ || user.CNPJ,
-                CPF: CPF || user.CPF,
+                CNPJ: (idTipo == 2)? (CNPJ || user.CNPJ) : null,
+                CPF: (idTipo == 1)? (CPF|| user.CPF) : null,
                 idTipo: idTipo || user.idTipo,
                 icone: icone || user.icone,
             })
 
+            delete updatedUser.password;
+
             return res.status(200).json(updatedUser);
         } catch (err) {
             console.log(err.message);
-            return res.status(400).json({message: "Erro ao atualizar informações"});
+            return res.status(400).json({ message: "Erro ao atualizar informações" });
         }
     },
     

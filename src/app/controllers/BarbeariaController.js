@@ -1,31 +1,10 @@
+'use strict'
+
 const { Barbearia, Usuario } = require('../models');
 const Sequelize = require('sequelize');
 const { Op } = Sequelize;
 
 module.exports = {
-
-    // async getAll(_, res) {
-    //     try {
-    //         const barbearias = await Barbearia.findAll({
-    //             where: {
-    //                 ativo: true
-    //             },
-    //             order: [
-    //                 ['id', 'ASC']
-    //             ]
-    //         })
-    
-    //         if (!barbearias) {
-    //             return res.status(400).json({ message: ''});
-    //         }
-    
-    //         return res.status(200).json(barbearias);
-    //     } catch(error) {
-    //         console.log(error);
-    //         return res.status(400).json({ message: 'Erro ao buscar barberias' });
-    //     }
-    // },
-
     async get(req, res) {
         try {
             let { nome } = req.query;
@@ -72,6 +51,12 @@ module.exports = {
     async create(req, res) {
         try {
             const { nome, endereco, telefone, horarioAbertura, horarioFechamento, icone, user_id } = req.body;
+            
+            if (!user_id) {
+                console.log('É necessário o id do moderador para associar uma barbearia');
+                return res.status(400).json({ message: 'É necessário informar o moderador'});
+            }
+            
             const barberia = await Barbearia.findOne({ 
                 where: { 
                     nome:  { 
@@ -84,15 +69,11 @@ module.exports = {
                 return res.status(400).json({ message: 'Já existe uma barbearia com este nome'});
             }
             
-            if (!user_id) {
-                console.log('É necessário o id do moderador para associar uma barbearia');
-                return res.status(400).json({ message: 'É necessário informar o moderador'});
-            }
 
             let usuario = await Usuario.findByPk(user_id);
-            if (usuario.idTipo === '1') {
+            if (usuario.idTipo == 1) {
                 console.log('É necessário ser um moderador para criar uma barbearia');
-                return req.status(400).json({ message: 'É necessário informar um moderador para criar uma barbearia' });
+                return res.status(400).json({ message: 'É necessário informar um moderador para criar uma barbearia' });
             }
 
             const novaBarbearia = await Barbearia.create({ nome, endereco, telefone, horarioAbertura, horarioFechamento, icone, user_id });
@@ -121,10 +102,10 @@ module.exports = {
                 horarioAbertura: horarioAbertura || barberia.horarioAbertura,
                 horarioFechamento: horarioFechamento || barberia.horarioFechamento,
                 icone: icone || barberia.icone,
-            })
+            });
             
             return res.status(200).json(barbeariaAtualizada);
-        } catch (err) {
+        } catch (error) {
             console.log(error);
             return res.status(400).json({ message: 'Erro ao atualizar barbearia'})
         }

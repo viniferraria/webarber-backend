@@ -17,7 +17,7 @@ describe("Barberia controller", () => {
     test('Não deve permitir que um usuário crie uma barberia', async () =>{
         const response = await request(app)
         .post('/barbearias')
-        .send({...barbearia, user_id: user.id});
+        .send({ ...barbearia, user_id: 1 });
 
         expect(response.status).toBe(400);
         expect(response.body).toHaveProperty('message');
@@ -55,7 +55,14 @@ describe("Barberia controller", () => {
         .get(`/barbearias?nome=${barbearia.nome}`);
         
         expect(response.status).toBe(200);
-        expect(response.body).toContainEqual(barbearia);
+        expect(response.body.length).toBeGreaterThanOrEqual(0);
+        expect(response.body[0].nome).toBe(barbearia.nome);
+        expect(response.body[0].endereco).toBe(barbearia.endereco);
+        expect(response.body[0].telefone).toBe(barbearia.telefone);
+        expect(response.body[0].horarioAbertura).toBe(barbearia.horarioAbertura);
+        expect(response.body[0].horarioFechamento).toBe(barbearia.horarioFechamento);
+        expect(response.body[0].user_id).toBe(barbearia.user_id);
+        expect(response.body[0].ativo).toBe(true);
     });
 
     test("Ao buscar uma barbearia inexistente, deve retornar barbearia não encontrada", async () => {
@@ -70,16 +77,28 @@ describe("Barberia controller", () => {
         const response = await request(app)
         .get("/barbearias/")
         expect(response.status).toBe(200);
-        expect(response.body).toContainEqual({ativo: true, ...barbearia});
         expect(response.body.length).toBeGreaterThanOrEqual(1);
+        expect(response.body[0].nome).toBe(barbearia.nome);
+        expect(response.body[0].endereco).toBe(barbearia.endereco);
+        expect(response.body[0].telefone).toBe(barbearia.telefone);
+        expect(response.body[0].horarioAbertura).toBe(barbearia.horarioAbertura);
+        expect(response.body[0].horarioFechamento).toBe(barbearia.horarioFechamento);
+        expect(response.body[0].user_id).toBe(barbearia.user_id);
+        expect(response.body[0].ativo).toBe(true);
     });
     
     test("Deve retornar uma lista com as barberias do moderador", async () => {
         const response = await request(app)
-        .get(`/barbearias/moderador/${moderador.id}`)
+        .get(`/barbearias/moderador/${2}`)
         expect(response.status).toBe(200);
-        expect(response.body).toContainEqual(barbearia);
         expect(response.body.length).toBe(1);
+        expect(response.body[0].nome).toBe(barbearia.nome);
+        expect(response.body[0].endereco).toBe(barbearia.endereco);
+        expect(response.body[0].telefone).toBe(barbearia.telefone);
+        expect(response.body[0].horarioAbertura).toBe(barbearia.horarioAbertura);
+        expect(response.body[0].horarioFechamento).toBe(barbearia.horarioFechamento);
+        expect(response.body[0].user_id).toBe(barbearia.user_id);
+        expect(response.body[0].ativo).toBe(true);
     });
     
     test("Deve retornar uma lista vazia para moderadores sem barbearia ou moderadores inexistentes", async () => {

@@ -7,7 +7,7 @@
     "first": "yarn install",
     "dev": "nodemon ./src/server.js --ignore __tests__",
     "pretest": "yarn sequelize db:migrate",
-    "test": "jest",
+    "test": "jest -b",
     "posttest": "yarn sequelize db:migrate:undo:all",
     "prestart": "yarn sequelize db:migrate",
     "start": "node ./src/server.js"
