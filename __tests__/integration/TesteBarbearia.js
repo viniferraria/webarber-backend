@@ -1,23 +1,12 @@
 const request = require("supertest");
 const app = require("../../src/app");
-const servicosTeste = require("./ServicoController.test");
-// const { user, moderator } = require("./1UserController.test");
+let { BarbeariaTeste, UsuarioTeste, ModeradorTeste } = require("../cases");
 
-var id;
-var barbearia = {
-    "nome": "Testing",
-    "endereco": "Testing",
-    "telefone": "(11)9999999",
-    "horarioAbertura": "2020-10-29T16:34:00.000Z",
-    "horarioFechamento": "2020-10-29T16:34:00.000Z",
-    "user_id": 2
-};
-
-describe("Barberia controller", () => {
+module.exports = () => {
     test('Não deve permitir que um usuário crie uma barberia', async () =>{
         const response = await request(app)
         .post('/barbearias')
-        .send({ ...barbearia, user_id: 1 });
+        .send({ ...BarbeariaTeste, user_id: UsuarioTeste.id });
 
         expect(response.status).toBe(400);
         expect(response.body).toHaveProperty('message');
@@ -27,24 +16,24 @@ describe("Barberia controller", () => {
     test('Deve permitir que um moderador crie uma barberia', async () =>{
         const response = await request(app)
         .post('/barbearias')
-        .send(barbearia);
+        .send(BarbeariaTeste);
 
         expect(response.status).toBe(201);
         expect(response.body).toHaveProperty('id');
-        id = response.body.id;
-        expect(response.body.nome).toBe(barbearia.nome);
-        expect(response.body.endereco).toBe(barbearia.endereco);
-        expect(response.body.telefone).toBe(barbearia.telefone);
-        expect(response.body.horarioAbertura).toBe(barbearia.horarioAbertura);
-        expect(response.body.horarioFechamento).toBe(barbearia.horarioFechamento);
-        expect(response.body.user_id).toBe(barbearia.user_id);
+        BarbeariaTeste.id = response.body.id;
+        expect(response.body.nome).toBe(BarbeariaTeste.nome);
+        expect(response.body.endereco).toBe(BarbeariaTeste.endereco);
+        expect(response.body.telefone).toBe(BarbeariaTeste.telefone);
+        expect(response.body.horarioAbertura).toBe(BarbeariaTeste.horarioAbertura);
+        expect(response.body.horarioFechamento).toBe(BarbeariaTeste.horarioFechamento);
+        expect(response.body.user_id).toBe(BarbeariaTeste.user_id);
         expect(response.body.ativo).toBe(true);
     });
 
     test("Não deve permitir uma barberia com o mesmo nome", async () => {
         const response = await request(app)
         .post('/barbearias')
-        .send(barbearia);
+        .send(BarbeariaTeste);
 
         expect(response.status).toBe(400);
         expect(response.body.message).toBe('Já existe uma barbearia com este nome');
@@ -52,16 +41,16 @@ describe("Barberia controller", () => {
 
     test("Deve retornar uma certa barbearia", async () => {
         const response = await request(app)
-        .get(`/barbearias?nome=${barbearia.nome}`);
+        .get(`/barbearias?nome=${BarbeariaTeste.nome}`);
         
         expect(response.status).toBe(200);
         expect(response.body.length).toBeGreaterThanOrEqual(0);
-        expect(response.body[0].nome).toBe(barbearia.nome);
-        expect(response.body[0].endereco).toBe(barbearia.endereco);
-        expect(response.body[0].telefone).toBe(barbearia.telefone);
-        expect(response.body[0].horarioAbertura).toBe(barbearia.horarioAbertura);
-        expect(response.body[0].horarioFechamento).toBe(barbearia.horarioFechamento);
-        expect(response.body[0].user_id).toBe(barbearia.user_id);
+        expect(response.body[0].nome).toBe(BarbeariaTeste.nome);
+        expect(response.body[0].endereco).toBe(BarbeariaTeste.endereco);
+        expect(response.body[0].telefone).toBe(BarbeariaTeste.telefone);
+        expect(response.body[0].horarioAbertura).toBe(BarbeariaTeste.horarioAbertura);
+        expect(response.body[0].horarioFechamento).toBe(BarbeariaTeste.horarioFechamento);
+        expect(response.body[0].user_id).toBe(BarbeariaTeste.user_id);
         expect(response.body[0].ativo).toBe(true);
     });
 
@@ -78,42 +67,42 @@ describe("Barberia controller", () => {
         .get("/barbearias/")
         expect(response.status).toBe(200);
         expect(response.body.length).toBeGreaterThanOrEqual(1);
-        expect(response.body[0].nome).toBe(barbearia.nome);
-        expect(response.body[0].endereco).toBe(barbearia.endereco);
-        expect(response.body[0].telefone).toBe(barbearia.telefone);
-        expect(response.body[0].horarioAbertura).toBe(barbearia.horarioAbertura);
-        expect(response.body[0].horarioFechamento).toBe(barbearia.horarioFechamento);
-        expect(response.body[0].user_id).toBe(barbearia.user_id);
+        expect(response.body[0].nome).toBe(BarbeariaTeste.nome);
+        expect(response.body[0].endereco).toBe(BarbeariaTeste.endereco);
+        expect(response.body[0].telefone).toBe(BarbeariaTeste.telefone);
+        expect(response.body[0].horarioAbertura).toBe(BarbeariaTeste.horarioAbertura);
+        expect(response.body[0].horarioFechamento).toBe(BarbeariaTeste.horarioFechamento);
+        expect(response.body[0].user_id).toBe(BarbeariaTeste.user_id);
         expect(response.body[0].ativo).toBe(true);
     });
     
     test("Deve retornar uma lista com as barberias do moderador", async () => {
         const response = await request(app)
-        .get(`/barbearias/moderador/${2}`)
+        .get(`/barbearias/moderador/${ModeradorTeste.id}`)
         expect(response.status).toBe(200);
         expect(response.body.length).toBe(1);
-        expect(response.body[0].nome).toBe(barbearia.nome);
-        expect(response.body[0].endereco).toBe(barbearia.endereco);
-        expect(response.body[0].telefone).toBe(barbearia.telefone);
-        expect(response.body[0].horarioAbertura).toBe(barbearia.horarioAbertura);
-        expect(response.body[0].horarioFechamento).toBe(barbearia.horarioFechamento);
-        expect(response.body[0].user_id).toBe(barbearia.user_id);
+        expect(response.body[0].nome).toBe(BarbeariaTeste.nome);
+        expect(response.body[0].endereco).toBe(BarbeariaTeste.endereco);
+        expect(response.body[0].telefone).toBe(BarbeariaTeste.telefone);
+        expect(response.body[0].horarioAbertura).toBe(BarbeariaTeste.horarioAbertura);
+        expect(response.body[0].horarioFechamento).toBe(BarbeariaTeste.horarioFechamento);
+        expect(response.body[0].user_id).toBe(BarbeariaTeste.user_id);
         expect(response.body[0].ativo).toBe(true);
     });
     
     test("Deve retornar uma lista vazia para moderadores sem barbearia ou moderadores inexistentes", async () => {
         const response = await request(app)
-        .get("/barbearias/moderador/222")
+        .get("/barbearias/moderador/12321313")
         expect(response.status).toBe(200);
         expect(response.body.length).toBe(0);
     });
 
     test("Deve atualizar uma barbearia", async () => {
-        barbearia.nome = "Barbearia atualizada";
-        barbearia.endereco = "Novo endereço";
+        BarbeariaTeste.nome = "Barbearia atualizada";
+        BarbeariaTeste.endereco = "Novo endereço";
         const response = await request(app)
-        .patch(`/barbearias/${id}`)
-        .send(barbearia)
+        .patch(`/barbearias/${BarbeariaTeste.id}`)
+        .send(BarbeariaTeste)
 
         expect(response.status).toBe(200)
         expect(response.body.nome).toBe('Barbearia atualizada');
@@ -123,7 +112,7 @@ describe("Barberia controller", () => {
     test("Deve retornar uma barbearia inválida", async () => {
         const response = await request(app)
         .patch("/barbearias/9999")
-        .send(barbearia)
+        .send(BarbeariaTeste)
 
         expect(response.status).toBe(400);
         expect(response.body.message).toBe('Barbearia não encontrada');
@@ -131,7 +120,7 @@ describe("Barberia controller", () => {
 
     test("Deve deletar uma barberia", async () => {
         const response = await request(app)
-        .delete("/barbearias/" + id)
+        .delete(`/barbearias/${BarbeariaTeste.id}`)
 
         expect(response.status).toBe(200);
         expect(response.body.message).toBe('Barbearia deletada');
@@ -144,13 +133,4 @@ describe("Barberia controller", () => {
         expect(response.status).toBe(400);
         expect(response.body.message).toBe('Barbearia não encontrada');
     });  
-
-    // test("Deve retornar Acesso recusado para usuários que não são moderadores", async () => {
-    //     const response = await request(app)
-    //     .get("/barbearias/moderador/2")
-    //     expect(response.body).toContainEqual(barbearia);
-    //     expect(response.body.length).toBe(1);
-    // }); 
-})
-
-describe("Criando serviços para barbearia", () => servicosTeste());
+}
