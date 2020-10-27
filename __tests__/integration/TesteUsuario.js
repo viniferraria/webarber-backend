@@ -1,6 +1,6 @@
 const request = require("supertest");
 const app = require("../../src/app");
-let { UsuarioTeste, ModeradorTeste } = require("../cases");
+let { UsuarioTeste, ModeradorTeste, BarbeariaTeste } = require("../cases");
 
 module.exports = () => {
     test('Deve criar uma conta', async () =>{
@@ -27,6 +27,7 @@ module.exports = () => {
         .send(ModeradorTeste);
 
         ModeradorTeste.id = response.body.id;
+        BarbeariaTeste.user_id = response.body.id;
         expect(response.status).toBe(201);
         expect(response.body).toHaveProperty('id');
         expect(response.body.nome).toBe(ModeradorTeste.nome);

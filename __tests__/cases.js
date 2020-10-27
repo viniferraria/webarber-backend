@@ -1,6 +1,6 @@
 
 let UsuarioTeste = {
-    "id": 1,
+    "id": 2,
     "nome": "Testing",
     "sobrenome": "123",
     "email": "testing123@gmail.com",
@@ -10,7 +10,7 @@ let UsuarioTeste = {
 };
 
 let ModeradorTeste = {
-    "id": 2,
+    "id": 3,
     "nome": "4queijos",
     "sobrenome": "123",
     "email": "4queijos@gmail.com",
@@ -26,7 +26,7 @@ var BarbeariaTeste = {
     "telefone": "(11)9999999",
     "horarioAbertura": "2020-10-29T16:34:00.000Z",
     "horarioFechamento": "2020-10-29T16:34:00.000Z",
-    "user_id": 2
+    "user_id": 3
 };
 
 
