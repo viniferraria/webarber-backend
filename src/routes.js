@@ -5,15 +5,22 @@ const UserController = require('./app/controllers/UserController');
 const TipoUsuarioController = require('./app/controllers/TipoUsuarioController');
 const BarbeariaController = require('./app/controllers/BarbeariaController');
 const ServicoController = require('./app/controllers/ServicoController');
+const AuthMiddleware = require('./app/middleware/auth');
 
 // Rotas Tipo
 routes.get('/tipos', TipoUsuarioController.getAll)
 
-// Rotas usuários
+// Rotas signin
+routes.post('/users', UserController.create);
+
+// Rota Login
 routes.post('/login', UserController.login);
+
+
+// Rotas que precisam de autenticação
+routes.use(AuthMiddleware)
 routes.get('/users', UserController.getAll);
 routes.get('/users/:user_id', UserController.get);
-routes.post('/users', UserController.create);
 routes.patch('/users/:user_id', UserController.update);
 routes.delete('/users/:user_id', UserController.delete);
 

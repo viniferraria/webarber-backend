@@ -46,9 +46,8 @@ module.exports = {
 
     async getMyBarbearias(req, res) {
         try {
-            const { user_id } = req.params;
             const barbearia = await Barbearia.findAll({ where: { 
-                user_id: user_id
+                user_id: req.userId
             }});
             
             if(!barbearia) {
@@ -64,14 +63,14 @@ module.exports = {
 
     async create(req, res) {
         try {
-            const { nome, endereco, telefone, horarioAbertura, horarioFechamento, icone, user_id } = req.body;
+            const { nome, endereco, telefone, horarioAbertura, horarioFechamento, icone } = req.body;
             const barberia = await Barbearia.findOne({ where: { nome: nome }});
             
             if (barberia) {
                 return res.status(400).json({ message: 'Já existe uma barbearia com este nome'});
             }
 
-            const novaBarbearia = await Barbearia.create({ nome, endereco, telefone, horarioAbertura, horarioFechamento, icone, user_id });
+            const novaBarbearia = await Barbearia.create({ nome, endereco, telefone, horarioAbertura, horarioFechamento, icone, user_id: req.userId });
             return res.status(201).json(novaBarbearia);
         } catch (error) {
             console.log(error);

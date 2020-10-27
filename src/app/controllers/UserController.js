@@ -23,9 +23,8 @@ module.exports = {
 
     async get(req, res) {
         try {
-            const { user_id } = req.params;
             const user = await Usuario.findOne({ where: { 
-                id: user_id
+                id: req.userId
             }});
             
             if(!user) {
@@ -61,10 +60,12 @@ module.exports = {
     },
 
     async update(req, res) {
-        const { user_id } = req.params;
+        if (!req.userId)
+            return res.status(400).json({ message: "Error."})
+
         const { nome, sobrenome, email, password, CNPJ, CPF, idTipo, icone } = req.body;
 
-        const user = await Usuario.findByPk(user_id);
+        const user = await Usuario.findByPk(userId);
 
         if (!user) {
             return res.status(400).json({ message: 'User Not Found'});
@@ -86,13 +87,7 @@ module.exports = {
 
     async delete(req, res) {
         try {
-
-            const { user_id } = req.params;
-            const user = await Usuario.findByPk(user_id);
-
-            if (!user) {
-                return res.status(400).json({ message: 'User not found' });
-            }
+            const user = await Usuario.findByPk(req.userId);
 
             await user.update({ 
                 ativo: false
@@ -119,7 +114,12 @@ module.exports = {
                 
             if (!user.ativo)
                 return res.status(400).json({ message: 'Credenciais inválidas' });
-            
+
+            user.generateToken();
+            await user.update({
+                sessionToken: user.sessionToken
+            });
+
             return res.status(200).json(user);
         } catch(err) {
             console.log(err);
