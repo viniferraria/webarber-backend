@@ -16,10 +16,10 @@ module.exports = () => {
     test('Deve permitir que um moderador crie uma barberia', async () =>{
         const response = await request(app)
         .post('/barbearias')
-        .send(BarbeariaTeste);
+        .send({ ...BarbeariaTeste, user_id: ModeradorTeste.id });
 
-        expect(response.status).toBe(201);
         expect(response.body).toHaveProperty('id');
+        expect(response.status).toBe(201);
         BarbeariaTeste.id = response.body.id;
         expect(response.body.nome).toBe(BarbeariaTeste.nome);
         expect(response.body.endereco).toBe(BarbeariaTeste.endereco);
