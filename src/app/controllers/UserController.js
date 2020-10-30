@@ -41,12 +41,16 @@ module.exports = {
 
     async create(req, res) {
         try {
-            const { nome, sobrenome, email, password, CNPJ, CPF, idTipo, icone } = req.body;
+            let { nome, sobrenome, email, password, CNPJ, CPF, idTipo, icone } = req.body;
             const user = await Usuario.findOne({ where: { email: email }});
             
             if (user) {
                 return res.status(400).json({ message: 'Error while creating new User'});
             }
+
+
+        if (icone)
+        icone = Buffer.from(icone, 'base64');
 
             const newUser = await Usuario.create({ nome, sobrenome, email, password, CNPJ, CPF, idTipo, icone });
             return res.status(201).json(newUser);
@@ -69,6 +73,9 @@ module.exports = {
         if (!user) {
             return res.status(400).json({ message: 'User Not Found'});
         }
+
+        if (icone)
+            icone = Buffer.from(icone, 'base64');
 
         const updatedUser = await user.update({
             nome: nome || user.nome,

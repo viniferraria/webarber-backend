@@ -71,6 +71,9 @@ module.exports = {
                 return res.status(400).json({ message: 'Já existe uma barbearia com este nome'});
             }
 
+            if (icone)
+                icone = Buffer.from(icone, 'base64');
+
             const novaBarbearia = await Barbearia.create({ nome, endereco, telefone, horarioAbertura, horarioFechamento, icone, user_id });
             return res.status(201).json(novaBarbearia);
         } catch (error) {
