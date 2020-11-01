@@ -30,13 +30,13 @@ describe('Barberia controller', () => {
         expect(response.body.ativo).toBe(true);
     });
 
-    test("Não deve permitir uma barberia com o mesmo nome", async () => {
+    test("Não deve permitir que o usuário crie outra barbearia", async () => {
         const response = await request(app)
         .post('/barbearias')
         .send(barberia);
 
         expect(response.status).toBe(400);
-        expect(response.body.message).toBe('Já existe uma barbearia com este nome');
+        expect(response.body.message).toBe('Usuário já possui uma barbearia');
     });
 
     test("Deve atualizar uma barbearia", async () => {

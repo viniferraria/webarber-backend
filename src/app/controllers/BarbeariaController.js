@@ -65,10 +65,10 @@ module.exports = {
     async create(req, res) {
         try {
             const { nome, endereco, telefone, horarioAbertura, horarioFechamento, icone, user_id } = req.body;
-            const barberia = await Barbearia.findOne({ where: { nome: nome }});
+            const barberia = await Barbearia.findOne({ where: { user_id: user_id }});
             
-            if (barberia) {
-                return res.status(400).json({ message: 'Já existe uma barbearia com este nome'});
+            if(barberia) {
+                return res.status(400).json({ message: 'Usuário já possui uma barbearia'});
             }
 
             const novaBarbearia = await Barbearia.create({ nome, endereco, telefone, horarioAbertura, horarioFechamento, icone, user_id });
