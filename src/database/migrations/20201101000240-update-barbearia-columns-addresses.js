@@ -10,11 +10,11 @@ module.exports = {
       type: Sequelize.INTEGER,
       allowNull: false
     });
-    await queryInterface.addColumn( 'Barbearia', 'bloco ', {
+    await queryInterface.addColumn( 'Barbearia', 'bloco', {
       type: Sequelize.STRING,
       allowNull: true
     });
-    await queryInterface.addColumn( 'Barbearia', 'cep ', {
+    await queryInterface.addColumn( 'Barbearia', 'cep', {
       type: Sequelize.STRING,
       allowNull: true
     });
