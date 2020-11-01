@@ -28,6 +28,10 @@ module.exports = () => {
         expect(response.body.horarioFechamento).toBe(BarbeariaTeste.horarioFechamento);
         expect(response.body.user_id).toBe(BarbeariaTeste.user_id);
         expect(response.body.ativo).toBe(true);
+        expect(response.body.complemento).toBe(BarbeariaTeste.complemento);
+        expect(response.body.numero).toBe(BarbeariaTeste.numero);
+        expect(response.body.bloco).toBe(BarbeariaTeste.bloco);
+        expect(response.body.cep).toBe(BarbeariaTeste.cep);
     });
 
     test("Não deve permitir que o usuário crie outra barbearia", async () => {
