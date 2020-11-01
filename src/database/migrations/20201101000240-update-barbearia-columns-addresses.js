@@ -16,7 +16,7 @@ module.exports = {
     });
     await queryInterface.addColumn( 'Barbearia', 'cep', {
       type: Sequelize.STRING,
-      allowNull: true
+      allowNull: false
     });
   },
 
