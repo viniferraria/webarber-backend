@@ -14,7 +14,11 @@ module.exports = (sequelize, DataTypes) => {
         icone: DataTypes.STRING.BINARY,
         user_id: DataTypes.INTEGER,
         horarioAbertura: DataTypes.DATE,
-        horarioFechamento: DataTypes.DATE
+        horarioFechamento: DataTypes.DATE,
+        complemento: DataTypes.STRING,
+        numero: DataTypes.INTEGER,
+        bloco: DataTypes.STRING,
+        cep: DataTypes.STRING,
     }, {
         timestamps: true
     });
