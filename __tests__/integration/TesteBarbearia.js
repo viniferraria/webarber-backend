@@ -30,13 +30,13 @@ module.exports = () => {
         expect(response.body.ativo).toBe(true);
     });
 
-    test("Não deve permitir uma barberia com o mesmo nome", async () => {
+    test("Não deve permitir que o usuário crie outra barbearia", async () => {
         const response = await request(app)
         .post('/barbearias')
         .send(BarbeariaTeste);
 
         expect(response.status).toBe(400);
-        expect(response.body.message).toBe('Já existe uma barbearia com este nome');
+        expect(response.body.message).toBe('Usuário já possui uma barbearia');
     });
 
     test("Deve retornar uma certa barbearia", async () => {
@@ -76,25 +76,24 @@ module.exports = () => {
         expect(response.body[0].ativo).toBe(true);
     });
     
-    test("Deve retornar uma lista com as barberias do moderador", async () => {
+    test("Deve retornar a barberia do moderador", async () => {
         const response = await request(app)
         .get(`/barbearias/moderador/${ModeradorTeste.id}`)
         expect(response.status).toBe(200);
-        expect(response.body.length).toBe(1);
-        expect(response.body[0].nome).toBe(BarbeariaTeste.nome);
-        expect(response.body[0].endereco).toBe(BarbeariaTeste.endereco);
-        expect(response.body[0].telefone).toBe(BarbeariaTeste.telefone);
-        expect(response.body[0].horarioAbertura).toBe(BarbeariaTeste.horarioAbertura);
-        expect(response.body[0].horarioFechamento).toBe(BarbeariaTeste.horarioFechamento);
-        expect(response.body[0].user_id).toBe(BarbeariaTeste.user_id);
-        expect(response.body[0].ativo).toBe(true);
+        expect(response.body.nome).toBe(BarbeariaTeste.nome);
+        expect(response.body.endereco).toBe(BarbeariaTeste.endereco);
+        expect(response.body.telefone).toBe(BarbeariaTeste.telefone);
+        expect(response.body.horarioAbertura).toBe(BarbeariaTeste.horarioAbertura);
+        expect(response.body.horarioFechamento).toBe(BarbeariaTeste.horarioFechamento);
+        expect(response.body.user_id).toBe(BarbeariaTeste.user_id);
+        expect(response.body.ativo).toBe(true);
     });
     
-    test("Deve retornar uma lista vazia para moderadores sem barbearia ou moderadores inexistentes", async () => {
+    test("Deve retornar um erro para moderadores sem barbearia ou moderadores inexistentes", async () => {
         const response = await request(app)
         .get("/barbearias/moderador/12321313")
-        expect(response.status).toBe(200);
-        expect(response.body.length).toBe(0);
+        expect(response.status).toBe(400);
+        expect(response.body.message).toBe('Nenhuma barberia encontrada');
     });
 
     test("Deve atualizar uma barbearia", async () => {

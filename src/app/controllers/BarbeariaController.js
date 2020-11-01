@@ -31,7 +31,7 @@ module.exports = {
     async getMyBarbearias(req, res) {
         try {
             const { user_id } = req.params;
-            const barbearia = await Barbearia.findAll({
+            const barbearia = await Barbearia.findOne({
                 where: { 
                     user_id: user_id
                 }
@@ -59,14 +59,12 @@ module.exports = {
             
             const barberia = await Barbearia.findOne({ 
                 where: { 
-                    nome:  { 
-                        [Op.iLike]: `%${nome}%`
-                    }
+                    user_id: user_id
                 }
             });
             
             if (barberia) {
-                return res.status(400).json({ message: 'Já existe uma barbearia com este nome'});
+                return res.status(400).json({ message: 'Usuário já possui uma barbearia'});
             }
             
 
