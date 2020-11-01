@@ -64,14 +64,14 @@ module.exports = {
 
     async create(req, res) {
         try {
-            const { nome, endereco, telefone, horarioAbertura, horarioFechamento, icone, user_id } = req.body;
+            const { nome, endereco, telefone, horarioAbertura, horarioFechamento, icone, user_id, complemento, numero, bloco, cep } = req.body;
             const barberia = await Barbearia.findOne({ where: { user_id: user_id }});
-            
+    
             if(barberia) {
                 return res.status(400).json({ message: 'Usuário já possui uma barbearia'});
             }
 
-            const novaBarbearia = await Barbearia.create({ nome, endereco, telefone, horarioAbertura, horarioFechamento, icone, user_id });
+            const novaBarbearia = await Barbearia.create({ nome, endereco, telefone, horarioAbertura, horarioFechamento, icone, user_id, complemento, numero, bloco, cep });
             return res.status(201).json(novaBarbearia);
         } catch (error) {
             console.log(error);
