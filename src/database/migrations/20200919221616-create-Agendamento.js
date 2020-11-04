@@ -27,7 +27,8 @@ module.exports = {
                 references: {
                     model: 'StatusAgendamento',
                     key: 'id'
-                }
+                },
+                defaultValue: 1
             },
             idServico: {
                 type: Sequelize.INTEGER,
