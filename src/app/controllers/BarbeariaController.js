@@ -56,10 +56,16 @@ module.exports = {
                 console.log('É necessário o id do moderador para associar uma barbearia');
                 return res.status(400).json({ message: 'É necessário informar o moderador'});
             }
-            
+
+            let usuario = await Usuario.findByPk(user_id);
+            if (usuario.idTipo == 1) {
+                console.log('É necessário ser um moderador para criar uma barbearia');
+                return res.status(400).json({ message: 'É necessário informar um moderador para criar uma barbearia' });
+            }
+
             const barberia = await Barbearia.findOne({ 
                 where: { 
-                    user_id: user_id
+                    user_id
                 }
             });
             
@@ -67,11 +73,26 @@ module.exports = {
                 return res.status(400).json({ message: 'Usuário já possui uma barbearia'});
             }
             
+            if (!endereco || !numero)
+                return res.status(400).json({ message: 'endereco e numero'});
+            
 
-            let usuario = await Usuario.findByPk(user_id);
-            if (usuario.idTipo == 1) {
-                console.log('É necessário ser um moderador para criar uma barbearia');
-                return res.status(400).json({ message: 'É necessário informar um moderador para criar uma barbearia' });
+            const barberiaExists = await Barbearia.findOne({ 
+                where: { 
+                    endereco,
+                    numero
+                    // ,
+                    // $or: [
+                    //     {
+                    //         cep
+                    //     }
+                    // ]
+                }
+            });
+
+
+            if (barberiaExists) {
+                return res.status(400).json({ message: 'Esta barbearia já existe'});
             }
 
             const novaBarbearia = await Barbearia.create({ nome, endereco, telefone, horarioAbertura, horarioFechamento, icone, user_id, complemento, numero, bloco, cep });
