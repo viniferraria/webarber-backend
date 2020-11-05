@@ -31,7 +31,7 @@ module.exports = {
     async getMyBarbearias(req, res) {
         try {
             const { user_id } = req.params;
-            const barbearia = await Barbearia.findAll({
+            const barbearia = await Barbearia.findOne({
                 where: { 
                     user_id: user_id
                 }
@@ -50,25 +50,12 @@ module.exports = {
 
     async create(req, res) {
         try {
-            const { nome, endereco, telefone, horarioAbertura, horarioFechamento, icone, user_id } = req.body;
+            const { nome, endereco, telefone, horarioAbertura, horarioFechamento, icone, user_id, complemento, numero, bloco, cep } = req.body;
             
             if (!user_id) {
                 console.log('É necessário o id do moderador para associar uma barbearia');
                 return res.status(400).json({ message: 'É necessário informar o moderador'});
             }
-            
-            const barberia = await Barbearia.findOne({ 
-                where: { 
-                    nome:  { 
-                        [Op.iLike]: `%${nome}%`
-                    }
-                }
-            });
-            
-            if (barberia) {
-                return res.status(400).json({ message: 'Já existe uma barbearia com este nome'});
-            }
-            
 
             let usuario = await Usuario.findByPk(user_id);
             if (usuario.idTipo == 1) {
@@ -76,7 +63,39 @@ module.exports = {
                 return res.status(400).json({ message: 'É necessário informar um moderador para criar uma barbearia' });
             }
 
-            const novaBarbearia = await Barbearia.create({ nome, endereco, telefone, horarioAbertura, horarioFechamento, icone, user_id });
+            const barberia = await Barbearia.findOne({ 
+                where: { 
+                    user_id
+                }
+            });
+            
+            if (barberia) {
+                return res.status(400).json({ message: 'Usuário já possui uma barbearia'});
+            }
+            
+            if (!endereco || !numero)
+                return res.status(400).json({ message: 'endereco e numero'});
+            
+
+            const barberiaExists = await Barbearia.findOne({ 
+                where: { 
+                    endereco,
+                    numero
+                    // ,
+                    // $or: [
+                    //     {
+                    //         cep
+                    //     }
+                    // ]
+                }
+            });
+
+
+            if (barberiaExists) {
+                return res.status(400).json({ message: 'Esta barbearia já existe'});
+            }
+
+            const novaBarbearia = await Barbearia.create({ nome, endereco, telefone, horarioAbertura, horarioFechamento, icone, user_id, complemento, numero, bloco, cep });
             return res.status(201).json(novaBarbearia);
         } catch (error) {
             console.log(error);

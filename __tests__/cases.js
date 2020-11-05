@@ -26,7 +26,11 @@ var BarbeariaTeste = {
     "telefone": "(11)9999999",
     "horarioAbertura": "2020-10-29T16:34:00.000Z",
     "horarioFechamento": "2020-10-29T16:34:00.000Z",
-    "user_id": 3
+    "user_id": 3,
+    "complemento": "Testing",
+    "numero": 123,
+    "bloco": "Testing",
+    "cep": "Testing"
 };
 
 
@@ -37,9 +41,14 @@ let ServicoTeste = {
     "barbearia_id": 1
 };
 
+var StatusAgendamentoTeste = {
+    "nome": "Agendado"
+};
+
 module.exports = {
     UsuarioTeste,
     ModeradorTeste,
     BarbeariaTeste,
     ServicoTeste,
+    StatusAgendamentoTeste
 };
