@@ -1,12 +1,13 @@
 const request = require("supertest");
 const app = require("../../src/app");
-let { BarbeariaTeste, UsuarioTeste, ModeradorTeste } = require("../cases");
+let { BarbeariaTeste, jwtModerador, jwtUsuario } = require("../cases");
 
 module.exports = () => {
     test('Não deve permitir que um usuário crie uma barberia', async () =>{
         const response = await request(app)
         .post('/barbearias')
-        .send({ ...BarbeariaTeste, user_id: UsuarioTeste.id });
+        .set('Authorization', `Bearer ${jwtUsuario}`)
+        .send(BarbeariaTeste);
 
         expect(response.status).toBe(400);
         expect(response.body).toHaveProperty('message');
@@ -16,10 +17,11 @@ module.exports = () => {
     test('Deve permitir que um moderador crie uma barberia', async () =>{
         const response = await request(app)
         .post('/barbearias')
-        .send({ ...BarbeariaTeste, user_id: ModeradorTeste.id });
+        .set('Authorization', `Bearer ${jwtModerador}`)
+        .send(BarbeariaTeste);
 
-        expect(response.body).toHaveProperty('id');
         expect(response.status).toBe(201);
+        expect(response.body).toHaveProperty('id');
         BarbeariaTeste.id = response.body.id;
         expect(response.body.nome).toBe(BarbeariaTeste.nome);
         expect(response.body.endereco).toBe(BarbeariaTeste.endereco);
@@ -37,6 +39,7 @@ module.exports = () => {
     test("Não deve permitir que o usuário crie outra barbearia", async () => {
         const response = await request(app)
         .post('/barbearias')
+        .set('Authorization', `Bearer ${jwtModerador}`)
         .send(BarbeariaTeste);
 
         expect(response.status).toBe(400);
@@ -82,7 +85,9 @@ module.exports = () => {
     
     test("Deve retornar a barberia do moderador", async () => {
         const response = await request(app)
-        .get(`/barbearias/moderador/${ModeradorTeste.id}`)
+        .get(`/barbearias/moderador/`)
+        .set('Authorization', `Bearer ${jwtModerador}`)
+
         expect(response.status).toBe(200);
         expect(response.body.nome).toBe(BarbeariaTeste.nome);
         expect(response.body.endereco).toBe(BarbeariaTeste.endereco);
@@ -92,19 +97,13 @@ module.exports = () => {
         expect(response.body.user_id).toBe(BarbeariaTeste.user_id);
         expect(response.body.ativo).toBe(true);
     });
-    
-    test("Deve retornar um erro para moderadores sem barbearia ou moderadores inexistentes", async () => {
-        const response = await request(app)
-        .get("/barbearias/moderador/12321313")
-        expect(response.status).toBe(400);
-        expect(response.body.message).toBe('Nenhuma barberia encontrada');
-    });
 
     test("Deve atualizar uma barbearia", async () => {
         BarbeariaTeste.nome = "Barbearia atualizada";
         BarbeariaTeste.endereco = "Novo endereço";
         const response = await request(app)
-        .patch(`/barbearias/${BarbeariaTeste.id}`)
+        .patch(`/barbearias/`)
+        .set('Authorization', `Bearer ${jwtModerador}`)
         .send(BarbeariaTeste)
 
         expect(response.status).toBe(200)
@@ -112,28 +111,29 @@ module.exports = () => {
         expect(response.body.endereco).toBe('Novo endereço');
     });
 
-    test("Deve retornar uma barbearia inválida", async () => {
+    /* test("Deve retornar uma barbearia inválida", async () => {
         const response = await request(app)
         .patch("/barbearias/9999")
         .send(BarbeariaTeste)
 
         expect(response.status).toBe(400);
         expect(response.body.message).toBe('Barbearia não encontrada');
-    });
+    }); */
 
     test("Deve deletar uma barberia", async () => {
         const response = await request(app)
-        .delete(`/barbearias/${BarbeariaTeste.id}`)
+        .delete(`/barbearias/`)
+        .set('Authorization', `Bearer ${jwtModerador}`)
 
         expect(response.status).toBe(200);
         expect(response.body.message).toBe('Barbearia deletada');
     });
 
-    test("Não deve deletar uma barberia inválida", async () => {
+    /* test("Não deve deletar uma barberia inválida", async () => {
         const response = await request(app)
         .delete("/barbearias/9999")
 
         expect(response.status).toBe(400);
         expect(response.body.message).toBe('Barbearia não encontrada');
-    });  
+    });   */
 }

@@ -1,6 +1,6 @@
 const request = require("supertest");
 const app = require("../../src/app");
-let { UsuarioTeste, ModeradorTeste, BarbeariaTeste } = require("../cases");
+let { UsuarioTeste, ModeradorTeste, jwtUsuario, jwtModerador } = require("../cases");
 
 module.exports = () => {
     test('Deve criar uma conta', async () =>{
@@ -8,7 +8,6 @@ module.exports = () => {
         .post('/users')
         .send(UsuarioTeste);
 
-        UsuarioTeste.id = response.body.id;
         expect(response.status).toBe(201);
         expect(response.body).toHaveProperty('id');
         expect(response.body.nome).toBe(UsuarioTeste.nome);
@@ -26,8 +25,6 @@ module.exports = () => {
         .post('/users')
         .send(ModeradorTeste);
 
-        ModeradorTeste.id = response.body.id;
-        BarbeariaTeste.user_id = response.body.id;
         expect(response.status).toBe(201);
         expect(response.body).toHaveProperty('id');
         expect(response.body.nome).toBe(ModeradorTeste.nome);
@@ -47,6 +44,19 @@ module.exports = () => {
 
         expect(response.status).toBe(200)
         expect(response.body).toHaveProperty('id');
+        expect(response.body).toHaveProperty('sessionToken');
+        jwtUsuario = response.body.sessionToken;
+    });
+
+    test("Deve autenticar um moderador", async () => {
+        const response = await request(app)
+        .post("/login")
+        .send({ email: ModeradorTeste.email, password: ModeradorTeste.password })
+
+        expect(response.status).toBe(200)
+        expect(response.body).toHaveProperty('id');
+        expect(response.body).toHaveProperty('sessionToken');
+        jwtModerador = response.body.sessionToken;
     });
 
     test("Não deve autenticar um usuário com senha inválida", async () => {
@@ -80,7 +90,8 @@ module.exports = () => {
         UsuarioTeste.nome = "updatedName";
         UsuarioTeste.sobrenome = "updatedLastName";
         const response = await request(app)
-        .patch(`/users/${UsuarioTeste.id}`)
+        .patch(`/users/`)
+        .set('Authorization', `Bearer ${jwtUsuario}`)
         .send(UsuarioTeste)
 
         expect(response.status).toBe(200)
@@ -88,18 +99,20 @@ module.exports = () => {
         expect(response.body.sobrenome).toBe('updatedLastName');
     });
 
-    test("Não deve atualizar as informações um usuário inexistente", async () => {
-        const response = await request(app)
-        .patch("/users/9999")
-        .send(UsuarioTeste)
+    // test("Não deve atualizar as informações um usuário inexistente", async () => {
+    //     const response = await request(app)
+    //     .patch("/users/9999")
+    //     .set('Authorization', `Bearer ${jwtUsuario}`)
+    //     .send(UsuarioTeste)
 
-        expect(response.status).toBe(404);
-        expect(response.body.message).toBe('Usuário não encontrado');
-    });
+    //     expect(response.status).toBe(404);
+    //     expect(response.body.message).toBe('Usuário não encontrado');
+    // });
 
     test("Deve excluir um usuário", async () => {
         const response = await request(app)
-        .delete(`/users/${UsuarioTeste.id}`)
+        .set('Authorization', `Bearer ${jwtUsuario}`)
+        .delete(`/users/`)
 
         expect(response.status).toBe(200);
         expect(response.body.message).toBe('User deleted');
@@ -108,6 +121,7 @@ module.exports = () => {
     test("Não deve autenticar um usuário com conta inativa", async () => {
         const response = await request(app)
         .post("/login")
+        .set('Authorization', `Bearer ${jwtUsuario}`)
         .send({ email: UsuarioTeste.email, password: UsuarioTeste.password })
 
         expect(response.status).toBe(400)

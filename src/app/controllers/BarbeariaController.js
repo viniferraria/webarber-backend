@@ -30,10 +30,9 @@ module.exports = {
 
     async getMyBarbearias(req, res) {
         try {
-            const { user_id } = req.params;
             const barbearia = await Barbearia.findOne({
                 where: { 
-                    user_id: user_id
+                    user_id: req.userId
                 }
             });
             
@@ -50,22 +49,22 @@ module.exports = {
 
     async create(req, res) {
         try {
-            const { nome, endereco, telefone, horarioAbertura, horarioFechamento, icone, user_id, complemento, numero, bloco, cep } = req.body;
+            const { nome, endereco, telefone, horarioAbertura, horarioFechamento, icone, complemento, numero, bloco, cep } = req.body;
             
-            if (!user_id) {
-                console.log('É necessário o id do moderador para associar uma barbearia');
-                return res.status(400).json({ message: 'É necessário informar o moderador'});
-            }
+            // if (!user_id) {
+            //     console.log('É necessário o id do moderador para associar uma barbearia');
+            //     return res.status(400).json({ message: 'É necessário informar o moderador'});
+            // }
 
-            let usuario = await Usuario.findByPk(user_id);
-            if (usuario.idTipo == 1) {
-                console.log('É necessário ser um moderador para criar uma barbearia');
-                return res.status(400).json({ message: 'É necessário informar um moderador para criar uma barbearia' });
-            }
+            // let usuario = await Usuario.findByPk(user_id);
+            // if (usuario.idTipo == 1) {
+            //     console.log('É necessário ser um moderador para criar uma barbearia');
+            //     return res.status(400).json({ message: 'É necessário informar um moderador para criar uma barbearia' });
+            // }
 
             const barberia = await Barbearia.findOne({ 
                 where: { 
-                    user_id
+                    user_id: req.userId
                 }
             });
             
@@ -106,9 +105,16 @@ module.exports = {
 
     async update(req, res) {
         try {
-            const { barbearia_id } = req.params;
+            const  { userId, barbeariaId } = req;
             const { nome, endereco, telefone, horarioAbertura, horarioFechamento, icone } = req.body;
-            const barberia = await Barbearia.findByPk(barbearia_id);
+            const barberia = await Barbearia.findOne({
+                where: {
+                    [Op.or]: [
+                        { user_id: userId },
+                    ]
+                } 
+            });
+            
             
             if (!barberia) {
                 return res.status(400).json({ message: 'Barbearia não encontrada'});
@@ -132,9 +138,14 @@ module.exports = {
 
     async delete(req, res) {
         try {
-
-            const { barbearia_id } = req.params;
-            const barbearia = await Barbearia.findByPk(barbearia_id);
+            const  { userId, barbeariaId } = req;
+            const barbearia = await Barbearia.findOne({
+                where: {
+                    [Op.or]: [
+                        { user_id: userId },
+                    ]
+                }  
+            });
 
             if (!barbearia) {
                 return res.status(400).json({ message: 'Barbearia não encontrada' });

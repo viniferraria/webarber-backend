@@ -1,6 +1,6 @@
+let jwtUsuario;
 
 let UsuarioTeste = {
-    "id": 2,
     "nome": "Testing",
     "sobrenome": "123",
     "email": "testing123@gmail.com",
@@ -9,8 +9,9 @@ let UsuarioTeste = {
     "idTipo": 1,
 };
 
+let jwtModerador;
+
 let ModeradorTeste = {
-    "id": 3,
     "nome": "4queijos",
     "sobrenome": "123",
     "email": "4queijos@gmail.com",
@@ -26,7 +27,6 @@ var BarbeariaTeste = {
     "telefone": "(11)9999999",
     "horarioAbertura": "2020-10-29T16:34:00.000Z",
     "horarioFechamento": "2020-10-29T16:34:00.000Z",
-    "user_id": 3,
     "complemento": "Testing",
     "numero": 123,
     "bloco": "Testing",
@@ -34,11 +34,12 @@ var BarbeariaTeste = {
 };
 
 
+
 let ServicoTeste = {
     "id": 1,
     "titulo": "Testing",
     "preco": 9.99,
-    "barbearia_id": 1
+    "barbearia_id": BarbeariaTeste.id
 };
 
 var StatusAgendamentoTeste = {
@@ -46,7 +47,9 @@ var StatusAgendamentoTeste = {
 };
 
 module.exports = {
+    jwtUsuario,
     UsuarioTeste,
+    jwtModerador,
     ModeradorTeste,
     BarbeariaTeste,
     ServicoTeste,

@@ -29,9 +29,8 @@ module.exports = {
 
     async get(req, res) {
         try {
-            const { user_id } = req.params;
             const user = await Usuario.findOne({ where: { 
-                id: user_id
+                id: req.userId
             }});
             
             if (!user) {
@@ -92,7 +91,7 @@ module.exports = {
 
     async update(req, res) {
         try {
-            const { user_id } = req.params;
+            const { userId } = req;
             let { nome, sobrenome, email, password, CNPJ, CPF, idTipo, icone } = req.body;
 
             if (!email) {
@@ -105,7 +104,7 @@ module.exports = {
                 return res.status(400).json({ message: 'Documento inválido' });
             }
 
-            let user = await Usuario.findByPk(user_id);
+            let user = await Usuario.findByPk(userId);
             if (!user) {
                 return res.status(404).json({ message: 'Usuário não encontrado'});
             }
@@ -121,7 +120,7 @@ module.exports = {
                 }
             });
 
-            if ((repetido && repetido.id) != user_id)
+            if (repetido && repetido.id != userId)
                 return res.status(400).json({ message: 'Erro ao atualizar documentos|email'});
 
             const updatedUser = await user.update({
@@ -146,8 +145,8 @@ module.exports = {
     
     async delete(req, res) {
         try {
-            const { user_id } = req.params;
-            const user = await Usuario.findByPk(user_id);
+            const { userId } = req;
+            const user = await Usuario.findByPk(userId);
 
             if (!user) {
                 return res.status(400).json({ message: 'User not found' });
@@ -178,7 +177,12 @@ module.exports = {
                 
             if (!user.ativo)
                 return res.status(400).json({ message: 'Credenciais inválidas' });
-            
+
+            user.generateToken();
+            await user.update({
+                sessionToken: user.sessionToken
+            });
+
             return res.status(200).json(user);
         } catch(err) {
             console.log(err);
