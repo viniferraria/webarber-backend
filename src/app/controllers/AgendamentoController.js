@@ -132,6 +132,43 @@ module.exports = {
         }
     },
 
+    async update(req, res) {
+        const { id, idUsuario, idStatus } = req.body;
+        
+        try {
+            if (!id || !idUsuario || !idStatus) {
+                return res.status(400).json({ message: 'Falta dados para completar a ação' });
+            }
+
+            let usuario = await Usuario.findByPk(idUsuario);
+
+            if(usuario.idTipo == 1) {
+                return res.status(400).json({ message: 'É necessário informar um moderador para criar uma barbearia' });
+            }
+
+            const agendamento = await Agendamento.findByPk(id);
+
+            if(!agendamento) {
+                return res.status(400).json({ message: 'Não existe este agendamento' });            
+            }
+            
+            const status = await StatusAgendamento.findByPk(idStatus);
+
+            if(!status) {
+                return res.status(400).json({ message: 'Não existe este status' });            
+            }
+
+            await agendamento.update({ 
+                idStatus: idStatus
+            });
+
+            return res.status(200).json({ message: 'Agendamento atualizado' });  
+        } catch (error) {
+            console.log(error);
+            return res.status(400).json({ message: 'Erro ao atualizar um agendamento' });
+        }
+    },
+
     async cancel(req, res) {
         const { id, idUsuario } = req.body;
         

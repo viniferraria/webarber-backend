@@ -37,6 +37,7 @@ routes.delete('/servicos/:servico_id', ServicoController.delete);
 routes.get('/agendamentos/barbearia/:barbearia_id', AgendamentoController.getAgendamentosBarbearia);
 routes.get('/agendamentos', AgendamentoController.getMyAgendamentos);
 routes.post('/agendamentos', AgendamentoController.create);
+routes.patch('/agendamentos', AgendamentoController.update);
 routes.delete('/agendamentos', AgendamentoController.cancel);
 
 // Rotas Status de agendamentos
