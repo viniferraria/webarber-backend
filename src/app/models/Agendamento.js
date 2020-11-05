@@ -15,13 +15,12 @@ module.exports = (sequelize, DataTypes) => {
         timestamps: false
     });
 
-    // Agendamentos.associate = function (models) {
-    //     Agendamentos.belongsTo(models.Agenda);
-        // Agendamentos.hasOne(models.Barbearia);
-        // Agendamentos.hasOne(models.Usuario);
-        // Agendamentos.hasOne(models.StatusAgendamento);
-        // Agendamentos.hasOne(models.ServicoBarbearia);
-    // };
+    Agendamento.associate = function (models) {
+        Agendamento.hasOne(models.Barbearia, { foreignKey: 'id'});
+        Agendamento.hasOne(models.Usuario, { foreignKey: 'id'});
+        Agendamento.hasOne(models.StatusAgendamento, { foreignKey: 'id'});
+        Agendamento.hasOne(models.Servico, { foreignKey: 'id'});
+    };
 
 
     return Agendamento;
