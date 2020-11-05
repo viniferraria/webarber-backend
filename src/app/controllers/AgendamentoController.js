@@ -79,7 +79,7 @@ module.exports = {
                 ],
                 where: { 
                     data:  { 
-                        [Op.gte]: moment().format('YYYY-MM-DD')
+                        [Op.gte]: moment().format('YYYY-DD-MM')
                     }
                 }
             }).then(items => {
@@ -111,10 +111,32 @@ module.exports = {
     },
 
     async create(req, res) {
-        return res.status(200).json();
+        const { idBarbearia, idUsuario, idServico, data } = req.body;
+        
+        try {
+            if (!idBarbearia || !idUsuario || !idServico || !data) {
+                return res.status(400).json({ message: 'Falta dados para completar a ação'});
+            }
+
+            // TODO: Por validações aqui
+
+            const novoAgendamento = await Agendamento.create({ idBarbearia, idUsuario, idServico, data });
+            return res.status(201).json(novoAgendamento);
+
+        } catch (error) {
+            console.log(error);
+            return res.status(400).json({ message: 'Erro ao criar um agendamento' });
+        }
     },
 
     async cancel(req, res) {
-        return res.status(200).json();
+        const { id, idUsuario } = req.body;
+        
+        try {
+            
+        } catch (error) {
+            console.log(error);
+            return res.status(400).json({ message: 'Erro ao criar um agendamento' });
+        }
     }
 };
