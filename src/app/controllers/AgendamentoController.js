@@ -31,13 +31,16 @@ module.exports = {
                 ],
                 where: { 
                     idUsuario: user_id
-                }
+                },
+                order: [
+                    ['data', 'DESC']
+                ]
             }).then(items => {
                 const response = items.map( item => {
                     return {
                         id: item.id,
-                        id_barbearia: item.idBarbearia,
-                        id_servico: item.idServico,
+                        idBarbearia: item.idBarbearia,
+                        idServico: item.idServico,
                         id_status: item.status.id,
                         nome_servico: item.servico.titulo,
                         status: item.status.nome,
@@ -84,18 +87,22 @@ module.exports = {
                         as: 'usuario'
                     }
                 ],
-                where: { 
-                    data:  { 
-                        [Op.gte]: moment().format('YYYY-MM-DD')
-                    },
-                    idBarbearia: barbearia_id
-                }
+                // Pega todos os agendamentos do dia de hoje
+                // where: { 
+                //     data:  { 
+                //         [Op.gte]: moment().format('YYYY-MM-DD')
+                //     },
+                //     idBarbearia: barbearia_id
+                // },
+                order: [
+                    ['data', 'ASC']
+                ]
             }).then(items => {
                 const response = items.map( item => {
                     return {
                         id: item.id,
-                        id_barbearia: item.idBarbearia,
-                        id_servico: item.idServico,
+                        idBarbearia: item.idBarbearia,
+                        idServico: item.idServico,
                         id_status: item.status.id,
                         id_usuario: item.idUsuario,
                         nome_usuario: item.usuario.nome,

@@ -1,4 +1,3 @@
-
 let UsuarioTeste = {
     "id": 2,
     "nome": "Testing",
@@ -66,5 +65,6 @@ module.exports = {
     BarbeariaTeste,
     ServicoTeste,
     StatusAgendamentoTeste,
-    AgendamentoTeste
+    AgendamentoTeste,
+    AgendamentoTesteFalha
 };

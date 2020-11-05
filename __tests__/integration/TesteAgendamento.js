@@ -1,6 +1,7 @@
 const request = require("supertest");
+const moment = require('moment');
 const app = require("../../src/app");
-let { AgendamentoTeste, AgendamentoTesteFalha, ModeradorTeste, UsuarioTeste } = require("../cases");
+let { AgendamentoTeste, AgendamentoTesteFalha, ModeradorTeste, UsuarioTeste, BarbeariaTeste } = require("../cases");
 
 module.exports = () => {
     test('Deve criar um agendamento', async () =>{
@@ -16,10 +17,10 @@ module.exports = () => {
         // TODO: Testar data convertendo para string
     });
 
-    test('Deve criar mais de um agendamento para o mesmo usuário', async () =>{
+    test('Deve criar mais de um agendamento para o mesmo usuário com horário diferente', async () =>{
         const response = await request(app)
         .post('/agendamentos')
-        .send({ ...AgendamentoTeste, idUsuario: UsuarioTeste.id });
+        .send({ ...AgendamentoTeste, idUsuario: UsuarioTeste.id, data: moment().subtract(1, "days") });
 
         expect(response.status).toBe(201);
         expect(response.body).toHaveProperty('id');
@@ -116,5 +117,25 @@ module.exports = () => {
 
         expect(response.status).toBe(200);
         expect(response.body.message).toBe('Agendamento atualizado');
+    });
+
+    test('Deve resgatar todos os agendamentos do usuário', async () =>{
+        const response = await request(app)
+        .get(`/agendamentos?user_id=${UsuarioTeste.id}`)
+        
+        expect(response.status).toBe(200);
+        expect(response.body.length).toBeGreaterThanOrEqual(0);
+        expect(response.body[0].idBarbearia).toBe(AgendamentoTeste.idBarbearia);
+        expect(response.body[0].idServico).toBe(AgendamentoTeste.idServico);
+    });
+
+    test('Deve resgatar todos os agendamentos da barbearia', async () =>{
+        const response = await request(app)
+        .get(`/agendamentos/barbearia/${BarbeariaTeste.id}`)
+        
+        expect(response.status).toBe(200);
+        expect(response.body.length).toBeGreaterThanOrEqual(0);
+        expect(response.body[0].idBarbearia).toBe(AgendamentoTeste.idBarbearia);
+        expect(response.body[0].idServico).toBe(AgendamentoTeste.idServico);
     });
 }
