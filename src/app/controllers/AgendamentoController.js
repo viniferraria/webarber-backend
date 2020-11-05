@@ -143,7 +143,7 @@ module.exports = {
             let usuario = await Usuario.findByPk(idUsuario);
 
             if(usuario.idTipo == 1) {
-                return res.status(400).json({ message: 'É necessário informar um moderador para criar uma barbearia' });
+                return res.status(400).json({ message: 'É necessário informar um moderador para atualizar um agendamento' });
             }
 
             const agendamento = await Agendamento.findByPk(id);
