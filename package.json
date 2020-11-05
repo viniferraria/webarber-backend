@@ -6,6 +6,8 @@
   "scripts": {
     "first": "yarn install",
     "dev": "nodemon ./src/server.js --ignore __tests__",
+    "db": "yarn sequelize db:migrate",
+    "undo": "yarn sequelize db:migrate:undo:all",
     "pretest": "yarn sequelize db:migrate",
     "test": "jest --runInBand --detectOpenHandles",
     "posttest": "yarn sequelize db:migrate:undo:all",
