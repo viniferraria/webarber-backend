@@ -30,6 +30,7 @@ module.exports = {
                     idUsuario: user_id
                 }
             }).then(items => {
+                console.log(items.length);
                 const response = items.map( item => {
                     // return item
                     return {
@@ -56,6 +57,7 @@ module.exports = {
     },
 
     async getAgendamentosBarbearia(req, res) {
+        const { barbearia_id } = req.params;
         try {
 
             await Agendamento.findAll({
@@ -80,7 +82,8 @@ module.exports = {
                 where: { 
                     data:  { 
                         [Op.gte]: moment().format('YYYY-DD-MM')
-                    }
+                    },
+                    idBarbearia: barbearia_id
                 }
             }).then(items => {
                 const response = items.map( item => {
@@ -133,10 +136,34 @@ module.exports = {
         const { id, idUsuario } = req.body;
         
         try {
+            if (!id || !idUsuario) {
+                return res.status(400).json({ message: 'Falta dados para completar a ação' });
+            }
+
+            const agendamento = await Agendamento.findByPk(id);
+
+            if(!agendamento) {
+                return res.status(400).json({ message: 'Não existe este agendamento' });            
+            }
+
+            const usuario = await Usuario.findByPk(idUsuario);
+
+            if(!usuario) {
+                return res.status(400).json({ message: 'Não existe este usuário' });            
+            }
             
+            if(agendamento.idUsuario == usuario.id) {
+                await agendamento.update({ 
+                    idStatus: 4
+                });
+
+                return res.status(200).json({ message: 'Agendamento cancelado' });    
+            } else {
+                return res.status(400).json({ message: 'Este agendamento não pertence à este usuário' });    
+            }  
         } catch (error) {
             console.log(error);
-            return res.status(400).json({ message: 'Erro ao criar um agendamento' });
+            return res.status(400).json({ message: 'Erro ao cancelar um agendamento' });
         }
     }
 };
