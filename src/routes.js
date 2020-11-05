@@ -5,6 +5,7 @@ const UserController = require('./app/controllers/UserController');
 const TipoUsuarioController = require('./app/controllers/TipoUsuarioController');
 const BarbeariaController = require('./app/controllers/BarbeariaController');
 const ServicoController = require('./app/controllers/ServicoController');
+const AgendamentoController = require('./app/controllers/AgendamentoController');
 
 // Rotas Tipo
 routes.get('/tipos', TipoUsuarioController.getAll)
@@ -30,5 +31,11 @@ routes.get('/servicos/:servico_id', ServicoController.get);
 routes.post('/servicos', ServicoController.create);
 routes.patch('/servicos/:servico_id', ServicoController.update);
 routes.delete('/servicos/:servico_id', ServicoController.delete);
+
+// Rotas Agendamento
+routes.get('/agendamentos/barbearia/:barbearia_id', AgendamentoController.getAgendamentosBarbearia);
+routes.get('/agendamentos/:user_id', AgendamentoController.getMyAgendamentos);
+routes.post('/agendamentos', AgendamentoController.create);
+routes.patch('/agendamentos/:agendamento_id', AgendamentoController.cancel);
 
 module.exports = routes;
