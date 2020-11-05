@@ -16,10 +16,10 @@ module.exports = (sequelize, DataTypes) => {
     });
 
     Agendamento.associate = function (models) {
-        Agendamento.hasOne(models.Barbearia, { foreignKey: 'id'});
-        Agendamento.hasOne(models.Usuario, { foreignKey: 'id'});
-        Agendamento.hasOne(models.StatusAgendamento, { foreignKey: 'id'});
-        Agendamento.hasOne(models.Servico, { foreignKey: 'id'});
+        Agendamento.belongsTo(models.Barbearia, { foreignKey: 'idBarbearia', as: 'barbearia' });
+        Agendamento.belongsTo(models.Usuario, { foreignKey: 'idUsuario', as: 'usuario' });
+        Agendamento.belongsTo(models.StatusAgendamento, { foreignKey: 'idStatus', as: 'status' });
+        Agendamento.belongsTo(models.Servico, { foreignKey: 'idServico', as: 'servico' });
     };
 
 

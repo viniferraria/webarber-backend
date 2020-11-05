@@ -15,31 +15,32 @@ module.exports = {
                 include : [
                     {
                         model: Servico,
-                        required: true
+                        required: true,
+                        as: 'servico'
                     },
                     {
                         model: StatusAgendamento,
-                        required: true
+                        required: true,
+                        as: 'status'
                     },
                     {
                         model: Barbearia,
-                        required: true
+                        required: true,
+                        as: 'barbearia'
                     }
                 ],
                 where: { 
                     idUsuario: user_id
                 }
             }).then(items => {
-                console.log(items.length);
                 const response = items.map( item => {
-                    // return item
                     return {
                         id: item.id,
                         id_barbearia: item.idBarbearia,
                         id_servico: item.idServico,
-                        id_status: item.StatusAgendamento.id,
-                        nome_servico: item.Servico.titulo,
-                        status: item.StatusAgendamento.nome,
+                        id_status: item.status.id,
+                        nome_servico: item.servico.titulo,
+                        status: item.status.nome,
                         data: item.data.toLocaleString('pt-BR', { timeZone: 'America/Sao_Paulo' })
                     }
                 });
@@ -64,39 +65,42 @@ module.exports = {
                 include : [
                     {
                         model: Servico,
-                        required: true
+                        required: true,
+                        as: 'servico'
                     },
                     {
                         model: StatusAgendamento,
-                        required: true
+                        required: true,
+                        as: 'status'
                     },
                     {
                         model: Barbearia,
-                        required: true
+                        required: true,
+                        as: 'barbearia'
                     },
                     {
                         model: Usuario,
-                        required: true
+                        required: true,
+                        as: 'usuario'
                     }
                 ],
                 where: { 
                     data:  { 
-                        [Op.gte]: moment().format('YYYY-DD-MM')
+                        [Op.gte]: moment().format('YYYY-MM-DD')
                     },
                     idBarbearia: barbearia_id
                 }
             }).then(items => {
                 const response = items.map( item => {
-                    // return item
                     return {
                         id: item.id,
                         id_barbearia: item.idBarbearia,
                         id_servico: item.idServico,
-                        id_status: item.StatusAgendamento.id,
+                        id_status: item.status.id,
                         id_usuario: item.idUsuario,
-                        nome_usuario: item.Usuario.nome,
-                        nome_servico: item.Servico.titulo,
-                        status: item.StatusAgendamento.nome,
+                        nome_usuario: item.usuario.nome,
+                        nome_servico: item.servico.titulo,
+                        status: item.status.nome,
                         data: item.data.toLocaleString('pt-BR', { timeZone: 'America/Sao_Paulo' })
                     }
                 });
