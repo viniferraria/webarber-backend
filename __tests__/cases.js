@@ -41,9 +41,14 @@ let ServicoTeste = {
     "barbearia_id": 1
 };
 
+var StatusAgendamentoTeste = {
+    "nome": "Agendado"
+};
+
 module.exports = {
     UsuarioTeste,
     ModeradorTeste,
     BarbeariaTeste,
     ServicoTeste,
+    StatusAgendamentoTeste
 };
