@@ -94,6 +94,7 @@ module.exports = {
             const { userId } = req;
             let { nome, sobrenome, email, password, CNPJ, CPF, idTipo, icone } = req.body;
 
+
             if (!email) {
                 return res.status(400).json({ message: 'É necessário informar um email para criar uma conta' });
             } else if (idTipo == 1 && !CPF) {
@@ -108,7 +109,6 @@ module.exports = {
             if (!user) {
                 return res.status(404).json({ message: 'Usuário não encontrado'});
             }
-
             // TODO validar se o cpf, ou CPNJ ou email já estão associados a outro usuário
             const repetido = await Usuario.findOne({
                 where: {

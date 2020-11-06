@@ -105,7 +105,7 @@ module.exports = {
 
     async update(req, res) {
         try {
-            const  { userId, barbeariaId } = req;
+            const  { userId } = req;
             const { nome, endereco, telefone, horarioAbertura, horarioFechamento, icone } = req.body;
             const barberia = await Barbearia.findOne({
                 where: {
