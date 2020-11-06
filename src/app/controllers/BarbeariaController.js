@@ -50,18 +50,6 @@ module.exports = {
     async create(req, res) {
         try {
             const { nome, endereco, telefone, horarioAbertura, horarioFechamento, icone, complemento, numero, bloco, cep } = req.body;
-            
-            // if (!user_id) {
-            //     console.log('É necessário o id do moderador para associar uma barbearia');
-            //     return res.status(400).json({ message: 'É necessário informar o moderador'});
-            // }
-
-            // let usuario = await Usuario.findByPk(user_id);
-            // if (usuario.idTipo == 1) {
-            //     console.log('É necessário ser um moderador para criar uma barbearia');
-            //     return res.status(400).json({ message: 'É necessário informar um moderador para criar uma barbearia' });
-            // }
-
             const barberia = await Barbearia.findOne({ 
                 where: { 
                     user_id: req.userId

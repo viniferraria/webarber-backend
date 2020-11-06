@@ -11,13 +11,9 @@ module.exports = async (req, res, next) => {
 
     try {
         const decoded = await promisify(jwt.verify)(token, process.env.APP_SECRET);
-<<<<<<< HEAD
-        
         if (!decoded.id || !decoded.idTipo)
             throw new Error();
 
-=======
->>>>>>> 72d81f10568586f42ce3983b170ac2640989cabb
         req.userId = decoded.id;
         req.idTipo = decoded.idTipo;
 
