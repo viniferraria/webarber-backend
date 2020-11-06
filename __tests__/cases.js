@@ -1,5 +1,3 @@
-let jwtUsuario;
-
 let UsuarioTeste = {
     "nome": "Testing",
     "sobrenome": "123",
@@ -7,9 +5,8 @@ let UsuarioTeste = {
     "password": "asdasdasd",
     "CPF": "999.999.999-21",
     "idTipo": 1,
+    "jwt": null 
 };
-
-let jwtModerador;
 
 let ModeradorTeste = {
     "nome": "4queijos",
@@ -18,6 +15,7 @@ let ModeradorTeste = {
     "password": "asdasdasd",
     "CNPJ": "999.123.999-11",
     "idTipo": 2,
+    "jwt": null
 };
 
 var BarbeariaTeste = {
@@ -47,9 +45,7 @@ var StatusAgendamentoTeste = {
 };
 
 module.exports = {
-    jwtUsuario,
     UsuarioTeste,
-    jwtModerador,
     ModeradorTeste,
     BarbeariaTeste,
     ServicoTeste,

@@ -1,6 +1,6 @@
 const request = require("supertest");
 const app = require("../../src/app");
-let { UsuarioTeste, ModeradorTeste, jwtUsuario, jwtModerador } = require("../cases");
+let { UsuarioTeste, ModeradorTeste } = require("../cases");
 
 module.exports = () => {
     test('Deve criar uma conta', async () =>{
@@ -45,7 +45,7 @@ module.exports = () => {
         expect(response.status).toBe(200)
         expect(response.body).toHaveProperty('id');
         expect(response.body).toHaveProperty('sessionToken');
-        jwtUsuario = response.body.sessionToken;
+        UsuarioTeste.jwt = response.body.sessionToken;
     });
 
     test("Deve autenticar um moderador", async () => {
@@ -56,7 +56,7 @@ module.exports = () => {
         expect(response.status).toBe(200)
         expect(response.body).toHaveProperty('id');
         expect(response.body).toHaveProperty('sessionToken');
-        jwtModerador = response.body.sessionToken;
+        ModeradorTeste.jwt = response.body.sessionToken;
     });
 
     test("Não deve autenticar um usuário com senha inválida", async () => {
@@ -91,7 +91,7 @@ module.exports = () => {
         UsuarioTeste.sobrenome = "updatedLastName";
         const response = await request(app)
         .patch(`/users/`)
-        .set('Authorization', `Bearer ${jwtUsuario}`)
+        .set('Authorization', `Bearer ${UsuarioTeste.jwt}`)
         .send(UsuarioTeste)
 
         expect(response.status).toBe(200)
@@ -102,17 +102,16 @@ module.exports = () => {
     // test("Não deve atualizar as informações um usuário inexistente", async () => {
     //     const response = await request(app)
     //     .patch("/users/9999")
-    //     .set('Authorization', `Bearer ${jwtUsuario}`)
     //     .send(UsuarioTeste)
 
     //     expect(response.status).toBe(404);
     //     expect(response.body.message).toBe('Usuário não encontrado');
     // });
 
-    test("Deve excluir um usuário", async () => {
+    test("Deve excluir o próprio usuário", async () => {
         const response = await request(app)
-        .set('Authorization', `Bearer ${jwtUsuario}`)
         .delete(`/users/`)
+        .set('Authorization', `Bearer ${UsuarioTeste.jwt}`)
 
         expect(response.status).toBe(200);
         expect(response.body.message).toBe('User deleted');
@@ -121,7 +120,7 @@ module.exports = () => {
     test("Não deve autenticar um usuário com conta inativa", async () => {
         const response = await request(app)
         .post("/login")
-        .set('Authorization', `Bearer ${jwtUsuario}`)
+        .set('Authorization', `Bearer ${UsuarioTeste.jwt}`)
         .send({ email: UsuarioTeste.email, password: UsuarioTeste.password })
 
         expect(response.status).toBe(400)

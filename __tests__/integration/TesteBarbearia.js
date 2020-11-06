@@ -1,23 +1,24 @@
 const request = require("supertest");
 const app = require("../../src/app");
-let { BarbeariaTeste, jwtModerador, jwtUsuario } = require("../cases");
+let { BarbeariaTeste, UsuarioTeste, ModeradorTeste } = require("../cases");
 
 module.exports = () => {
-    test('Não deve permitir que um usuário crie uma barberia', async () =>{
+    test('Não deve permitir que um usuário crie uma barberia', async () => {
+        console.log(`TESTEEEEEEE e${UsuarioTeste.jwt}`)
         const response = await request(app)
         .post('/barbearias')
-        .set('Authorization', `Bearer ${jwtUsuario}`)
+        .set('Authorization', `Bearer ${UsuarioTeste.jwt}`)
         .send(BarbeariaTeste);
 
-        expect(response.status).toBe(400);
+        expect(response.status).toBe(401);
         expect(response.body).toHaveProperty('message');
-        expect(response.body.message).toBe('É necessário informar um moderador para criar uma barbearia');
+        expect(response.body.message).toBe('Blocked');
     });
 
     test('Deve permitir que um moderador crie uma barberia', async () =>{
         const response = await request(app)
         .post('/barbearias')
-        .set('Authorization', `Bearer ${jwtModerador}`)
+        .set('Authorization', `Bearer ${ModeradorTeste.jwt}`)
         .send(BarbeariaTeste);
 
         expect(response.status).toBe(201);
@@ -28,7 +29,6 @@ module.exports = () => {
         expect(response.body.telefone).toBe(BarbeariaTeste.telefone);
         expect(response.body.horarioAbertura).toBe(BarbeariaTeste.horarioAbertura);
         expect(response.body.horarioFechamento).toBe(BarbeariaTeste.horarioFechamento);
-        expect(response.body.user_id).toBe(BarbeariaTeste.user_id);
         expect(response.body.ativo).toBe(true);
         expect(response.body.complemento).toBe(BarbeariaTeste.complemento);
         expect(response.body.numero).toBe(BarbeariaTeste.numero);
@@ -39,7 +39,7 @@ module.exports = () => {
     test("Não deve permitir que o usuário crie outra barbearia", async () => {
         const response = await request(app)
         .post('/barbearias')
-        .set('Authorization', `Bearer ${jwtModerador}`)
+        .set('Authorization', `Bearer ${ModeradorTeste.jwt}`)
         .send(BarbeariaTeste);
 
         expect(response.status).toBe(400);
@@ -57,7 +57,6 @@ module.exports = () => {
         expect(response.body[0].telefone).toBe(BarbeariaTeste.telefone);
         expect(response.body[0].horarioAbertura).toBe(BarbeariaTeste.horarioAbertura);
         expect(response.body[0].horarioFechamento).toBe(BarbeariaTeste.horarioFechamento);
-        expect(response.body[0].user_id).toBe(BarbeariaTeste.user_id);
         expect(response.body[0].ativo).toBe(true);
     });
 
@@ -79,14 +78,13 @@ module.exports = () => {
         expect(response.body[0].telefone).toBe(BarbeariaTeste.telefone);
         expect(response.body[0].horarioAbertura).toBe(BarbeariaTeste.horarioAbertura);
         expect(response.body[0].horarioFechamento).toBe(BarbeariaTeste.horarioFechamento);
-        expect(response.body[0].user_id).toBe(BarbeariaTeste.user_id);
         expect(response.body[0].ativo).toBe(true);
     });
     
     test("Deve retornar a barberia do moderador", async () => {
         const response = await request(app)
         .get(`/barbearias/moderador/`)
-        .set('Authorization', `Bearer ${jwtModerador}`)
+        .set('Authorization', `Bearer ${ModeradorTeste.jwt}`)
 
         expect(response.status).toBe(200);
         expect(response.body.nome).toBe(BarbeariaTeste.nome);
@@ -94,8 +92,17 @@ module.exports = () => {
         expect(response.body.telefone).toBe(BarbeariaTeste.telefone);
         expect(response.body.horarioAbertura).toBe(BarbeariaTeste.horarioAbertura);
         expect(response.body.horarioFechamento).toBe(BarbeariaTeste.horarioFechamento);
-        expect(response.body.user_id).toBe(BarbeariaTeste.user_id);
         expect(response.body.ativo).toBe(true);
+    });
+
+    test("Não deve permitir que um usuário acesse a rota", async () => {
+        const response = await request(app)
+        .get(`/barbearias/moderador/`)
+        .set('Authorization', `Bearer ${UsuarioTeste.jwt}`)
+
+        expect(response.status).toBe(401);
+        expect(response.body).toHaveProperty('message');
+        expect(response.body.message).toBe('Blocked');        
     });
 
     test("Deve atualizar uma barbearia", async () => {
@@ -103,7 +110,7 @@ module.exports = () => {
         BarbeariaTeste.endereco = "Novo endereço";
         const response = await request(app)
         .patch(`/barbearias/`)
-        .set('Authorization', `Bearer ${jwtModerador}`)
+        .set('Authorization', `Bearer ${ModeradorTeste.jwt}`)
         .send(BarbeariaTeste)
 
         expect(response.status).toBe(200)
@@ -123,7 +130,7 @@ module.exports = () => {
     test("Deve deletar uma barberia", async () => {
         const response = await request(app)
         .delete(`/barbearias/`)
-        .set('Authorization', `Bearer ${jwtModerador}`)
+        .set('Authorization', `Bearer ${ModeradorTeste.jwt}`)
 
         expect(response.status).toBe(200);
         expect(response.body.message).toBe('Barbearia deletada');

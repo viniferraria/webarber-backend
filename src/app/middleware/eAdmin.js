@@ -1,6 +1,6 @@
 module.exports = async (req, res, next) => {
     const { tipoId } = req;
-    if (!tipoId || tipoId != 2)
+    if (tipoId != 3)
         return res.status(401).json({ message: "Blocked "})
 
     return next();

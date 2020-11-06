@@ -72,8 +72,8 @@ module.exports = {
                 return res.status(400).json({ message: 'Usuário já possui uma barbearia'});
             }
             
-            if (!endereco || !numero)
-                return res.status(400).json({ message: 'endereco e numero'});
+            if (!endereco || !numero || !cep)
+                return res.status(400).json({ message: 'É necessário informar um endereço, número e cep para o comércio'});
             
 
             const barberiaExists = await Barbearia.findOne({ 
@@ -94,7 +94,7 @@ module.exports = {
                 return res.status(400).json({ message: 'Esta barbearia já existe'});
             }
 
-            const novaBarbearia = await Barbearia.create({ nome, endereco, telefone, horarioAbertura, horarioFechamento, icone, user_id, complemento, numero, bloco, cep });
+            const novaBarbearia = await Barbearia.create({ nome, endereco, telefone, horarioAbertura, horarioFechamento, icone, user_id: req.userId, complemento, numero, bloco, cep });
             return res.status(201).json(novaBarbearia);
         } catch (error) {
             console.log(error);
@@ -138,7 +138,7 @@ module.exports = {
 
     async delete(req, res) {
         try {
-            const  { userId, barbeariaId } = req;
+            const  { userId } = req;
             const barbearia = await Barbearia.findOne({
                 where: {
                     [Op.or]: [
