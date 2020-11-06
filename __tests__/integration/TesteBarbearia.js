@@ -4,7 +4,6 @@ let { BarbeariaTeste, UsuarioTeste, ModeradorTeste } = require("../cases");
 
 module.exports = () => {
     test('Não deve permitir que um usuário crie uma barberia', async () => {
-        console.log(`TESTEEEEEEE e${UsuarioTeste.jwt}`)
         const response = await request(app)
         .post('/barbearias')
         .set('Authorization', `Bearer ${UsuarioTeste.jwt}`)
