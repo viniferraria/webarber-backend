@@ -178,7 +178,7 @@ module.exports = {
             if (!user.ativo)
                 return res.status(400).json({ message: 'Credenciais inválidas' });
 
-            user.generateToken();
+            await user.generateToken();
             await user.update({
                 sessionToken: user.sessionToken
             });
