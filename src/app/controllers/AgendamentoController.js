@@ -11,7 +11,7 @@ module.exports = {
 
         try {
 
-            await Agendamento.findAll({
+            const agendamentos = await Agendamento.findAll({
                 include : [
                     {
                         model: Servico,
@@ -35,25 +35,26 @@ module.exports = {
                 order: [
                     ['data', 'DESC']
                 ]
-            }).then(items => {
-                const response = items.map( item => {
-                    return {
-                        id: item.id,
-                        idBarbearia: item.idBarbearia,
-                        idServico: item.idServico,
-                        id_status: item.status.id,
-                        nome_servico: item.servico.titulo,
-                        status: item.status.nome,
-                        data: item.data.toLocaleString('pt-BR', { timeZone: 'America/Sao_Paulo' })
-                    }
-                });
-                
-                if(!response) {
-                    return res.status(400).json({ message: 'Nenhum agendamento encontrado'});
-                }
-                
-                return res.status(200).json(response);
             });
+
+            const response = agendamentos.map( item => {
+                return {
+                    id: item.id,
+                    idBarbearia: item.idBarbearia,
+                    idServico: item.idServico,
+                    id_status: item.status.id,
+                    nome_servico: item.servico.titulo,
+                    status: item.status.nome,
+                    data: item.data.toLocaleString('pt-BR', { timeZone: 'America/Sao_Paulo' })
+                }
+            });
+            
+            if(!response) {
+                return res.status(400).json({ message: 'Nenhum agendamento encontrado'});
+            }
+            
+            return res.status(200).json(response);
+
         } catch (error) {
             console.log(error);
             return res.status(400).json({ message: 'Erro ao buscar agendamentos' });
@@ -64,7 +65,7 @@ module.exports = {
         const { barbearia_id } = req.params;
         try {
 
-            await Agendamento.findAll({
+            const agendamentos = await Agendamento.findAll({
                 include : [
                     {
                         model: Servico,
@@ -97,27 +98,27 @@ module.exports = {
                 order: [
                     ['data', 'ASC']
                 ]
-            }).then(items => {
-                const response = items.map( item => {
-                    return {
-                        id: item.id,
-                        idBarbearia: item.idBarbearia,
-                        idServico: item.idServico,
-                        id_status: item.status.id,
-                        id_usuario: item.idUsuario,
-                        nome_usuario: item.usuario.nome,
-                        nome_servico: item.servico.titulo,
-                        status: item.status.nome,
-                        data: item.data.toLocaleString('pt-BR', { timeZone: 'America/Sao_Paulo' })
-                    }
-                });
-                
-                if(!response) {
-                    return res.status(400).json({ message: 'Nenhum agendamento encontrado'});
-                }
-                
-                return res.status(200).json(response);
             });
+
+            const response = agendamentos.map( item => {
+                return {
+                    id: item.id,
+                    idBarbearia: item.idBarbearia,
+                    idServico: item.idServico,
+                    id_status: item.status.id,
+                    id_usuario: item.idUsuario,
+                    nome_usuario: item.usuario.nome,
+                    nome_servico: item.servico.titulo,
+                    status: item.status.nome,
+                    data: item.data.toLocaleString('pt-BR', { timeZone: 'America/Sao_Paulo' })
+                }
+            });
+            
+            if(!response) {
+                return res.status(400).json({ message: 'Nenhum agendamento encontrado'});
+            }
+            
+            return res.status(200).json(response);
         } catch (error) {
             console.log(error);
             return res.status(400).json({ message: 'Erro ao buscar agendamentos' });
