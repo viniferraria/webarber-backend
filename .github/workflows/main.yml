@@ -48,6 +48,7 @@ jobs:
         run: yarn --production=false --frozen-lockfile
 
       - name: Run test
+        run: yarn test
         env:
           DB_HOST: localhost
           DB_PORT: 5432
@@ -55,4 +56,3 @@ jobs:
           DB_USERNAME: webarber
           DB_PASSWORD: webarber
           APP_SECRET: cyberbarber-2077
-        run: yarn test
