@@ -11,5 +11,9 @@ module.exports = {
         timestamps: true, 
         underscored: false,
         freezeTableName: true
-    }
+    },
+    dialectOptions: {
+        useUTC: false 
+    },
+    timezone: '-03:00'
 };

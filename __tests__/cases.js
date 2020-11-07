@@ -44,10 +44,25 @@ var StatusAgendamentoTeste = {
     "nome": "Agendado"
 };
 
+var AgendamentoTeste = {
+    "id": 1,
+    "idBarbearia": BarbeariaTeste.id,
+    "idServico": ServicoTeste.id,
+    "data": new Date()
+};
+
+var AgendamentoTesteFalha = {
+    "id": 1,
+    "idBarbearia": BarbeariaTeste.id,
+    "data": new Date(),
+};
+
 module.exports = {
     UsuarioTeste,
     ModeradorTeste,
     BarbeariaTeste,
     ServicoTeste,
-    StatusAgendamentoTeste
+    StatusAgendamentoTeste,
+    AgendamentoTeste,
+    AgendamentoTesteFalha
 };

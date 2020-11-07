@@ -6,7 +6,6 @@ module.exports = () => {
     test('Deve buscar os status de agendamento', async () =>{
         const response = await request(app)
         .get('/status')
-        .set('Authorization', `Bearer ${UsuarioTeste.jwt}`)
 
         expect(response.status).toBe(200);
         expect(response.body.length).toBeGreaterThanOrEqual(0);
