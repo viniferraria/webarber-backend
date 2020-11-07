@@ -13,6 +13,7 @@ module.exports = () => {
         ServicoTeste.id = response.body.id;
         expect(response.body.titulo).toBe(ServicoTeste.titulo);
         expect(response.body.preco).toBe(ServicoTeste.preco);
+        expect(response.body.descricao).toBe(ServicoTeste.descricao);
         expect(response.body.barbearia_id).toBe(ServicoTeste.barbearia_id);
         expect(response.body.ativo).toBe(true);
     });
@@ -32,6 +33,7 @@ module.exports = () => {
         expect(response.status).toBe(200);
         expect(response.body).toHaveProperty('id');
         expect(response.body.titulo).toBe(ServicoTeste.titulo);
+        expect(response.body.descricao).toBe(ServicoTeste.descricao);
         expect(response.body.preco).toBe(ServicoTeste.preco);
         expect(response.body.barbearia_id).toBe(ServicoTeste.barbearia_id);
         expect(response.body.ativo).toBe(true);
@@ -48,6 +50,7 @@ module.exports = () => {
 
     test("Deve atualizar um serviço", async () => {
         ServicoTeste.titulo = "Serviço atualizado";
+        ServicoTeste.descricao = "Descrição atualizado";
         ServicoTeste.preco = 1.99;
         const response = await request(app)
         .patch(`/servicos/${ServicoTeste.id}`)
@@ -55,6 +58,7 @@ module.exports = () => {
 
         expect(response.status).toBe(200)
         expect(response.body.titulo).toBe('Serviço atualizado');
+        expect(response.body.descricao).toBe(ServicoTeste.descricao);
         expect(response.body.preco).toBe(1.99);
     });
 
