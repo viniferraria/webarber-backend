@@ -48,7 +48,7 @@ module.exports = (sequelize, DataTypes) => {
         this.sessionToken = jwt.sign({
             id: this.id, 
             idTipo: this.idTipo 
-        }, process.env.APP_SECRET || 'cyberbarber-2077', { 
+        }, process.env.APP_SECRET, { 
             algorithm: 'HS256',
             expiresIn: '1h'
         });
