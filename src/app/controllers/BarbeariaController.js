@@ -30,9 +30,10 @@ module.exports = {
 
     async getMyBarbearias(req, res) {
         try {
+            const { userId } = req;
             const barbearia = await Barbearia.findOne({
                 where: { 
-                    user_id: req.userId
+                    user_id: userId
                 }
             });
             
@@ -50,9 +51,10 @@ module.exports = {
     async create(req, res) {
         try {
             const { nome, endereco, telefone, horarioAbertura, horarioFechamento, icone, complemento, numero, bloco, cep } = req.body;
+            const { userId } = req;
             const barberia = await Barbearia.findOne({ 
                 where: { 
-                    user_id: req.userId
+                    user_id: userId
                 }
             });
             
@@ -82,7 +84,7 @@ module.exports = {
                 return res.status(400).json({ message: 'Esta barbearia já existe'});
             }
 
-            const novaBarbearia = await Barbearia.create({ nome, endereco, telefone, horarioAbertura, horarioFechamento, icone, user_id: req.userId, complemento, numero, bloco, cep });
+            const novaBarbearia = await Barbearia.create({ nome, endereco, telefone, horarioAbertura, horarioFechamento, icone, user_id: userId, complemento, numero, bloco, cep });
             return res.status(201).json(novaBarbearia);
         } catch (error) {
             console.log(error);
@@ -93,7 +95,7 @@ module.exports = {
 
     async update(req, res) {
         try {
-            const  { userId } = req;
+            const { userId } = req;
             const { nome, endereco, telefone, horarioAbertura, horarioFechamento, icone } = req.body;
             const barberia = await Barbearia.findOne({
                 where: {

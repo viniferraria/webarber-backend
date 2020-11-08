@@ -29,8 +29,9 @@ module.exports = {
 
     async get(req, res) {
         try {
+            const { userId } = req;
             const user = await Usuario.findOne({ where: { 
-                id: req.userId
+                id: userId
             }});
             
             if (!user) {
