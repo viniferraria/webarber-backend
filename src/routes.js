@@ -21,6 +21,7 @@ routes.post('/users', UserController.create);
 routes.post('/login', UserController.login);
 routes.get('/barbearias', BarbeariaController.get);
 routes.get('/servicos/barbearia/:barbearia_id', ServicoController.getAllBarbearia);
+routes.get('/barbearias/barbearia/:barbearia_id', BarbeariaController.getSpecificBarbearia);
 routes.get('/servicos/:servico_id', ServicoController.get);
 
 
