@@ -94,7 +94,7 @@ module.exports = () => {
         .send({ ...AgendamentoTeste,  idStatus: 2 });
 
         expect(response.status).toBe(401);
-        expect(response.body.message).toBe('Blocked');
+        expect(response.body.message).toBe('Rota restrita à moderadores');
     });
 
     test('Deve retornar falha ao atualizar um agendamento inexistente', async () =>{

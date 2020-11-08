@@ -1,62 +1,63 @@
 const express = require('express');
 const routes = express.Router();
 
-const UserController = require('./app/controllers/UserController');
+const UsuarioController = require('./app/controllers/UsuarioController');
 const TipoUsuarioController = require('./app/controllers/TipoUsuarioController');
 const BarbeariaController = require('./app/controllers/BarbeariaController');
 const ServicoController = require('./app/controllers/ServicoController');
 const AgendamentoController = require('./app/controllers/AgendamentoController');
 const StatusAgendamentoController = require('./app/controllers/StatusAgendamentoController');
-const AuthMiddleware = require('./app/middleware/auth');
+const MiddlewareAutenticacao = require('./app/middleware/auth');
 const eModerador = require('./app/middleware/eModerador');
 
-/* Rotas abertas */
+/* ROTAS ABERTAS */
 // Rotas Tipo
-routes.get('/tipos', TipoUsuarioController.getAll)
+routes.get('/tiposconta/', TipoUsuarioController.obterTiposUsuario)
 // Rotas dos status do agendamento
-routes.get('/status', StatusAgendamentoController.getAll)
+routes.get('/statusagendamento/', StatusAgendamentoController.obterStatusAgendamento)
 // Rotas signin
-routes.post('/users', UserController.create);
+routes.post('/cadastro/', UsuarioController.cadastrarUsuario);
 // Rota Login
-routes.post('/login', UserController.login);
-routes.get('/barbearias', BarbeariaController.get);
-routes.get('/servicos/barbearia/:barbearia_id', ServicoController.getAllBarbearia);
-routes.get('/barbearias/barbearia/:barbearia_id', BarbeariaController.getSpecificBarbearia);
-routes.get('/servicos/:servico_id', ServicoController.get);
+routes.post('/login/', UsuarioController.login);
+// Rota obter barbearias e servicos
+routes.get('/barbearias/', BarbeariaController.obterBarbearias);
+routes.get('/barbearias/:barbearia_id/', BarbeariaController.obterBarbeariaPorId);
+routes.get('/servicos/barbearia/:barbearia_id/', ServicoController.obterServicosBarbearia);
+routes.get('/servicos/:servico_id/', ServicoController.obterServicoPorId);
 
 
-/* Rotas que precisam de autenticação */
+/* ROTAS QUE PRECISAM DE AUTENTICAÇÃO */
 // Middleware
-routes.use(AuthMiddleware)
+routes.use(MiddlewareAutenticacao)
+
 // Rotas Usuários
-routes.get('/users', UserController.getAll);
-routes.get('/users/', UserController.get);
-routes.patch('/users/', UserController.update);
-routes.delete('/users/', UserController.delete);
+routes.get('/usuarios/', UsuarioController.obterTodosUsuarios);
+routes.get('/conta/', UsuarioController.obterUsuario);
+routes.patch('/conta/', UsuarioController.atualizarUsuario);
+routes.delete('/conta/', UsuarioController.desativarUsuario);
 
 // Rotas Status de agendamentos
-routes.get('/status', StatusAgendamentoController.getAll)
-routes.get('/agendamentos', AgendamentoController.getMyAgendamentos);
-routes.post('/agendamentos', AgendamentoController.create);
-routes.delete('/agendamentos', AgendamentoController.cancel);
+routes.get('/agendamentos/', AgendamentoController.obterAgendamentosUsuario);
+routes.post('/agendamentos/', AgendamentoController.criarAgendamento);
+routes.delete('/agendamentos/', AgendamentoController.cancelarAgendamento);
 
 
-/* Rotas do moderador */
+/* ROTAS DO MODERADOR */
 
 routes.use(eModerador);
 // Rotas de barbearia
-routes.get('/barbearias/moderador/', BarbeariaController.getMyBarbearias);
-routes.post('/barbearias', BarbeariaController.create);
-routes.patch('/barbearias/', BarbeariaController.update);
-routes.delete('/barbearias/', BarbeariaController.delete);
+routes.get('/barbearia/', BarbeariaController.obterBarbeariaModerador);
+routes.post('/barbearias/', BarbeariaController.cadastrarBarbearia);
+routes.patch('/barbearias/', BarbeariaController.atualizarBarbearia);
+routes.delete('/barbearias/', BarbeariaController.desativarBarbearia);
 
 // Rotas serviço
-routes.post('/servicos', ServicoController.create);
-routes.patch('/servicos/:servico_id', ServicoController.update);
-routes.delete('/servicos/:servico_id', ServicoController.delete);
+routes.post('/servicos/', ServicoController.criarServico);
+routes.patch('/servicos/:servico_id/', ServicoController.atualizarServico);
+routes.delete('/servicos/:servico_id/', ServicoController.excluirServico);
 
 // Rotas Agendamento
-routes.get('/agendamentos/barbearia/:barbearia_id', AgendamentoController.getAgendamentosBarbearia);
-routes.patch('/agendamentos', AgendamentoController.update);
+routes.get('/agendamentos/barbearia/:barbearia_id/', AgendamentoController.obterAgendamentosBarbearia);
+routes.patch('/agendamentos/', AgendamentoController.atualizarStatusAgendamento);
 
 module.exports = routes;

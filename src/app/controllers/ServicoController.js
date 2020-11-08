@@ -3,7 +3,7 @@ const { Barbearia } = require('../models');
 
 module.exports = {
 
-    async getAllBarbearia(req, res) {
+    async obterServicosBarbearia(req, res) {
         try {
             const { barbearia_id } = req.params;
         
@@ -11,7 +11,7 @@ module.exports = {
                 id: barbearia_id
             }});
             
-            if(!barbearia) {
+            if (!barbearia) {
                 return res.status(400).json({ message: 'Barbearia não encontrada'});
             }
             const servico = await Servico.findAll({ where: { 
@@ -19,7 +19,7 @@ module.exports = {
                 ativo: true
             }});
 
-            if(!servico) {
+            if (!servico) {
                 return res.status(400).json({ message: 'Não há serviços'});
             }
             
@@ -30,7 +30,7 @@ module.exports = {
         }
     },
 
-    async get(req, res) {
+    async obterServicoPorId(req, res) {
         try {
             const { servico_id } = req.params;
             const servico = await Servico.findOne({ where: { 
@@ -49,7 +49,7 @@ module.exports = {
         }
     },
 
-    async create(req, res) {
+    async criarServico(req, res) {
         try {
             const { titulo, preco, descricao, barbearia_id } = req.body;
             const servico = await Servico.findOne({ where: { titulo: titulo, barbearia_id: barbearia_id }});
@@ -74,9 +74,9 @@ module.exports = {
 
     },
 
-    async update(req, res) {
+    async atualizarServico(req, res) {
         const { servico_id } = req.params;
-        const { titulo, descricao,preco, ativo } = req.body;
+        const { titulo, descricao, preco } = req.body;
 
         const servico = await Servico.findByPk(servico_id);
 
@@ -89,11 +89,10 @@ module.exports = {
             preco: preco || servico.preco,
             descricao: descricao || descricao.preco
         })
-
         return res.status(200).json(servicoAtualizado);
     },
 
-    async delete(req, res) {
+    async excluirServico(req, res) {
         try {
 
             const { servico_id } = req.params;
@@ -112,6 +111,5 @@ module.exports = {
             console.log(error);
             return res.status(400).json({ message: 'Erro ao deletar serviço' });
         }
-
     }
 };

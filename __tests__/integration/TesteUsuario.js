@@ -5,7 +5,7 @@ let { UsuarioTeste, ModeradorTeste } = require("../cases");
 module.exports = () => {
     test('Deve criar uma conta', async () =>{
         const response = await request(app)
-        .post('/users')
+        .post('/cadastro')
         .send(UsuarioTeste);
 
         expect(response.status).toBe(201);
@@ -22,7 +22,7 @@ module.exports = () => {
 
     test('Deve criar uma conta de moderador', async () =>{
         const response = await request(app)
-        .post('/users')
+        .post('/cadastro')
         .send(ModeradorTeste);
 
         expect(response.status).toBe(201);
@@ -73,13 +73,13 @@ module.exports = () => {
         .post("/login")
         .send({ email: "fake@mail.com", password: "lalala" })
 
-        expect(response.status).toBe(401)
-        expect(response.body.message).toBe('User not found');
+        expect(response.status).toBe(404)
+        expect(response.body.message).toBe('Usuário não cadastrado');
     });
     
     test("Não deve permitir cadastros com  CPF/CNPJ/Email repetidos", async () => {
         const response = await request(app)
-        .post('/users')
+        .post('/cadastro')
         .send(UsuarioTeste);
 
         expect(response.status).toBe(400);
@@ -90,7 +90,7 @@ module.exports = () => {
         UsuarioTeste.nome = "updatedName";
         UsuarioTeste.sobrenome = "updatedLastName";
         const response = await request(app)
-        .patch(`/users/`)
+        .patch(`/conta`)
         .set('Authorization', `Bearer ${UsuarioTeste.jwt}`)
         .send(UsuarioTeste)
 
@@ -110,11 +110,11 @@ module.exports = () => {
 
     test("Deve excluir o próprio usuário", async () => {
         const response = await request(app)
-        .delete(`/users/`)
+        .delete(`/conta`)
         .set('Authorization', `Bearer ${UsuarioTeste.jwt}`)
 
         expect(response.status).toBe(200);
-        expect(response.body.message).toBe('User deleted');
+        expect(response.body.message).toBe('Conta desativada');
     });
 
     test("Não deve autenticar um usuário com conta inativa", async () => {
