@@ -7,10 +7,8 @@ const { Op } = Sequelize;
 
 module.exports = {
     async getMyAgendamentos(req, res) {
-        let { user_id } = req.query;
-
         try {
-
+            let { userId } = req;
             const agendamentos = await Agendamento.findAll({
                 include : [
                     {
@@ -30,7 +28,7 @@ module.exports = {
                     }
                 ],
                 where: { 
-                    idUsuario: user_id
+                    idUsuario: userId
                 },
                 order: [
                     ['data', 'DESC']
@@ -62,8 +60,8 @@ module.exports = {
     },
 
     async getAgendamentosBarbearia(req, res) {
-        const { barbearia_id } = req.params;
         try {
+            const { barbearia_id } = req.params;
 
             const agendamentos = await Agendamento.findAll({
                 include : [
@@ -126,16 +124,16 @@ module.exports = {
     },
 
     async create(req, res) {
-        const { idBarbearia, idUsuario, idServico, data } = req.body;
-        
         try {
-            if (!idBarbearia || !idUsuario || !idServico || !data) {
+            const { idBarbearia, idServico, data } = req.body;
+            const { userId } = req;
+            if (!idBarbearia || !idServico || !data) {
                 return res.status(400).json({ message: 'Falta dados para completar a ação'});
             }
 
             // TODO: Por validações aqui
 
-            const novoAgendamento = await Agendamento.create({ idBarbearia, idUsuario, idServico, data });
+            const novoAgendamento = await Agendamento.create({ idBarbearia, idUsuario: userId, idServico, data });
             return res.status(201).json(novoAgendamento);
 
         } catch (error) {
@@ -145,18 +143,18 @@ module.exports = {
     },
 
     async update(req, res) {
-        const { id, idUsuario, idStatus } = req.body;
-        
         try {
-            if (!id || !idUsuario || !idStatus) {
+            const { id, idStatus } = req.body;
+            const { userId } = req;
+            if (!id || !userId || !idStatus) {
                 return res.status(400).json({ message: 'Falta dados para completar a ação' });
             }
 
-            let usuario = await Usuario.findByPk(idUsuario);
+            // let usuario = await Usuario.findByPk(userId);
 
-            if(usuario.idTipo == 1) {
-                return res.status(400).json({ message: 'É necessário informar um moderador para atualizar um agendamento' });
-            }
+            // if(usuario.idTipo == 1) {
+            //     return res.status(400).json({ message: 'É necessário informar um moderador para atualizar um agendamento' });
+            // }
 
             const agendamento = await Agendamento.findByPk(id);
 
@@ -182,34 +180,30 @@ module.exports = {
     },
 
     async cancel(req, res) {
-        const { id, idUsuario } = req.body;
+        const { id } = req.body;
+        const { userId } = req;
         
         try {
-            if (!id || !idUsuario) {
-                return res.status(400).json({ message: 'Falta dados para completar a ação' });
-            }
-
             const agendamento = await Agendamento.findByPk(id);
 
-            if(!agendamento) {
+            if (!agendamento) {
                 return res.status(400).json({ message: 'Não existe este agendamento' });            
             }
 
-            const usuario = await Usuario.findByPk(idUsuario);
+            const usuario = await Usuario.findByPk(userId);
 
-            if(!usuario) {
+            if (!usuario) {
                 return res.status(400).json({ message: 'Não existe este usuário' });            
             }
             
-            if(agendamento.idUsuario == usuario.id) {
+            if (agendamento.idUsuario == usuario.id) {
                 await agendamento.update({ 
                     idStatus: 4
                 });
 
                 return res.status(200).json({ message: 'Agendamento cancelado' });    
-            } else {
-                return res.status(400).json({ message: 'Este agendamento não pertence à este usuário' });    
-            }  
+            }
+            return res.status(400).json({ message: 'Este agendamento não pertence à este usuário' });    
         } catch (error) {
             console.log(error);
             return res.status(400).json({ message: 'Erro ao cancelar um agendamento' });
