@@ -25,4 +25,4 @@
 - DB_NAME
 
 ## Documentos
-- [Documentação da API no Postman](https://documenter.getpostman.com/view/7650335/TVK8cLQj)
+- [Documentação da API no Postman](https://documenter.getpostman.com/view/6734624/TVKD2cr3)

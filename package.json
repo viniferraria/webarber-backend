@@ -6,8 +6,10 @@
   "scripts": {
     "first": "yarn install",
     "dev": "nodemon ./src/server.js --ignore __tests__",
+    "db": "yarn sequelize db:migrate",
+    "undo": "yarn sequelize db:migrate:undo:all",
     "pretest": "yarn sequelize db:migrate",
-    "test": "jest",
+    "test": "jest --runInBand --detectOpenHandles --debug",
     "posttest": "yarn sequelize db:migrate:undo:all",
     "prestart": "yarn sequelize db:migrate",
     "start": "node ./src/server.js"
@@ -19,6 +21,7 @@
     "express": "^4.17.1",
     "helmet": "^4.1.1",
     "jsonwebtoken": "^8.5.1",
+    "moment": "^2.29.1",
     "pg": "^8.3.3",
     "pg-hstore": "^2.3.3",
     "sequelize": "^6.3.5",

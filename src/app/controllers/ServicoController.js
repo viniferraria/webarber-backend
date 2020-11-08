@@ -51,7 +51,7 @@ module.exports = {
 
     async create(req, res) {
         try {
-            const { titulo, preco, barbearia_id } = req.body;
+            const { titulo, preco, descricao, barbearia_id } = req.body;
             const servico = await Servico.findOne({ where: { titulo: titulo, barbearia_id: barbearia_id }});
             const barbearia = await Barbearia.findOne({ where: { 
                 id: barbearia_id
@@ -65,7 +65,7 @@ module.exports = {
                 return res.status(400).json({ message: 'Já existe um serviço com este nome para esta barbearia'});
             }
 
-            const novoServico = await Servico.create({ titulo, preco, barbearia_id });
+            const novoServico = await Servico.create({ titulo, preco, descricao, barbearia_id });
             return res.status(201).json(novoServico);
         } catch (error) {
             console.log(error);
@@ -76,7 +76,7 @@ module.exports = {
 
     async update(req, res) {
         const { servico_id } = req.params;
-        const { titulo, preco, ativo } = req.body;
+        const { titulo, descricao,preco, ativo } = req.body;
 
         const servico = await Servico.findByPk(servico_id);
 
@@ -86,7 +86,8 @@ module.exports = {
 
         const servicoAtualizado = await servico.update({
             titulo: titulo || servico.titulo,
-            preco: preco || servico.preco
+            preco: preco || servico.preco,
+            descricao: descricao || descricao.preco
         })
 
         return res.status(200).json(servicoAtualizado);

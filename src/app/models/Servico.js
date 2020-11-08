@@ -7,6 +7,7 @@ module.exports = (sequelize, DataTypes) => {
             allowNull: false,
         },
         titulo: DataTypes.STRING,
+        descricao: DataTypes.STRING,
         preco: DataTypes.FLOAT,
         ativo: DataTypes.BOOLEAN,
         barbearia_id: DataTypes.INTEGER
