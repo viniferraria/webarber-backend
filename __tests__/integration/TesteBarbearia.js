@@ -79,6 +79,18 @@ module.exports = () => {
         expect(response.body[0].horarioFechamento).toBe(BarbeariaTeste.horarioFechamento);
         expect(response.body[0].ativo).toBe(true);
     });
+
+    test("Deve retornar uma barberia válida", async () => {
+        const response = await request(app)
+        .get(`/barbearias/barbearia/${BarbeariaTeste.id}`)
+        expect(response.status).toBe(200);
+        expect(response.body.nome).toBe(BarbeariaTeste.nome);
+        expect(response.body.endereco).toBe(BarbeariaTeste.endereco);
+        expect(response.body.telefone).toBe(BarbeariaTeste.telefone);
+        expect(response.body.horarioAbertura).toBe(BarbeariaTeste.horarioAbertura);
+        expect(response.body.horarioFechamento).toBe(BarbeariaTeste.horarioFechamento);
+        expect(response.body.ativo).toBe(true);
+    });
     
     test("Deve retornar a barberia do moderador", async () => {
         const response = await request(app)

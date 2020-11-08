@@ -48,6 +48,26 @@ module.exports = {
         }
     },
 
+    async getSpecificBarbearia(req, res) {
+        try {
+            const { barbearia_id } = req.params;
+            const barbearia = await Barbearia.findOne({
+                where: { 
+                    id: barbearia_id
+                }
+            });
+            
+            if (!barbearia) {
+                return res.status(400).json({ message: 'Nenhuma barberia encontrada'});
+            }
+            
+            return res.status(200).json(barbearia);
+        } catch (error) {
+            console.log(error);
+            return res.status(400).json({ message: 'Erro ao buscar barberias' });
+        }
+    },
+
     async create(req, res) {
         try {
             const { nome, endereco, telefone, horarioAbertura, horarioFechamento, icone, complemento, numero, bloco, cep } = req.body;
