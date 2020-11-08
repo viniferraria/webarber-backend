@@ -1,11 +1,13 @@
 const request = require("supertest");
 const app = require("../../src/app");
-let { ServicoTeste } = require("../cases");
+let { ServicoTeste, ModeradorTeste } = require("../cases");
+
 
 module.exports = () => {
     test('Deve criar um serviço', async () =>{
         const response = await request(app)
         .post('/servicos')
+        .set('Authorization', `Bearer ${ModeradorTeste.jwt}`)
         .send(ServicoTeste);
 
         expect(response.status).toBe(201);
@@ -21,6 +23,7 @@ module.exports = () => {
     test('Não deve criar um serviço para uma barbearia inválida', async () =>{
         const response = await request(app)
         .post('/servicos')
+        .set('Authorization', `Bearer ${ModeradorTeste.jwt}`)
         .send({ ...ServicoTeste, barbearia_id: 123123});
 
         expect(response.status).toBe(400);
@@ -42,6 +45,7 @@ module.exports = () => {
     test("Não deve permitir um serviço com o mesmo nome na mesma barbearia", async () => {
         const response = await request(app)
         .post('/servicos')
+        .set('Authorization', `Bearer ${ModeradorTeste.jwt}`)
         .send(ServicoTeste);
 
         expect(response.status).toBe(400);
@@ -54,6 +58,7 @@ module.exports = () => {
         ServicoTeste.preco = 1.99;
         const response = await request(app)
         .patch(`/servicos/${ServicoTeste.id}`)
+        .set('Authorization', `Bearer ${ModeradorTeste.jwt}`)
         .send(ServicoTeste)
 
         expect(response.status).toBe(200)
@@ -65,6 +70,7 @@ module.exports = () => {
     test("Não deve atualizar serviço inválido", async () => {
         const response = await request(app)
         .patch("/servicos/9999")
+        .set('Authorization', `Bearer ${ModeradorTeste.jwt}`)
         .send(ServicoTeste)
 
         expect(response.status).toBe(400);
@@ -74,6 +80,7 @@ module.exports = () => {
     test("Deve deletar um serviço", async () => {
         const response = await request(app)
         .delete(`/servicos/${ServicoTeste.id}`)
+        .set('Authorization', `Bearer ${ModeradorTeste.jwt}`)
 
         expect(response.status).toBe(200);
         expect(response.body.message).toBe('Serviço deletado');
@@ -82,6 +89,7 @@ module.exports = () => {
     test("Não deve deletar um serviço inválido", async () => {
         const response = await request(app)
         .delete("/servicos/9999")
+        .set('Authorization', `Bearer ${ModeradorTeste.jwt}`)
 
         expect(response.status).toBe(400);
         expect(response.body.message).toBe('Serviço não encontrado');

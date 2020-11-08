@@ -9,7 +9,7 @@
     "db": "yarn sequelize db:migrate",
     "undo": "yarn sequelize db:migrate:undo:all",
     "pretest": "yarn sequelize db:migrate",
-    "test": "jest --runInBand --detectOpenHandles",
+    "test": "jest --runInBand --detectOpenHandles --debug",
     "posttest": "yarn sequelize db:migrate:undo:all",
     "prestart": "yarn sequelize db:migrate",
     "start": "node ./src/server.js"
