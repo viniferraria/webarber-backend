@@ -6,7 +6,7 @@ const moment = require('moment');
 const { Op } = Sequelize;
 
 module.exports = {
-    async getMyAgendamentos(req, res) {
+    async obterAgendamentosUsuario(req, res) {
         try {
             let { userId } = req;
             const agendamentos = await Agendamento.findAll({
@@ -47,7 +47,7 @@ module.exports = {
                 }
             });
             
-            if(!response) {
+            if (!response) {
                 return res.status(400).json({ message: 'Nenhum agendamento encontrado'});
             }
             
@@ -59,7 +59,7 @@ module.exports = {
         }
     },
 
-    async getAgendamentosBarbearia(req, res) {
+    async obterAgendamentosBarbearia(req, res) {
         try {
             const { barbearia_id } = req.params;
 
@@ -123,7 +123,7 @@ module.exports = {
         }
     },
 
-    async create(req, res) {
+    async criarAgendamento(req, res) {
         try {
             const { idBarbearia, idServico, data } = req.body;
             const { userId } = req;
@@ -142,7 +142,7 @@ module.exports = {
         }
     },
 
-    async update(req, res) {
+    async atualizarStatusAgendamento(req, res) {
         try {
             const { id, idStatus } = req.body;
             const { userId } = req;
@@ -179,7 +179,7 @@ module.exports = {
         }
     },
 
-    async cancel(req, res) {
+    async cancelarAgendamento(req, res) {
         const { id } = req.body;
         const { userId } = req;
         

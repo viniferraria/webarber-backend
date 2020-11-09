@@ -11,7 +11,7 @@ module.exports = () => {
 
         expect(response.status).toBe(401);
         expect(response.body).toHaveProperty('message');
-        expect(response.body.message).toBe('Blocked');
+        expect(response.body.message).toBe('Rota restrita à moderadores');
     });
 
     test('Deve permitir que um moderador crie uma barberia', async () =>{
@@ -69,7 +69,7 @@ module.exports = () => {
 
     test("Deve retornar uma lista com todas as barberias", async () => {
         const response = await request(app)
-        .get("/barbearias/")
+        .get("/barbearias")
         expect(response.status).toBe(200);
         expect(response.body.length).toBeGreaterThanOrEqual(1);
         expect(response.body[0].nome).toBe(BarbeariaTeste.nome);
@@ -82,7 +82,7 @@ module.exports = () => {
 
     test("Deve retornar uma barberia válida", async () => {
         const response = await request(app)
-        .get(`/barbearias/barbearia/${BarbeariaTeste.id}`)
+        .get(`/barbearias/${BarbeariaTeste.id}`)
         expect(response.status).toBe(200);
         expect(response.body.nome).toBe(BarbeariaTeste.nome);
         expect(response.body.endereco).toBe(BarbeariaTeste.endereco);
@@ -94,7 +94,7 @@ module.exports = () => {
     
     test("Deve retornar a barberia do moderador", async () => {
         const response = await request(app)
-        .get(`/barbearias/moderador/`)
+        .get(`/barbearia`)
         .set('Authorization', `Bearer ${ModeradorTeste.jwt}`)
 
         expect(response.status).toBe(200);
@@ -108,19 +108,19 @@ module.exports = () => {
 
     test("Não deve permitir que um usuário acesse a rota", async () => {
         const response = await request(app)
-        .get(`/barbearias/moderador/`)
+        .get(`/barbearia`)
         .set('Authorization', `Bearer ${UsuarioTeste.jwt}`)
 
         expect(response.status).toBe(401);
         expect(response.body).toHaveProperty('message');
-        expect(response.body.message).toBe('Blocked');        
+        expect(response.body.message).toBe('Rota restrita à moderadores');        
     });
 
     test("Deve atualizar uma barbearia", async () => {
         BarbeariaTeste.nome = "Barbearia atualizada";
         BarbeariaTeste.endereco = "Novo endereço";
         const response = await request(app)
-        .patch(`/barbearias/`)
+        .patch(`/barbearias`)
         .set('Authorization', `Bearer ${ModeradorTeste.jwt}`)
         .send(BarbeariaTeste)
 
@@ -140,7 +140,7 @@ module.exports = () => {
 
     test("Deve deletar uma barberia", async () => {
         const response = await request(app)
-        .delete(`/barbearias/`)
+        .delete(`/barbearias`)
         .set('Authorization', `Bearer ${ModeradorTeste.jwt}`)
 
         expect(response.status).toBe(200);

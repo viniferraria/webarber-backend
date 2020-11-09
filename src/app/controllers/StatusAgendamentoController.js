@@ -2,7 +2,7 @@ const { StatusAgendamento } = require('../models');
 
 module.exports = {
 
-    async getAll(_, res) {
+    async obterStatusAgendamento(_, res) {
         try {
             let tipos = await StatusAgendamento.findAll({
                 order: [
