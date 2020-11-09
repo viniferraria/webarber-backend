@@ -2,7 +2,7 @@ const { TipoUsuario } = require('../models');
 
 module.exports = {
 
-    async getAll(_, res) {
+    async obterTiposUsuario(_, res) {
         try {
             let tipos = await TipoUsuario.findAll({
                 order: [

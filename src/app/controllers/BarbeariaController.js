@@ -5,7 +5,7 @@ const Sequelize = require('sequelize');
 const { Op } = Sequelize;
 
 module.exports = {
-    async get(req, res) {
+    async obterBarbearias(req, res) {
         try {
             let { nome } = req.query;
             nome = (nome)? nome.replace('+', ' ') : '';
@@ -28,7 +28,7 @@ module.exports = {
         }
     },
 
-    async getMyBarbearias(req, res) {
+    async obterBarbeariaModerador(req, res) {
         try {
             const { userId } = req;
             const barbearia = await Barbearia.findOne({
@@ -44,11 +44,11 @@ module.exports = {
             return res.status(200).json(barbearia);
         } catch (error) {
             console.log(error);
-            return res.status(400).json({ message: 'Erro ao buscar barberias' });
+            return res.status(400).json({ message: 'Erro ao buscar barberia' });
         }
     },
 
-    async getSpecificBarbearia(req, res) {
+    async obterBarbeariaPorId(req, res) {
         try {
             const { barbearia_id } = req.params;
             const barbearia = await Barbearia.findOne({
@@ -68,7 +68,7 @@ module.exports = {
         }
     },
 
-    async create(req, res) {
+    async cadastrarBarbearia(req, res) {
         try {
             const { nome, endereco, telefone, horarioAbertura, horarioFechamento, icone, complemento, numero, bloco, cep } = req.body;
             const { userId } = req;
@@ -113,7 +113,7 @@ module.exports = {
 
     },
 
-    async update(req, res) {
+    async atualizarBarbearia(req, res) {
         try {
             const { userId } = req;
             const { nome, endereco, telefone, horarioAbertura, horarioFechamento, icone } = req.body;
@@ -146,7 +146,7 @@ module.exports = {
         }
     },
 
-    async delete(req, res) {
+    async desativarBarbearia(req, res) {
         try {
             const  { userId } = req;
             const barbearia = await Barbearia.findOne({

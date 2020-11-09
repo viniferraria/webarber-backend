@@ -8,7 +8,7 @@ function validaDocumento(documento) {
 
 module.exports = {
 
-    async getAll(_, res) {
+    async obterTodosUsuarios(_, res) {
         try {
             const users = await Usuario.findAll({
                 order: [
@@ -17,17 +17,17 @@ module.exports = {
             })
     
             if (!users) {
-                return res.status(400).json({ message: 'No Users found'});
+                return res.status(404).json({ message: 'Não existem usuários cadastrados'});
             }
     
             return res.status(200).json(users);
         } catch(error) {
             console.log(error);
-            return res.status(400).json({ message: 'Error while fetching users' });
+            return res.status(400).json({ message: 'Erro ao obter usuários' });
         }
     },
 
-    async get(req, res) {
+    async obterUsuario(req, res) {
         try {
             const { userId } = req;
             const user = await Usuario.findOne({ where: { 
@@ -35,17 +35,17 @@ module.exports = {
             }});
             
             if (!user) {
-                return res.status(400).json({ message: 'User Not Found'});
+                return res.status(404).json({ message: 'Usuário não encontrado' });
             }
             
             return res.status(200).json(user);
         } catch (error) {
             console.log(error);
-            return res.status(400).json({ message: 'Error while fetching user' });
+            return res.status(400).json({ message: 'Erro ao obter usuário' });
         }
     },
 
-    async create(req, res) {
+    async cadastrarUsuario(req, res) {
         try {
             let { nome, sobrenome, email, password, CNPJ, CPF, idTipo, icone } = req.body;
             if (!email)
@@ -90,11 +90,10 @@ module.exports = {
 
     },
 
-    async update(req, res) {
+    async atualizarUsuario(req, res) {
         try {
             const { userId } = req;
             let { nome, sobrenome, email, password, CNPJ, CPF, idTipo, icone } = req.body;
-
 
             if (!email) {
                 return res.status(400).json({ message: 'É necessário informar um email para criar uma conta' });
@@ -134,7 +133,6 @@ module.exports = {
                 idTipo: idTipo || user.idTipo,
                 icone: icone || user.icone,
             })
-
             delete updatedUser.password;
 
             return res.status(200).json(updatedUser);
@@ -144,7 +142,7 @@ module.exports = {
         }
     },
     
-    async delete(req, res) {
+    async desativarUsuario(req, res) {
         try {
             const { userId } = req;
             const user = await Usuario.findByPk(userId);
@@ -157,12 +155,11 @@ module.exports = {
                 ativo: false
             })
     
-            return res.status(200).json({ message: "User deleted"});
+            return res.status(200).json({ message: "Conta desativada"});
         } catch(error) {
             console.log(error);
-            return res.status(400).json({ message: 'Error while deleting user' });
+            return res.status(400).json({ message: 'Erro ao desativar conta' });
         }
-
     },
 
     async login(req, res) {
@@ -171,7 +168,7 @@ module.exports = {
             const user = await Usuario.findOne({ where: { email } });
             
             if (!user)
-                return res.status(401).json({ message: 'User not found' });
+                return res.status(404).json({ message: 'Usuário não cadastrado' });
             
             if (!(await user.checkPassword(password))) 
                 return res.status(400).json({ message: 'Credenciais inválidas' });
@@ -187,7 +184,7 @@ module.exports = {
             return res.status(200).json(user);
         } catch(err) {
             console.log(err);
-            return res.status(404).json({ message: `Error`});
+            return res.status(400).json({ message: `Erro ao realizar login`});
         }
     }
 };
