@@ -28,7 +28,7 @@ routes.get('/servicos/:servico_id/', ServicoController.obterServicoPorId);
 
 /* ROTAS QUE PRECISAM DE AUTENTICAÇÃO */
 // Middleware
-routes.use(MiddlewareAutenticacao)
+routes.use(MiddlewareAutenticacao);
 
 // Rotas Usuários
 routes.get('/usuarios/', UsuarioController.obterTodosUsuarios);
