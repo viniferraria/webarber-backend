@@ -6,7 +6,7 @@ const moment = require('moment');
 const { Op } = Sequelize;
 
 function isDateValid(isoDate) {
-    return typeof("2020-10-29T16:34:00.000Z") === 'string' && isoDate.match(/^(\d{4})-(\d){2}-(\d){2}T(\d{2}?:\d{2}:\d{2}\.\d{3}Z$)/g)
+    return typeof(isoDate) === 'string' && isoDate.match(/^(\d{4})-(\d){2}-(\d){2}T(\d{2}?:\d{2}:\d{2}\.\d{3}Z$)/g)
 }
 
 module.exports = {
