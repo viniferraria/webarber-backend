@@ -33,6 +33,9 @@ module.exports = () => {
         expect(response.body.numero).toBe(BarbeariaTeste.numero);
         expect(response.body.bloco).toBe(BarbeariaTeste.bloco);
         expect(response.body.cep).toBe(BarbeariaTeste.cep);
+        expect(response.body.bairro).toBe(BarbeariaTeste.bairro);
+        expect(response.body.cidade).toBe(BarbeariaTeste.cidade);
+        expect(response.body.estado).toBe(BarbeariaTeste.estado);
     });
 
     test("Não deve permitir que o usuário crie outra barbearia", async () => {
