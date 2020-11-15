@@ -14,6 +14,26 @@ module.exports = () => {
         expect(response.body.message).toBe('Rota restrita à moderadores');
     });
 
+    test("Não deve permitir que o moderador crie uma barbearia sem informar um endereço completo", async () => {
+        const response = await request(app)
+        .post('/barbearias')
+        .set('Authorization', `Bearer ${ModeradorTeste.jwt}`)
+        .send({ ...BarbeariaTeste, cep: ""});
+
+        expect(response.status).toBe(400);
+        expect(response.body.message).toBe('É necessário informar um endereço, número, bairro, estado, cidade e cep para o comércio');
+    });
+
+    test("Não deve permitir que o moderador crie uma barbearia sem informar uma lista com os dias de funcionamento", async () => {
+        const response = await request(app)
+        .post('/barbearias')
+        .set('Authorization', `Bearer ${ModeradorTeste.jwt}`)
+        .send({ ...BarbeariaTeste, diaFuncionamento: ""});
+
+        expect(response.status).toBe(400);
+        expect(response.body.message).toBe('É necessário informar uma lista com os dias de funcionamento da barbearia');
+    });
+
     test('Deve permitir que um moderador crie uma barberia', async () =>{
         const response = await request(app)
         .post('/barbearias')
@@ -38,14 +58,14 @@ module.exports = () => {
         expect(response.body.estado).toBe(BarbeariaTeste.estado);
     });
 
-    test("Não deve permitir que o usuário crie outra barbearia", async () => {
+    test("Não deve permitir que um moderador crie outra barbearia", async () => {
         const response = await request(app)
         .post('/barbearias')
         .set('Authorization', `Bearer ${ModeradorTeste.jwt}`)
         .send(BarbeariaTeste);
 
         expect(response.status).toBe(400);
-        expect(response.body.message).toBe('Usuário já possui uma barbearia');
+        expect(response.body.message).toBe('Usuário já possui uma barbearia ativa');
     });
 
     test("Deve retornar uma certa barbearia", async () => {

@@ -21,7 +21,8 @@ module.exports = (sequelize, DataTypes) => {
         cep: DataTypes.STRING,
         bairro: DataTypes.STRING,
         cidade: DataTypes.STRING,
-        estado: DataTypes.STRING
+        estado: DataTypes.STRING,
+        diaFuncionamento: DataTypes.STRING
     }, {
         timestamps: true
     });
