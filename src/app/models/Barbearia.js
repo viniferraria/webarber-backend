@@ -18,7 +18,10 @@ module.exports = (sequelize, DataTypes) => {
         complemento: DataTypes.STRING,
         numero: DataTypes.INTEGER,
         bloco: DataTypes.STRING,
-        cep: DataTypes.STRING
+        cep: DataTypes.STRING,
+        bairro: DataTypes.STRING,
+        cidade: DataTypes.STRING,
+        estado: DataTypes.STRING
     }, {
         timestamps: true
     });
