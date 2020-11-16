@@ -121,7 +121,7 @@ module.exports = () => {
         const response = await request(app)
         .patch('/agendamentos')
         .set('Authorization', `Bearer ${ModeradorTeste.jwt}`)
-        .send({ ...AgendamentoTeste, idStatus: 3 });
+        .send({ ...AgendamentoTeste, idStatus: 2 });
 
         expect(response.status).toBe(200);
         expect(response.body.message).toBe('Agendamento atualizado');

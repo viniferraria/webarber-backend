@@ -58,6 +58,16 @@ var AgendamentoTesteFalha = {
     "data": new Date(),
 };
 
+var AvaliacaoTeste = {
+    "id": 1,
+    "titulo": "Um titulo",
+    "descricao": "Uma descrição",
+    "nota": 8,
+    "idBarbearia": BarbeariaTeste.id,
+    "idServico": ServicoTeste.id,
+    "idAgendamento": AgendamentoTeste.id
+};
+
 module.exports = {
     UsuarioTeste,
     ModeradorTeste,
@@ -65,5 +75,6 @@ module.exports = {
     ServicoTeste,
     StatusAgendamentoTeste,
     AgendamentoTeste,
-    AgendamentoTesteFalha
+    AgendamentoTesteFalha,
+    AvaliacaoTeste
 };

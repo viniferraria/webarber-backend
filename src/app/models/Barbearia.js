@@ -18,7 +18,8 @@ module.exports = (sequelize, DataTypes) => {
         complemento: DataTypes.STRING,
         numero: DataTypes.INTEGER,
         bloco: DataTypes.STRING,
-        cep: DataTypes.STRING
+        cep: DataTypes.STRING,
+        media: DataTypes.FLOAT
     }, {
         timestamps: true
     });
