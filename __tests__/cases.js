@@ -28,7 +28,10 @@ var BarbeariaTeste = {
     "complemento": "Testing",
     "numero": 123,
     "bloco": "Testing",
-    "cep": "Testing"
+    "cep": "Testing",
+    "bairro": "Vila Honda",
+    "cidade": "São Paulo",
+    "estado": "SP"
 };
 
 

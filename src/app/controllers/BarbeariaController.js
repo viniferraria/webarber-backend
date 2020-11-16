@@ -70,7 +70,7 @@ module.exports = {
 
     async cadastrarBarbearia(req, res) {
         try {
-            const { nome, endereco, telefone, horarioAbertura, horarioFechamento, icone, complemento, numero, bloco, cep } = req.body;
+            const { nome, endereco, telefone, horarioAbertura, horarioFechamento, icone, complemento, numero, bloco, cep, bairro, cidade, estado } = req.body;
             const { userId } = req;
             const barberia = await Barbearia.findOne({ 
                 where: { 
@@ -104,7 +104,7 @@ module.exports = {
                 return res.status(400).json({ message: 'Esta barbearia já existe'});
             }
 
-            const novaBarbearia = await Barbearia.create({ nome, endereco, telefone, horarioAbertura, horarioFechamento, icone, user_id: userId, complemento, numero, bloco, cep });
+            const novaBarbearia = await Barbearia.create({ nome, endereco, telefone, horarioAbertura, horarioFechamento, icone, user_id: userId, complemento, numero, bloco, cep, bairro, cidade, estado });
             return res.status(201).json(novaBarbearia);
         } catch (error) {
             console.log(error);
@@ -116,7 +116,7 @@ module.exports = {
     async atualizarBarbearia(req, res) {
         try {
             const { userId } = req;
-            const { nome, endereco, telefone, horarioAbertura, horarioFechamento, icone } = req.body;
+            const { nome, endereco, telefone, horarioAbertura, horarioFechamento, icone, bairro, cidade, estado } = req.body;
             const barberia = await Barbearia.findOne({
                 where: {
                     [Op.or]: [
@@ -137,6 +137,9 @@ module.exports = {
                 horarioAbertura: horarioAbertura || barberia.horarioAbertura,
                 horarioFechamento: horarioFechamento || barberia.horarioFechamento,
                 icone: icone || barberia.icone,
+                bairro: bairro || barberia.bairro,
+                cidade: cidade || barberia.cidade,
+                estado: estado || barberia.estado,
             });
             
             return res.status(200).json(barbeariaAtualizada);
