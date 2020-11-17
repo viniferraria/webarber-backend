@@ -113,8 +113,7 @@ module.exports = {
                     [Op.or]: [
                         { endereco },
                         { cep }
-                    ],
-                    ativo: true
+                    ]
                 }
             });
 

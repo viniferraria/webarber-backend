@@ -57,6 +57,18 @@ module.exports = () => {
         expect(response.body.message).toBe('É necessário informar uma lista com os dias de funcionamento da barbearia');
     });
 
+    test('Deve dar erro ao criar uma barbearia com dados inválidos', async () =>{
+        BarbeariaTeste.endereco = 1;
+        BarbeariaTeste.diaFuncionamento = [0,1,2,3,4,5];
+        const response = await request(app)
+        .post('/barbearias')
+        .set('Authorization', `Bearer ${ModeradorTeste.jwt}`)
+        .send(BarbeariaTeste);
+
+        expect(response.status).toBe(400);
+        expect(response.body.message).toBe('Erro ao criar uma barbearia');
+    });
+
     test('Deve permitir que um moderador crie uma barberia', async () =>{
         BarbeariaTeste.endereco = 'Testing';
         BarbeariaTeste.diaFuncionamento = [0,1,2,3,4,5];
@@ -198,6 +210,19 @@ module.exports = () => {
         expect(response.body.endereco).toBe('Novo endereço');
     });
 
+    test("Deve retornar erro ao atualizar uma barbearia", async () => {
+        BarbeariaTeste.nome = "Barbearia atualizada";
+        BarbeariaTeste.endereco = 1;
+        const response = await request(app)
+        .patch(`/barbearias`)
+        .set('Authorization', `Bearer ${ModeradorTeste.jwt}`)
+        .send(BarbeariaTeste)
+
+        expect(response.status).toBe(400)
+        expect(response.body.message).toBe('Erro ao atualizar barbearia');
+        BarbeariaTeste.endereco = "Novo endereço";
+    });
+
     test("Deve deletar uma barberia", async () => {
         const response = await request(app)
         .delete(`/barbearias`)
@@ -240,5 +265,15 @@ module.exports = () => {
 
         expect(response.status).toBe(400);
         expect(response.body.message).toBe('Nenhuma barberia encontrada');
+    });
+
+    test("Não deve permitir que um moderador crie outra barbearia no mesmo endereço", async () => {
+        const response = await request(app)
+        .post('/barbearias')
+        .set('Authorization', `Bearer ${ModeradorTeste.jwt}`)
+        .send(BarbeariaTeste);
+
+        expect(response.status).toBe(400);
+        expect(response.body.message).toBe('Esta barbearia já existe');
     });
 }
