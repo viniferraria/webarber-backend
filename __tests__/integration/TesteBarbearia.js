@@ -188,4 +188,11 @@ module.exports = () => {
         expect(response.status).toBe(400)
         expect(response.body.message).toBe('Barbearia não existe ou foi desativada');
     });
+
+    test("Não deve retornar uma barberia que foi deletada", async () => {
+        const response = await request(app)
+        .get(`/barbearias/${BarbeariaTeste.id}`)
+        expect(response.status).toBe(400);
+        expect(response.body.message).toBe('Esta barberia não está disponível');
+    });
 }
