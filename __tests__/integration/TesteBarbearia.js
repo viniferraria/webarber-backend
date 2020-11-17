@@ -170,11 +170,22 @@ module.exports = () => {
         expect(response.body.message).toBe('Barbearia deletada');
     });
 
-    /* test("Não deve deletar uma barberia inválida", async () => {
+    test("Não deve deletar uma barberia já deletada", async () => {
         const response = await request(app)
-        .delete("/barbearias/9999")
+        .delete(`/barbearias`)
+        .set('Authorization', `Bearer ${ModeradorTeste.jwt}`)
 
         expect(response.status).toBe(400);
         expect(response.body.message).toBe('Barbearia não encontrada');
-    });   */
+    });
+
+    test("Não deve atualizar uma barbearia deletada", async () => {
+        const response = await request(app)
+        .patch(`/barbearias`)
+        .set('Authorization', `Bearer ${ModeradorTeste.jwt}`)
+        .send(BarbeariaTeste)
+
+        expect(response.status).toBe(400)
+        expect(response.body.message).toBe('Barbearia não existe ou foi desativada');
+    });
 }
