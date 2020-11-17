@@ -30,10 +30,6 @@ module.exports = {
                 }
             });
 
-            if (!barbearia) {
-                return res.status(400).json({ message: 'Nenhuma barberia encontrada' });
-            }
-
             return res.status(200).json(barbearia);
         } catch (error) {
             console.log(error);
@@ -161,7 +157,7 @@ module.exports = {
 
             // Não deve permitir que o moderador crie uma barbearia caso já exista uma barbearia ativa no mesmo endereço
             if (barbeariaExists && barbeariaExists.ativo && barbeariaExists.user_id != userId) {
-                return res.status(400).json({ message: 'O novo endereço informado já está cadastrado ' });
+                return res.status(400).json({ message: 'O novo endereço informado já está cadastrado' });
             }
 
             diaFuncionamento = (diaFuncionamento instanceof Array && diaFuncionamento.length > 0) ?
