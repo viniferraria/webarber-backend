@@ -222,7 +222,7 @@ module.exports = {
                 return res.status(400).json({ message: "Não existe este usuário" });            
             }
             
-            if (agendamento.idUsuario == usuario.id) {
+            if (agendamento.idUsuario === usuario.id) {
                 await agendamento.update({ 
                     idStatus: 4
                 });

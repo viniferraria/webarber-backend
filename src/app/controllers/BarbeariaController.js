@@ -147,17 +147,20 @@ module.exports = {
                 return res.status(400).json({ message: "Barbearia não existe ou foi desativada" });
             }
 
-            const barbeariaExists = await Barbearia.findOne({
-                where: {
-                    [Op.or]: [
-                        { endereco },
-                        { cep }
-                    ]
-                }
-            });
+            let barbeariaExists; 
+            if (endereco || cep) {
+                barbeariaExists = await Barbearia.findOne({
+                    where: {
+                        [Op.or]: [
+                            { endereco },
+                            { cep }
+                        ]
+                    }
+                });
+            }
 
             // Não deve permitir que o moderador crie uma barbearia caso já exista uma barbearia ativa no mesmo endereço
-            if (barbeariaExists && barbeariaExists.ativo && barbeariaExists.user_id != userId) {
+            if (barbeariaExists && barbeariaExists.ativo && barbeariaExists.user_id !== userId) {
                 return res.status(400).json({ message: "O novo endereço informado já está cadastrado " });
             }
 
