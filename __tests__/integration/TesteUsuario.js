@@ -94,7 +94,7 @@ module.exports = () => {
         .set("Authorization", `Bearer ${UsuarioTeste.jwt}`)
         .send(UsuarioTeste);
 
-        expect(response.status).toBe(200)
+        expect(response.status).toBe(200);
         expect(response.body.nome).toBe("updatedName");
         expect(response.body.sobrenome).toBe("updatedLastName");
     });
