@@ -2,6 +2,8 @@
   Webarber
 </h3>
 
+![Docker Image CI](https://github.com/viniferraria/webarber-backend/workflows/Docker%20Image%20CI/badge.svg?branch=master)
+
 <p align="center">API para o sistema de agendamento de barbearia para a disciplina Laboratório de Engenharia de Software, utilizando NodeJS e Sequelize</p>
 
 ## Pré-Requisitos
