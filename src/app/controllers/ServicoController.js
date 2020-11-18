@@ -15,7 +15,7 @@ module.exports = {
                 return res.status(400).json({ message: "Barbearia não encontrada"});
             }
             const servico = await Servico.findAll({ where: { 
-                barbearia_id: barbearia_id,
+                barbearia_id,
                 ativo: true
             }});
 
@@ -104,7 +104,7 @@ module.exports = {
 
             await servico.update({ 
                 ativo: false
-            })
+            });
     
             return res.status(200).json({ message: "Serviço deletado"});
         } catch(error) {

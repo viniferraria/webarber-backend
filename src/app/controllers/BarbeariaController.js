@@ -1,4 +1,4 @@
-"use strict"
+"use strict";
 
 const { Barbearia, Usuario } = require("../models");
 const Sequelize = require("sequelize");
@@ -185,7 +185,7 @@ module.exports = {
             return res.status(200).json(barbeariaAtualizada);
         } catch (error) {
             console.log(error);
-            return res.status(400).json({ message: "Erro ao atualizar barbearia" })
+            return res.status(400).json({ message: "Erro ao atualizar barbearia" });
         }
     },
 
@@ -206,7 +206,7 @@ module.exports = {
 
             await barbearia.update({
                 ativo: false
-            })
+            });
 
             return res.status(200).json({ message: "Barbearia deletada" });
         } catch (error) {

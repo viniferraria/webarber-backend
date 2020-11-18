@@ -59,7 +59,7 @@ module.exports = () => {
         const response = await request(app)
         .patch(`/servicos/${ServicoTeste.id}`)
         .set("Authorization", `Bearer ${ModeradorTeste.jwt}`)
-        .send(ServicoTeste)
+        .send(ServicoTeste);
 
         expect(response.status).toBe(200);
         expect(response.body.titulo).toBe("Serviço atualizado");
@@ -80,7 +80,7 @@ module.exports = () => {
     test("Deve deletar um serviço", async () => {
         const response = await request(app)
         .delete(`/servicos/${ServicoTeste.id}`)
-        .set("Authorization", `Bearer ${ModeradorTeste.jwt}`)
+        .set("Authorization", `Bearer ${ModeradorTeste.jwt}`);
 
         expect(response.status).toBe(200);
         expect(response.body.message).toBe("Serviço deletado");
@@ -94,4 +94,4 @@ module.exports = () => {
         expect(response.status).toBe(400);
         expect(response.body.message).toBe("Serviço não encontrado");
     });
-}
+};

@@ -14,7 +14,7 @@ module.exports = {
                 order: [
                     ["id", "ASC"]
                 ]
-            })
+            });
     
             if (!users) {
                 return res.status(404).json({ message: "Não existem usuários cadastrados"});

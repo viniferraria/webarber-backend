@@ -129,7 +129,7 @@ module.exports = () => {
 
     test("Deve resgatar todos os agendamentos do usuário", async () => {
         const response = await request(app)
-        .get(`/agendamentos`)
+        .get("/agendamentos")
         .set("Authorization", `Bearer ${UsuarioTeste.jwt}`);
         
         expect(response.status).toBe(200);
@@ -141,11 +141,11 @@ module.exports = () => {
     test("Deve resgatar todos os agendamentos da barbearia", async () => {
         const response = await request(app)
         .get(`/agendamentos/barbearia/${BarbeariaTeste.id}`)
-        .set("Authorization", `Bearer ${ModeradorTeste.jwt}`)
+        .set("Authorization", `Bearer ${ModeradorTeste.jwt}`);
         
         expect(response.status).toBe(200);
         expect(response.body.length).toBeGreaterThanOrEqual(0);
         expect(response.body[0].idBarbearia).toBe(AgendamentoTeste.idBarbearia);
         expect(response.body[0].idServico).toBe(AgendamentoTeste.idServico);
     });
-}
+};

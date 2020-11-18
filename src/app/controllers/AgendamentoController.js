@@ -1,4 +1,4 @@
-"use strict"
+"use strict";
 
 const { StatusAgendamento, Agendamento, Servico, Barbearia, Usuario } = require("../models");
 const Sequelize = require("sequelize");
@@ -98,7 +98,7 @@ module.exports = {
                 ]
             });
 
-            const response = agendamentos.map( item => {
+            const response = agendamentos.map((item) => {
                 return {
                     id: item.id,
                     idBarbearia: item.idBarbearia,
@@ -169,7 +169,7 @@ module.exports = {
             }
 
             await agendamento.update({ 
-                idStatus: idStatus
+                idStatus
             });
 
             return res.status(200).json({ message: "Agendamento atualizado" });  

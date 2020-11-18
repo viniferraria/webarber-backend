@@ -40,9 +40,9 @@ module.exports = () => {
     test("Deve autenticar um usuário", async () => {
         const response = await request(app)
         .post("/login")
-        .send({ email: UsuarioTeste.email, password: UsuarioTeste.password })
+        .send({ email: UsuarioTeste.email, password: UsuarioTeste.password });
 
-        expect(response.status).toBe(200)
+        expect(response.status).toBe(200);
         expect(response.body).toHaveProperty("id");
         expect(response.body).toHaveProperty("sessionToken");
         UsuarioTeste.jwt = response.body.sessionToken;
@@ -51,7 +51,7 @@ module.exports = () => {
     test("Deve autenticar um moderador", async () => {
         const response = await request(app)
         .post("/login")
-        .send({ email: ModeradorTeste.email, password: ModeradorTeste.password })
+        .send({ email: ModeradorTeste.email, password: ModeradorTeste.password });
 
         expect(response.status).toBe(200)
         expect(response.body).toHaveProperty("id");
@@ -62,9 +62,9 @@ module.exports = () => {
     test("Não deve autenticar um usuário com senha inválida", async () => {
         const response = await request(app)
         .post("/login")
-        .send({ email: UsuarioTeste.email, password: "lalala" })
+        .send({ email: UsuarioTeste.email, password: "lalala" });
 
-        expect(response.status).toBe(400)
+        expect(response.status).toBe(400);
         expect(response.body.message).toBe("Credenciais inválidas");
     });
     
@@ -92,7 +92,7 @@ module.exports = () => {
         const response = await request(app)
         .patch("/conta")
         .set("Authorization", `Bearer ${UsuarioTeste.jwt}`)
-        .send(UsuarioTeste)
+        .send(UsuarioTeste);
 
         expect(response.status).toBe(200)
         expect(response.body.nome).toBe("updatedName");
@@ -111,7 +111,7 @@ module.exports = () => {
     test("Deve excluir o próprio usuário", async () => {
         const response = await request(app)
         .delete("/conta")
-        .set("Authorization", `Bearer ${UsuarioTeste.jwt}`)
+        .set("Authorization", `Bearer ${UsuarioTeste.jwt}`);
 
         expect(response.status).toBe(200);
         expect(response.body.message).toBe("Conta desativada");
@@ -126,4 +126,4 @@ module.exports = () => {
         expect(response.status).toBe(400)
         expect(response.body.message).toBe("Credenciais inválidas");
     });
-}
+};

@@ -92,7 +92,8 @@ module.exports = () => {
 
     test("Deve retornar uma lista com todas as barberias", async () => {
         const response = await request(app)
-        .get("/barbearias")
+        .get("/barbearias");
+
         expect(response.status).toBe(200);
         expect(response.body.length).toBeGreaterThanOrEqual(1);
         expect(response.body[0].nome).toBe(BarbeariaTeste.nome);
@@ -105,7 +106,8 @@ module.exports = () => {
 
     test("Deve retornar uma barberia válida", async () => {
         const response = await request(app)
-        .get(`/barbearias/${BarbeariaTeste.id}`)
+        .get(`/barbearias/${BarbeariaTeste.id}`);
+
         expect(response.status).toBe(200);
         expect(response.body.nome).toBe(BarbeariaTeste.nome);
         expect(response.body.endereco).toBe(BarbeariaTeste.endereco);
@@ -132,7 +134,7 @@ module.exports = () => {
     test("Não deve permitir que um usuário acesse a rota", async () => {
         const response = await request(app)
         .get(`/barbearia`)
-        .set("Authorization", `Bearer ${UsuarioTeste.jwt}`)
+        .set("Authorization", `Bearer ${UsuarioTeste.jwt}`);
 
         expect(response.status).toBe(401);
         expect(response.body).toHaveProperty("message");
@@ -147,7 +149,7 @@ module.exports = () => {
         .set("Authorization", `Bearer ${ModeradorTeste.jwt}`)
         .send(BarbeariaTeste);
 
-        expect(response.status).toBe(200)
+        expect(response.status).toBe(200);
         expect(response.body.nome).toBe("Barbearia atualizada");
         expect(response.body.endereco).toBe("Novo endereço");
     });
@@ -164,7 +166,7 @@ module.exports = () => {
     test("Deve deletar uma barberia", async () => {
         const response = await request(app)
         .delete("/barbearias")
-        .set("Authorization", `Bearer ${ModeradorTeste.jwt}`)
+        .set("Authorization", `Bearer ${ModeradorTeste.jwt}`);
 
         expect(response.status).toBe(200);
         expect(response.body.message).toBe("Barbearia deletada");
@@ -177,4 +179,4 @@ module.exports = () => {
         expect(response.status).toBe(400);
         expect(response.body.message).toBe("Barbearia não encontrada");
     });   */
-}
+};

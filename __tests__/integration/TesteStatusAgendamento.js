@@ -11,4 +11,4 @@ module.exports = () => {
         expect(response.body.length).toBeGreaterThanOrEqual(0);
         expect(response.body[0].nome).toBe(StatusAgendamentoTeste.nome);
     });
-}
+};
