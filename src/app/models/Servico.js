@@ -26,7 +26,7 @@ module.exports = (sequelize, DataTypes) => {
 
     Servico.associate = function (models) {
             Servico.hasOne(models.Barbearia, {
-            foreignKey: 'id'
+            foreignKey: "id"
         });
     };
 

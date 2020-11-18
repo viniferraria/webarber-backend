@@ -1,4 +1,4 @@
-const { TipoUsuario } = require('../models');
+const { TipoUsuario } = require("../models");
 
 module.exports = {
 
@@ -6,13 +6,13 @@ module.exports = {
         try {
             let tipos = await TipoUsuario.findAll({
                 order: [
-                    ['id', 'ASC']
+                    ["id", "ASC"]
                 ]
             })
             return res.status(200).json(tipos);
         } catch (error) {
             console.log(error);
-            return res.status(400).json({ message: 'Error while fetching' });
+            return res.status(400).json({ message: "Error while fetching" });
         }
     }
 

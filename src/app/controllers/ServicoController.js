@@ -1,5 +1,5 @@
-const { Servico } = require('../models');
-const { Barbearia } = require('../models');
+const { Servico } = require("../models");
+const { Barbearia } = require("../models");
 
 module.exports = {
 
@@ -12,7 +12,7 @@ module.exports = {
             }});
             
             if (!barbearia) {
-                return res.status(400).json({ message: 'Barbearia não encontrada'});
+                return res.status(400).json({ message: "Barbearia não encontrada"});
             }
             const servico = await Servico.findAll({ where: { 
                 barbearia_id: barbearia_id,
@@ -20,13 +20,13 @@ module.exports = {
             }});
 
             if (!servico) {
-                return res.status(400).json({ message: 'Não há serviços'});
+                return res.status(400).json({ message: "Não há serviços"});
             }
             
             return res.status(200).json(servico);
         } catch (error) {
             console.log(error);
-            return res.status(400).json({ message: 'Erro ao buscar serviços da barbearia' });
+            return res.status(400).json({ message: "Erro ao buscar serviços da barbearia" });
         }
     },
 
@@ -39,13 +39,13 @@ module.exports = {
             }});
             
             if(!servico) {
-                return res.status(400).json({ message: 'Serviço não encontrado'});
+                return res.status(400).json({ message: "Serviço não encontrado"});
             }
             
             return res.status(200).json(servico);
         } catch (error) {
             console.log(error);
-            return res.status(400).json({ message: 'Erro ao buscar serviço' });
+            return res.status(400).json({ message: "Erro ao buscar serviço" });
         }
     },
 
@@ -58,18 +58,18 @@ module.exports = {
             }});
             
             if(!barbearia) {
-                return res.status(400).json({ message: 'Barbearia não encontrada'});
+                return res.status(400).json({ message: "Barbearia não encontrada"});
             }
             
             if(servico) {
-                return res.status(400).json({ message: 'Já existe um serviço com este nome para esta barbearia'});
+                return res.status(400).json({ message: "Já existe um serviço com este nome para esta barbearia"});
             }
 
             const novoServico = await Servico.create({ titulo, preco, descricao, barbearia_id });
             return res.status(201).json(novoServico);
         } catch (error) {
             console.log(error);
-            return res.status(400).json({ message: 'Erro ao criar um serviço' });
+            return res.status(400).json({ message: "Erro ao criar um serviço" });
         }
 
     },
@@ -81,7 +81,7 @@ module.exports = {
         const servico = await Servico.findByPk(servico_id);
 
         if (!servico) {
-            return res.status(400).json({ message: 'Serviço não encontrado'});
+            return res.status(400).json({ message: "Serviço não encontrado"});
         }
 
         const servicoAtualizado = await servico.update({
@@ -99,7 +99,7 @@ module.exports = {
             const servico = await Servico.findByPk(servico_id);
 
             if (!servico) {
-                return res.status(400).json({ message: 'Serviço não encontrado' });
+                return res.status(400).json({ message: "Serviço não encontrado" });
             }
 
             await servico.update({ 
@@ -109,7 +109,7 @@ module.exports = {
             return res.status(200).json({ message: "Serviço deletado"});
         } catch(error) {
             console.log(error);
-            return res.status(400).json({ message: 'Erro ao deletar serviço' });
+            return res.status(400).json({ message: "Erro ao deletar serviço" });
         }
     }
 };

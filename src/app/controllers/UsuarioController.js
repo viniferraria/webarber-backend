@@ -1,5 +1,5 @@
-const { Usuario } = require('../models');
-const Sequelize = require('sequelize');
+const { Usuario } = require("../models");
+const Sequelize = require("sequelize");
 const { Op } = Sequelize;
 
 function validaDocumento(documento) {
@@ -12,18 +12,18 @@ module.exports = {
         try {
             const users = await Usuario.findAll({
                 order: [
-                    ['id', 'ASC']
+                    ["id", "ASC"]
                 ]
             })
     
             if (!users) {
-                return res.status(404).json({ message: 'Não existem usuários cadastrados'});
+                return res.status(404).json({ message: "Não existem usuários cadastrados"});
             }
     
             return res.status(200).json(users);
         } catch(error) {
             console.log(error);
-            return res.status(400).json({ message: 'Erro ao obter usuários' });
+            return res.status(400).json({ message: "Erro ao obter usuários" });
         }
     },
 
@@ -35,13 +35,13 @@ module.exports = {
             }});
             
             if (!user) {
-                return res.status(404).json({ message: 'Usuário não encontrado' });
+                return res.status(404).json({ message: "Usuário não encontrado" });
             }
             
             return res.status(200).json(user);
         } catch (error) {
             console.log(error);
-            return res.status(400).json({ message: 'Erro ao obter usuário' });
+            return res.status(400).json({ message: "Erro ao obter usuário" });
         }
     },
 
@@ -49,19 +49,19 @@ module.exports = {
         try {
             let { nome, sobrenome, email, password, CNPJ, CPF, idTipo, icone } = req.body;
             if (!email)
-                return res.status(400).json({ message: 'É necessário informar um email para criar uma conta' });
+                return res.status(400).json({ message: "É necessário informar um email para criar uma conta" });
             
 
             if (idTipo == 1 && !CPF) {
-                return res.status(400).json({ message: 'É necessário informar um CPF para criar uma conta' });
+                return res.status(400).json({ message: "É necessário informar um CPF para criar uma conta" });
             }
 
             if (idTipo == 2 && !CNPJ) {
-                return res.status(400).json({ message: 'É necessário informar um CNPJ para criar uma conta de moderador' });
+                return res.status(400).json({ message: "É necessário informar um CNPJ para criar uma conta de moderador" });
             }
 
             if (!validaDocumento(CPF || CNPJ))
-                return res.status(400).json({ message: 'Documento inválido' });
+                return res.status(400).json({ message: "Documento inválido" });
 
             CPF = (idTipo == 2)? null : CPF;
             CNPJ = (idTipo == 1)? null : CNPJ;
@@ -70,22 +70,22 @@ module.exports = {
                 where: {
                     [Op.or]: [
                         { email },
-                        { CPF: CPF || '' },
-                        { CNPJ: CNPJ || '' }
+                        { CPF: CPF || "" },
+                        { CNPJ: CNPJ || "" }
                     ]
                 }
             });
             
             if (user) {
                 console.log("Duplicate fields");
-                return res.status(400).json({ message: 'Erro ao criar uma conta'});
+                return res.status(400).json({ message: "Erro ao criar uma conta"});
             }
 
             const newUser = await Usuario.create({ nome, sobrenome, email, password, CNPJ, CPF, idTipo, icone });
             return res.status(201).json(newUser);
         } catch (error) {
             console.log(error);
-            return res.status(400).json({ message: 'Erro ao criar uma conta' });
+            return res.status(400).json({ message: "Erro ao criar uma conta" });
         }
 
     },
@@ -96,32 +96,32 @@ module.exports = {
             let { nome, sobrenome, email, password, CNPJ, CPF, idTipo, icone } = req.body;
 
             if (!email) {
-                return res.status(400).json({ message: 'É necessário informar um email para criar uma conta' });
+                return res.status(400).json({ message: "É necessário informar um email para criar uma conta" });
             } else if (idTipo == 1 && !CPF) {
-                return res.status(400).json({ message: 'É necessário informar um CPF para criar uma conta' });
+                return res.status(400).json({ message: "É necessário informar um CPF para criar uma conta" });
             } else if (idTipo == 2 && !CNPJ) {
-                return res.status(400).json({ message: 'É necessário informar um CNPJ para criar uma conta de moderador' });
+                return res.status(400).json({ message: "É necessário informar um CNPJ para criar uma conta de moderador" });
             } else if (!validaDocumento(CPF || CNPJ)) {
-                return res.status(400).json({ message: 'Documento inválido' });
+                return res.status(400).json({ message: "Documento inválido" });
             }
 
             let user = await Usuario.findByPk(userId);
             if (!user) {
-                return res.status(404).json({ message: 'Usuário não encontrado'});
+                return res.status(404).json({ message: "Usuário não encontrado"});
             }
             // TODO validar se o cpf, ou CPNJ ou email já estão associados a outro usuário
             const repetido = await Usuario.findOne({
                 where: {
                     [Op.or]: [
                         { email },
-                        { CPF: CPF || '' },
-                        { CNPJ: CNPJ || '' }
+                        { CPF: CPF || "" },
+                        { CNPJ: CNPJ || "" }
                     ]
                 }
             });
 
             if (repetido && repetido.id != userId)
-                return res.status(400).json({ message: 'Erro ao atualizar documentos|email'});
+                return res.status(400).json({ message: "Erro ao atualizar documentos|email"});
 
             const updatedUser = await user.update({
                 nome: nome || user.nome,
@@ -148,7 +148,7 @@ module.exports = {
             const user = await Usuario.findByPk(userId);
 
             if (!user) {
-                return res.status(400).json({ message: 'User not found' });
+                return res.status(400).json({ message: "User not found" });
             }
 
             await user.update({ 
@@ -158,7 +158,7 @@ module.exports = {
             return res.status(200).json({ message: "Conta desativada"});
         } catch(error) {
             console.log(error);
-            return res.status(400).json({ message: 'Erro ao desativar conta' });
+            return res.status(400).json({ message: "Erro ao desativar conta" });
         }
     },
 
@@ -168,13 +168,13 @@ module.exports = {
             const user = await Usuario.findOne({ where: { email } });
             
             if (!user)
-                return res.status(404).json({ message: 'Usuário não cadastrado' });
+                return res.status(404).json({ message: "Usuário não cadastrado" });
             
             if (!(await user.checkPassword(password))) 
-                return res.status(400).json({ message: 'Credenciais inválidas' });
+                return res.status(400).json({ message: "Credenciais inválidas" });
                 
             if (!user.ativo)
-                return res.status(400).json({ message: 'Credenciais inválidas' });
+                return res.status(400).json({ message: "Credenciais inválidas" });
 
             await user.generateToken();
             await user.update({

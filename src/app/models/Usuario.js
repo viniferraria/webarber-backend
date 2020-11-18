@@ -1,5 +1,5 @@
-const bcrypt = require('bcryptjs');
-const jwt = require('jsonwebtoken');
+const bcrypt = require("bcryptjs");
+const jwt = require("jsonwebtoken");
 
 module.exports = (sequelize, DataTypes) => {
     const Usuario = sequelize.define("Usuario", {
@@ -36,7 +36,7 @@ module.exports = (sequelize, DataTypes) => {
 
     Usuario.associate = function (models) {
         Usuario.hasOne(models.TipoUsuario, {
-            foreignKey: 'id'
+            foreignKey: "id"
         });
     };
 
@@ -49,8 +49,8 @@ module.exports = (sequelize, DataTypes) => {
             id: this.id, 
             idTipo: this.idTipo 
         }, process.env.APP_SECRET, { 
-            algorithm: 'HS256',
-            expiresIn: '1h'
+            algorithm: "HS256",
+            expiresIn: "1h"
         });
     }
 
