@@ -14,7 +14,7 @@ const eModerador = require("./app/middleware/eModerador");
 // Rotas Tipo
 routes.get("/tiposconta/", TipoUsuarioController.obterTiposUsuario);
 // Rotas dos status do agendamento
-routes.get("/statusagendamento/", StatusAgendamentoController.obterStatusAgendamento)
+routes.get("/statusagendamento/", StatusAgendamentoController.obterStatusAgendamento);
 // Rotas signin
 routes.post("/cadastro/", UsuarioController.cadastrarUsuario);
 // Rota Login

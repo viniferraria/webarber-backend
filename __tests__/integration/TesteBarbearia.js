@@ -133,7 +133,7 @@ module.exports = () => {
 
     test("Não deve permitir que um usuário acesse a rota", async () => {
         const response = await request(app)
-        .get(`/barbearia`)
+        .get("/barbearia")
         .set("Authorization", `Bearer ${UsuarioTeste.jwt}`);
 
         expect(response.status).toBe(401);

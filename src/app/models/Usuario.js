@@ -42,7 +42,7 @@ module.exports = (sequelize, DataTypes) => {
 
     Usuario.prototype.checkPassword = function (password) {
         return bcrypt.compare(password, this.password_hash);
-    }
+    };
 
     Usuario.prototype.generateToken = function() {
         this.sessionToken = jwt.sign({
@@ -52,7 +52,7 @@ module.exports = (sequelize, DataTypes) => {
             algorithm: "HS256",
             expiresIn: "1h"
         });
-    }
+    };
 
     return Usuario;
 };

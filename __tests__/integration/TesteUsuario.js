@@ -53,7 +53,7 @@ module.exports = () => {
         .post("/login")
         .send({ email: ModeradorTeste.email, password: ModeradorTeste.password });
 
-        expect(response.status).toBe(200)
+        expect(response.status).toBe(200);
         expect(response.body).toHaveProperty("id");
         expect(response.body).toHaveProperty("sessionToken");
         ModeradorTeste.jwt = response.body.sessionToken;
