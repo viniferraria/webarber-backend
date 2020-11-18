@@ -150,7 +150,7 @@ module.exports = {
 
             await user.update({ 
                 ativo: false
-            })
+            });
     
             return res.status(200).json({ message: "Conta desativada"});
         } catch(error) {
@@ -184,7 +184,7 @@ module.exports = {
             return res.status(200).json(user);
         } catch(err) {
             console.log(err);
-            return res.status(400).json({ message: `Erro ao realizar login`});
+            return res.status(400).json({ message: "Erro ao realizar login"});
         }
     }
 };
