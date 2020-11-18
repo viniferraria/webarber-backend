@@ -89,7 +89,7 @@ module.exports = () => {
     test("Não deve deletar um serviço inválido", async () => {
         const response = await request(app)
         .delete("/servicos/9999")
-        .set("Authorization", `Bearer ${ModeradorTeste.jwt}`)
+        .set("Authorization", `Bearer ${ModeradorTeste.jwt}`);
 
         expect(response.status).toBe(400);
         expect(response.body.message).toBe("Serviço não encontrado");
