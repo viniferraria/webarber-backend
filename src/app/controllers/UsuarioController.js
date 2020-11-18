@@ -129,7 +129,7 @@ module.exports = {
                 CPF: (idTipo == 1)? (CPF|| user.CPF) : null,
                 idTipo: idTipo || user.idTipo,
                 icone: icone || user.icone,
-            })
+            });
             delete updatedUser.password;
 
             return res.status(200).json(updatedUser);
