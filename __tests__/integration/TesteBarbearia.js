@@ -6,7 +6,7 @@ module.exports = () => {
     test("Não deve permitir que um usuário crie uma barberia", async () => {
         const response = await request(app)
         .post("/barbearias")
-        .set("Authorization", `Bearer ${UsuarioTeste.jwt}`)
+        .set("Authorization", `Bearer ${UsuarioTeste.jwt}`);
         .send(BarbeariaTeste);
 
         expect(response.status).toBe(401);
@@ -179,7 +179,7 @@ module.exports = () => {
     test("Não deve permitir que um usuário acesse a rota", async () => {
         const response = await request(app)
         .get(`/barbearia`)
-        .set("Authorization", `Bearer ${UsuarioTeste.jwt}`)
+        .set("Authorization", `Bearer ${UsuarioTeste.jwt}`);
 
         expect(response.status).toBe(401);
         expect(response.body).toHaveProperty("message");
