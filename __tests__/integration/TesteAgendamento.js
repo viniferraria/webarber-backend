@@ -17,7 +17,29 @@ module.exports = () => {
         // TODO: Testar data convertendo para string
     });
 
-    test("Deve criar mais de um agendamento para o mesmo usuário com horário diferente", async () => {
+    test('Não deve criar um agendamento para o mesmo horário', async () =>{
+        const response = await request(app)
+        .post('/agendamentos')
+        .set('Authorization', `Bearer ${UsuarioTeste.jwt}`)
+        .send(AgendamentoTeste);
+
+        expect(response.status).toBe(400);
+        expect(response.body).toHaveProperty('message');
+        expect(response.body.message).toBe('Não é possível criar um agendamento, o horário informado já está ocupado');
+    });
+
+    test('Não deve criar um agendamento ao enviar a data no formato inválido', async () =>{
+        const response = await request(app)
+        .post('/agendamentos')
+        .set('Authorization', `Bearer ${UsuarioTeste.jwt}`)
+        .send({ ...AgendamentoTeste, data: new Date().toUTCString()});
+
+        expect(response.status).toBe(400);
+        expect(response.body).toHaveProperty('message');
+        expect(response.body.message).toBe('É necessário informar uma data válida no formato ISO para criar um agendamento');
+    });
+
+    test('Deve criar mais de um agendamento para o mesmo usuário com horário diferente', async () =>{
         const response = await request(app)
         .post("/agendamentos")
         .set("Authorization", `Bearer ${UsuarioTeste.jwt}`)
@@ -39,33 +61,27 @@ module.exports = () => {
         expect(response.body.message).toBe("Falta dados para completar a ação");
     });
 
-    // test("Deve retornar falha na falta de dados para cancelar um agendamento", async () => {
-    //     const response = await request(app)
-    //     .delete("/agendamentos")
-    //     .set("Authorization", `Bearer ${UsuarioTeste.jwt}`)
-    //     .send(AgendamentoTesteFalha);
+    test('Não deve criar um agendamento para um serviço inexistente', async () =>{
+        const response = await request(app)
+        .post('/agendamentos')
+        .set('Authorization', `Bearer ${UsuarioTeste.jwt}`)
+        .send({ ...AgendamentoTeste, idServico: 9929213 });
 
-    //     expect(response.status).toBe(400);
-    //     expect(response.body.message).toBe("Falta dados para completar a ação");
-    // });
+        expect(response.status).toBe(400);
+        expect(response.body).toHaveProperty('message');
+        expect(response.body.message).toBe('Não é possível criar um agendamento para um serviço inexistente');
+    });
 
-    // test("Deve retornar falha ao cancelar agendamento de um usuário inexistente", async () => {
-    //     const response = await request(app)
-    //     .delete("/agendamentos")
-    //     .send({ ...AgendamentoTeste, idUsuario: 99 });
+    test('Não deve criar um agendamento para uma barbearia inexistente', async () =>{
+        const response = await request(app)
+        .post('/agendamentos')
+        .set('Authorization', `Bearer ${UsuarioTeste.jwt}`)
+        .send({ ...AgendamentoTeste, idBarbearia: 9929213});
 
-    //     expect(response.status).toBe(400);
-    //     expect(response.body.message).toBe("Não existe este usuário");
-    // });
-
-    // test("Deve retornar falha ao cancelar agendamento que não seja deste usuário", async () => {
-    //     const response = await request(app)
-    //     .delete("/agendamentos")
-    //     .send({ ...AgendamentoTeste, idUsuario: ModeradorTeste.id });
-
-    //     expect(response.status).toBe(400);
-    //     expect(response.body.message).toBe("Este agendamento não pertence à este usuário");
-    // });
+        expect(response.status).toBe(400);
+        expect(response.body).toHaveProperty('message');
+        expect(response.body.message).toBe('Não é possível criar um agendamento para uma barbearia inexistente');
+    });
 
     test("Deve cancelar um agendamento que seja deste usuário", async () => {
         const response = await request(app)
@@ -77,17 +93,7 @@ module.exports = () => {
         expect(response.body.message).toBe("Agendamento cancelado");
     });
 
-/*     test("Deve retornar falha na falta de dados para atualizar um agendamento", async () => {
-        const response = await request(app)
-        .patch("/agendamentos")
-        .set("Authorization", `Bearer ${ModeradorTeste.jwt}`)
-        .send(AgendamentoTesteFalha);
-
-        expect(response.status).toBe(400);
-        expect(response.body.message).toBe("Falta dados para completar a ação");
-    }); */
-
-    test("Deve retornar falha ao atualizar um agendamento se não for moderador", async () => {
+    test('Deve retornar falha ao atualizar um agendamento se não for moderador', async () =>{
         const response = await request(app)
         .patch("/agendamentos")
         .set("Authorization", `Bearer ${UsuarioTeste.jwt}`)
