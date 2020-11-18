@@ -17,7 +17,7 @@ module.exports = () => {
         // TODO: Testar data convertendo para string
     });
 
-    test("Não deve criar um agendamento para o mesmo horário", async () =>{
+    test("Não deve criar um agendamento para o mesmo horário", async () => {
         const response = await request(app)
         .post("/agendamentos")
         .set("Authorization", `Bearer ${UsuarioTeste.jwt}`)
@@ -28,7 +28,7 @@ module.exports = () => {
         expect(response.body.message).toBe("Não é possível criar um agendamento, o horário informado já está ocupado");
     });
 
-    test("Não deve criar um agendamento ao enviar a data no formato inválido", async () =>{
+    test("Não deve criar um agendamento ao enviar a data no formato inválido", async () => {
         const response = await request(app)
         .post("/agendamentos")
         .set("Authorization", `Bearer ${UsuarioTeste.jwt}`)
@@ -39,7 +39,7 @@ module.exports = () => {
         expect(response.body.message).toBe("É necessário informar uma data válida no formato ISO para criar um agendamento");
     });
 
-    test("Deve criar mais de um agendamento para o mesmo usuário com horário diferente", async () =>{
+    test("Deve criar mais de um agendamento para o mesmo usuário com horário diferente", async () => {
         const response = await request(app)
         .post("/agendamentos")
         .set("Authorization", `Bearer ${UsuarioTeste.jwt}`)
@@ -61,7 +61,7 @@ module.exports = () => {
         expect(response.body.message).toBe("Falta dados para completar a ação");
     });
 
-    test("Não deve criar um agendamento para um serviço inexistente", async () =>{
+    test("Não deve criar um agendamento para um serviço inexistente", async () => {
         const response = await request(app)
         .post("/agendamentos")
         .set("Authorization", `Bearer ${UsuarioTeste.jwt}`)
@@ -72,7 +72,7 @@ module.exports = () => {
         expect(response.body.message).toBe("Não é possível criar um agendamento para um serviço inexistente");
     });
 
-    test("Não deve criar um agendamento para uma barbearia inexistente", async () =>{
+    test("Não deve criar um agendamento para uma barbearia inexistente", async () => {
         const response = await request(app)
         .post("/agendamentos")
         .set("Authorization", `Bearer ${UsuarioTeste.jwt}`)
@@ -93,7 +93,7 @@ module.exports = () => {
         expect(response.body.message).toBe("Agendamento cancelado");
     });
 
-    test("Deve retornar falha ao atualizar um agendamento se não for moderador", async () =>{
+    test("Deve retornar falha ao atualizar um agendamento se não for moderador", async () => {
         const response = await request(app)
         .patch("/agendamentos")
         .set("Authorization", `Bearer ${UsuarioTeste.jwt}`)

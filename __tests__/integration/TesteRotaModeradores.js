@@ -5,7 +5,7 @@ let { AgendamentoTeste, AgendamentoTesteFalha, ModeradorTeste, UsuarioTeste, Bar
 
 module.exports = () => {
 
-    // test("Deve retornar falha na falta de dados para cancelar um agendamento", async () =>{
+    // test("Deve retornar falha na falta de dados para cancelar um agendamento", async () => {
     //     const response = await request(app)
     //     .delete("/agendamentos")
     //     .set("Authorization", `Bearer ${UsuarioTeste.jwt}`)
@@ -15,7 +15,7 @@ module.exports = () => {
     //     expect(response.body.message).toBe("Falta dados para completar a ação");
     // });
 
-    // test("Deve retornar falha ao cancelar agendamento de um usuário inexistente", async () =>{
+    // test("Deve retornar falha ao cancelar agendamento de um usuário inexistente", async () => {
     //     const response = await request(app)
     //     .delete("/agendamentos")
     //     .send({ ...AgendamentoTeste, idUsuario: 99 });
