@@ -31,7 +31,7 @@ module.exports = () => {
 
     test("Deve resgatar o serviço com este id", async () => {
         const response = await request(app)
-        .get(`/servicos/${ServicoTeste.id}`)
+        .get(`/servicos/${ServicoTeste.id}`);
 
         expect(response.status).toBe(200);
         expect(response.body).toHaveProperty("id");
@@ -61,7 +61,7 @@ module.exports = () => {
         .set("Authorization", `Bearer ${ModeradorTeste.jwt}`)
         .send(ServicoTeste)
 
-        expect(response.status).toBe(200)
+        expect(response.status).toBe(200);
         expect(response.body.titulo).toBe("Serviço atualizado");
         expect(response.body.descricao).toBe(ServicoTeste.descricao);
         expect(response.body.preco).toBe(1.99);

@@ -12,7 +12,7 @@ const eModerador = require("./app/middleware/eModerador");
 
 /* ROTAS ABERTAS */
 // Rotas Tipo
-routes.get("/tiposconta/", TipoUsuarioController.obterTiposUsuario)
+routes.get("/tiposconta/", TipoUsuarioController.obterTiposUsuario);
 // Rotas dos status do agendamento
 routes.get("/statusagendamento/", StatusAgendamentoController.obterStatusAgendamento)
 // Rotas signin
@@ -28,7 +28,7 @@ routes.get("/servicos/:servico_id/", ServicoController.obterServicoPorId);
 
 /* ROTAS QUE PRECISAM DE AUTENTICAÇÃO */
 // Middleware
-routes.use(MiddlewareAutenticacao)
+routes.use(MiddlewareAutenticacao);
 
 // Rotas Usuários
 routes.get("/usuarios/", UsuarioController.obterTodosUsuarios);

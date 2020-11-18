@@ -52,7 +52,7 @@ module.exports = {
     async criarServico(req, res) {
         try {
             const { titulo, preco, descricao, barbearia_id } = req.body;
-            const servico = await Servico.findOne({ where: { titulo: titulo, barbearia_id: barbearia_id }});
+            const servico = await Servico.findOne({ where: { titulo, barbearia_id }});
             const barbearia = await Barbearia.findOne({ where: { 
                 id: barbearia_id
             }});
@@ -88,7 +88,7 @@ module.exports = {
             titulo: titulo || servico.titulo,
             preco: preco || servico.preco,
             descricao: descricao || descricao.preco
-        })
+        });
         return res.status(200).json(servicoAtualizado);
     },
 

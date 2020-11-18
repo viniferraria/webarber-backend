@@ -7,11 +7,11 @@ const { Op } = Sequelize;
 
 function filtrarDiasFuncionamento(dias) {
     // valores de dias permitidos
-    let diasPermitidos = new Set([0, 1, 2, 3, 4, 5, 6])
+    let diasPermitidos = new Set([0, 1, 2, 3, 4, 5, 6]);
     // Remove os dias duplicados
     let diaFuncionamento = new Set(dias);
     // Faz a intersecção dos valores passados com os valores possíveis para os dias 
-    diaFuncionamento = [...diaFuncionamento].filter(dia => diasPermitidos.has(dia));
+    diaFuncionamento = [...diaFuncionamento].filter((dia) => diasPermitidos.has(dia));
     // Formata os dias para salvar na coluna do banco
     return diaFuncionamento.join(";");
 }
@@ -97,10 +97,11 @@ module.exports = {
                 return res.status(400).json({ message: "Usuário já possui uma barbearia ativa" });
             }
 
-            if (!endereco || !numero || !cep || !bairro || !cidade || !estado)
+            if (!endereco || !numero || !cep || !bairro || !cidade || !estado) {
                 return res.status(400).json({ message: "É necessário informar um endereço, número, bairro, estado, cidade e cep para o comércio" });
+            }
 
-            if (!(diaFuncionamento instanceof Array) || diaFuncionamento.length == 0) {
+            if (!(diaFuncionamento instanceof Array) || diaFuncionamento.length === 0) {
                 return res.status(400).json({ message: "É necessário informar uma lista com os dias de funcionamento da barbearia" });
             }
 
@@ -162,7 +163,7 @@ module.exports = {
 
             diaFuncionamento = (diaFuncionamento instanceof Array && diaFuncionamento.length > 0) ?
                 filtrarDiasFuncionamento(diaFuncionamento)
-                : ""
+                : "";
 
             const barbeariaAtualizada = await barbearia.update({
                 nome: nome || barbearia.nome,

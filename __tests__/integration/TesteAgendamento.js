@@ -130,7 +130,7 @@ module.exports = () => {
     test("Deve resgatar todos os agendamentos do usuário", async () => {
         const response = await request(app)
         .get(`/agendamentos`)
-        .set("Authorization", `Bearer ${UsuarioTeste.jwt}`)
+        .set("Authorization", `Bearer ${UsuarioTeste.jwt}`);
         
         expect(response.status).toBe(200);
         expect(response.body.length).toBeGreaterThanOrEqual(0);

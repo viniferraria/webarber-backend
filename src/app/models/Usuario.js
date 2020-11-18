@@ -25,7 +25,7 @@ module.exports = (sequelize, DataTypes) => {
         sessionToken: DataTypes.STRING
     }, {
         hooks: {
-            beforeSave: async user => {
+            beforeSave: async (user) => {
                 if (user.password) {
                     user.password_hash = await bcrypt.hash(user.password, 12);
                     delete user.password;

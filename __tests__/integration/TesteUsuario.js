@@ -71,9 +71,9 @@ module.exports = () => {
     test("Não deve autenticar um usuário inexistente", async () => {
         const response = await request(app)
         .post("/login")
-        .send({ email: "fake@mail.com", password: "lalala" })
+        .send({ email: "fake@mail.com", password: "lalala" });
 
-        expect(response.status).toBe(404)
+        expect(response.status).toBe(404);
         expect(response.body.message).toBe("Usuário não cadastrado");
     });
     
@@ -83,14 +83,14 @@ module.exports = () => {
         .send(UsuarioTeste);
 
         expect(response.status).toBe(400);
-        expect(response.body.message).toBe("Erro ao criar uma conta")
+        expect(response.body.message).toBe("Erro ao criar uma conta");
     });
 
     test("Deve atualizar as informações de um usuário", async () => {
         UsuarioTeste.nome = "updatedName";
         UsuarioTeste.sobrenome = "updatedLastName";
         const response = await request(app)
-        .patch(`/conta`)
+        .patch("/conta")
         .set("Authorization", `Bearer ${UsuarioTeste.jwt}`)
         .send(UsuarioTeste)
 
@@ -110,7 +110,7 @@ module.exports = () => {
 
     test("Deve excluir o próprio usuário", async () => {
         const response = await request(app)
-        .delete(`/conta`)
+        .delete("/conta")
         .set("Authorization", `Bearer ${UsuarioTeste.jwt}`)
 
         expect(response.status).toBe(200);

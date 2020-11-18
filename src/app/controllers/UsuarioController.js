@@ -48,20 +48,16 @@ module.exports = {
     async cadastrarUsuario(req, res) {
         try {
             let { nome, sobrenome, email, password, CNPJ, CPF, idTipo, icone } = req.body;
-            if (!email)
-                return res.status(400).json({ message: "É necessário informar um email para criar uma conta" });
             
-
-            if (idTipo == 1 && !CPF) {
+            if (!email) {
+                return res.status(400).json({ message: "É necessário informar um email para criar uma conta" });
+            } else if (idTipo == 1 && !CPF) {
                 return res.status(400).json({ message: "É necessário informar um CPF para criar uma conta" });
-            }
-
-            if (idTipo == 2 && !CNPJ) {
+            } else if (idTipo == 2 && !CNPJ) {
                 return res.status(400).json({ message: "É necessário informar um CNPJ para criar uma conta de moderador" });
-            }
-
-            if (!validaDocumento(CPF || CNPJ))
+            } else if (!validaDocumento(CPF || CNPJ)) {
                 return res.status(400).json({ message: "Documento inválido" });
+            }
 
             CPF = (idTipo == 2)? null : CPF;
             CNPJ = (idTipo == 1)? null : CNPJ;
@@ -120,8 +116,9 @@ module.exports = {
                 }
             });
 
-            if (repetido && repetido.id != userId)
+            if (repetido && repetido.id != userId) {
                 return res.status(400).json({ message: "Erro ao atualizar documentos|email"});
+            }
 
             const updatedUser = await user.update({
                 nome: nome || user.nome,
@@ -167,14 +164,17 @@ module.exports = {
             const { email, password } = req.body;
             const user = await Usuario.findOne({ where: { email } });
             
-            if (!user)
+            if (!user) {
                 return res.status(404).json({ message: "Usuário não cadastrado" });
-            
-            if (!(await user.checkPassword(password))) 
+            }
+
+            if (!(await user.checkPassword(password))) {
                 return res.status(400).json({ message: "Credenciais inválidas" });
+            }
                 
-            if (!user.ativo)
+            if (!user.ativo) {
                 return res.status(400).json({ message: "Credenciais inválidas" });
+            }
 
             await user.generateToken();
             await user.update({

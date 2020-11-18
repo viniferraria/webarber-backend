@@ -35,7 +35,7 @@ module.exports = {
                 ]
             });
 
-            const response = agendamentos.map( item => {
+            const response = agendamentos.map((item) => {
                 return {
                     id: item.id,
                     idBarbearia: item.idBarbearia,
@@ -44,7 +44,7 @@ module.exports = {
                     nome_servico: item.servico.titulo,
                     status: item.status.nome,
                     data: item.data.toLocaleString("pt-BR", { timeZone: "America/Sao_Paulo" })
-                }
+                };
             });
             
             if (!response) {

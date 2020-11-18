@@ -117,8 +117,8 @@ module.exports = () => {
     
     test("Deve retornar a barberia do moderador", async () => {
         const response = await request(app)
-        .get(`/barbearia`)
-        .set("Authorization", `Bearer ${ModeradorTeste.jwt}`)
+        .get("/barbearia")
+        .set("Authorization", `Bearer ${ModeradorTeste.jwt}`);
 
         expect(response.status).toBe(200);
         expect(response.body.nome).toBe(BarbeariaTeste.nome);
@@ -143,9 +143,9 @@ module.exports = () => {
         BarbeariaTeste.nome = "Barbearia atualizada";
         BarbeariaTeste.endereco = "Novo endereço";
         const response = await request(app)
-        .patch(`/barbearias`)
+        .patch("/barbearias")
         .set("Authorization", `Bearer ${ModeradorTeste.jwt}`)
-        .send(BarbeariaTeste)
+        .send(BarbeariaTeste);
 
         expect(response.status).toBe(200)
         expect(response.body.nome).toBe("Barbearia atualizada");
@@ -163,7 +163,7 @@ module.exports = () => {
 
     test("Deve deletar uma barberia", async () => {
         const response = await request(app)
-        .delete(`/barbearias`)
+        .delete("/barbearias")
         .set("Authorization", `Bearer ${ModeradorTeste.jwt}`)
 
         expect(response.status).toBe(200);
