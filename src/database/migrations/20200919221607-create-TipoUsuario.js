@@ -1,7 +1,7 @@
-'use strict';
+"use strict";
 module.exports = {
     up: async (queryInterface, Sequelize) => {
-        await queryInterface.createTable('TipoUsuario', {
+        await queryInterface.createTable("TipoUsuario", {
             id: {
                 type: Sequelize.INTEGER,
                 primaryKey: true,
@@ -16,7 +16,7 @@ module.exports = {
             timestamps: false,
             freezeTableName: true
         });
-        await queryInterface.bulkInsert('TipoUsuario', [
+        await queryInterface.bulkInsert("TipoUsuario", [
             {
                 id: 1,
                 nome: "Consumidor"
@@ -27,6 +27,6 @@ module.exports = {
             }]);
     },
     down: async (queryInterface, Sequelize) => {
-        await queryInterface.dropTable('TipoUsuario');
+        await queryInterface.dropTable("TipoUsuario");
     }
 };

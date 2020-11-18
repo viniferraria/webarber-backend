@@ -1,8 +1,8 @@
-'use strict'
+"use strict";
 
-const { StatusAgendamento, Agendamento, Servico, Barbearia, Usuario } = require('../models');
-const Sequelize = require('sequelize');
-const moment = require('moment');
+const { StatusAgendamento, Agendamento, Servico, Barbearia, Usuario } = require("../models");
+const Sequelize = require("sequelize");
+const moment = require("moment");
 const { Op } = Sequelize;
 
 function isDateValid(isoDate) {
@@ -18,28 +18,28 @@ module.exports = {
                     {
                         model: Servico,
                         required: true,
-                        as: 'servico'
+                        as: "servico"
                     },
                     {
                         model: StatusAgendamento,
                         required: true,
-                        as: 'status'
+                        as: "status"
                     },
                     {
                         model: Barbearia,
                         required: true,
-                        as: 'barbearia'
+                        as: "barbearia"
                     }
                 ],
                 where: { 
                     idUsuario: userId
                 },
                 order: [
-                    ['data', 'DESC']
+                    ["data", "DESC"]
                 ]
             });
 
-            const response = agendamentos.map( item => {
+            const response = agendamentos.map((item) => {
                 return {
                     id: item.id,
                     idBarbearia: item.idBarbearia,
@@ -47,19 +47,19 @@ module.exports = {
                     id_status: item.status.id,
                     nome_servico: item.servico.titulo,
                     status: item.status.nome,
-                    data: item.data.toLocaleString('pt-BR', { timeZone: 'America/Sao_Paulo' })
-                }
+                    data: item.data.toLocaleString("pt-BR", { timeZone: "America/Sao_Paulo" })
+                };
             });
             
             if (!response) {
-                return res.status(400).json({ message: 'Nenhum agendamento encontrado'});
+                return res.status(400).json({ message: "Nenhum agendamento encontrado"});
             }
             
             return res.status(200).json(response);
 
         } catch (error) {
             console.log(error);
-            return res.status(400).json({ message: 'Erro ao buscar agendamentos' });
+            return res.status(400).json({ message: "Erro ao buscar agendamentos" });
         }
     },
 
@@ -72,22 +72,22 @@ module.exports = {
                     {
                         model: Servico,
                         required: true,
-                        as: 'servico'
+                        as: "servico"
                     },
                     {
                         model: StatusAgendamento,
                         required: true,
-                        as: 'status'
+                        as: "status"
                     },
                     {
                         model: Barbearia,
                         required: true,
-                        as: 'barbearia'
+                        as: "barbearia"
                     },
                     {
                         model: Usuario,
                         required: true,
-                        as: 'usuario'
+                        as: "usuario"
                     }
                 ],
                 // Pega todos os agendamentos do dia de hoje
@@ -98,11 +98,11 @@ module.exports = {
                     idBarbearia: barbearia_id
                 },
                 order: [
-                    ['data', 'ASC']
+                    ["data", "ASC"]
                 ]
             });
 
-            const response = agendamentos.map( item => {
+            const response = agendamentos.map((item) => {
                 return {
                     id: item.id,
                     idBarbearia: item.idBarbearia,
@@ -112,18 +112,18 @@ module.exports = {
                     nome_usuario: item.usuario.nome,
                     nome_servico: item.servico.titulo,
                     status: item.status.nome,
-                    data: item.data.toLocaleString('pt-BR', { timeZone: 'America/Sao_Paulo' })
+                    data: item.data.toLocaleString("pt-BR", { timeZone: "America/Sao_Paulo" })
                 }
             });
             
             if(!response) {
-                return res.status(400).json({ message: 'Nenhum agendamento encontrado'});
+                return res.status(400).json({ message: "Nenhum agendamento encontrado"});
             }
             
             return res.status(200).json(response);
         } catch (error) {
             console.log(error);
-            return res.status(400).json({ message: 'Erro ao buscar agendamentos' });
+            return res.status(400).json({ message: "Erro ao buscar agendamentos" });
         }
     },
 
@@ -134,7 +134,7 @@ module.exports = {
 
             
             if (!idBarbearia || !idServico || !data) {
-                return res.status(400).json({ message: 'Falta dados para completar a ação'});
+                return res.status(400).json({ message: "Falta dados para completar a ação"});
             }
 
             if (!isDateValid(data))
@@ -165,7 +165,7 @@ module.exports = {
 
         } catch (error) {
             console.log(error);
-            return res.status(400).json({ message: 'Erro ao criar um agendamento' });
+            return res.status(400).json({ message: "Erro ao criar um agendamento" });
         }
     },
 
@@ -174,29 +174,29 @@ module.exports = {
             const { id, idStatus } = req.body;
             const { userId } = req;
             if (!id || !userId || !idStatus) {
-                return res.status(400).json({ message: 'Falta dados para completar a ação' });
+                return res.status(400).json({ message: "Falta dados para completar a ação" });
             }
 
             const agendamento = await Agendamento.findByPk(id);
 
             if(!agendamento) {
-                return res.status(400).json({ message: 'Não existe este agendamento' });            
+                return res.status(400).json({ message: "Não existe este agendamento" });            
             }
             
             const status = await StatusAgendamento.findByPk(idStatus);
 
             if(!status) {
-                return res.status(400).json({ message: 'Não existe este status' });            
+                return res.status(400).json({ message: "Não existe este status" });            
             }
 
             await agendamento.update({ 
-                idStatus: idStatus
+                idStatus
             });
 
-            return res.status(200).json({ message: 'Agendamento atualizado' });  
+            return res.status(200).json({ message: "Agendamento atualizado" });  
         } catch (error) {
             console.log(error);
-            return res.status(400).json({ message: 'Erro ao atualizar um agendamento' });
+            return res.status(400).json({ message: "Erro ao atualizar um agendamento" });
         }
     },
 
@@ -208,13 +208,13 @@ module.exports = {
             const agendamento = await Agendamento.findByPk(id);
 
             if (!agendamento) {
-                return res.status(400).json({ message: 'Não existe este agendamento' });            
+                return res.status(400).json({ message: "Não existe este agendamento" });            
             }
 
             const usuario = await Usuario.findByPk(userId);
 
             if (!usuario) {
-                return res.status(400).json({ message: 'Não existe este usuário' });            
+                return res.status(400).json({ message: "Não existe este usuário" });            
             }
             
             if (agendamento.idUsuario == usuario.id) {
@@ -222,12 +222,12 @@ module.exports = {
                     idStatus: 4
                 });
 
-                return res.status(200).json({ message: 'Agendamento cancelado' });    
+                return res.status(200).json({ message: "Agendamento cancelado" });    
             }
-            return res.status(400).json({ message: 'Este agendamento não pertence à este usuário' });    
+            return res.status(400).json({ message: "Este agendamento não pertence à este usuário" });    
         } catch (error) {
             console.log(error);
-            return res.status(400).json({ message: 'Erro ao cancelar um agendamento' });
+            return res.status(400).json({ message: "Erro ao cancelar um agendamento" });
         }
     }
 };

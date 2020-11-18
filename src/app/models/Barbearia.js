@@ -1,6 +1,6 @@
 
 module.exports = (sequelize, DataTypes) => {
-    const Barbearia = sequelize.define('Barbearia', {
+    const Barbearia = sequelize.define("Barbearia", {
         id: {
             type: DataTypes.INTEGER,
             primaryKey: true,
@@ -21,7 +21,8 @@ module.exports = (sequelize, DataTypes) => {
         cep: DataTypes.STRING,
         bairro: DataTypes.STRING,
         cidade: DataTypes.STRING,
-        estado: DataTypes.STRING
+        estado: DataTypes.STRING,
+        diaFuncionamento: DataTypes.STRING
     }, {
         timestamps: true
     });
@@ -33,7 +34,7 @@ module.exports = (sequelize, DataTypes) => {
         // Barbearia.belongsTo(models.AvaliacaoUsuario);
 
         Barbearia.hasOne(models.Usuario, {
-            foreignKey: 'id'
+            foreignKey: "id"
         });
     };
 

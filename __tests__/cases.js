@@ -31,7 +31,8 @@ var BarbeariaTeste = {
     "cep": "Testing",
     "bairro": "Vila Honda",
     "cidade": "São Paulo",
-    "estado": "SP"
+    "estado": "SP",
+    "diaFuncionamento": [0,1,2,3,4,5]
 };
 
 
