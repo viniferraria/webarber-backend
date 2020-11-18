@@ -6,6 +6,8 @@
 
 ## Pré-Requisitos
 
+[![Codacy Badge](https://api.codacy.com/project/badge/Grade/6d498df42eed4490a9546824a7b373da)](https://app.codacy.com/gh/viniferraria/webarber-backend?utm_source=github.com&utm_medium=referral&utm_content=viniferraria/webarber-backend&utm_campaign=Badge_Grade_Settings)
+
 - [Node.js](https://nodejs.org/en/)
 - [Yarn](https://yarnpkg.com/pt-BR/docs/install)
 - [Postgres](https://www.postgresql.org/docs/12/index.html)
