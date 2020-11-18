@@ -1,7 +1,7 @@
-'use strict';
+"use strict";
 module.exports = {
     up: async (queryInterface, Sequelize) => {
-        await queryInterface.createTable('Agendamento', {
+        await queryInterface.createTable("Agendamento", {
             id: {
                 type: Sequelize.INTEGER,
                 primaryKey: true,
@@ -11,30 +11,30 @@ module.exports = {
             idBarbearia: {
                 type: Sequelize.INTEGER,
                 references: {
-                    model: 'Barbearia',
-                    key: 'id'
+                    model: "Barbearia",
+                    key: "id"
                 }
             },
             idUsuario: {
                 type: Sequelize.INTEGER,
                 references: {
-                    model: 'Usuario',
-                    key: 'id'
+                    model: "Usuario",
+                    key: "id"
                 }
             },
             idStatus: {
                 type: Sequelize.INTEGER,
                 references: {
-                    model: 'StatusAgendamento',
-                    key: 'id'
+                    model: "StatusAgendamento",
+                    key: "id"
                 },
                 defaultValue: 1
             },
             idServico: {
                 type: Sequelize.INTEGER,
                 references: {
-                    model: 'Servico',
-                    key: 'id'
+                    model: "Servico",
+                    key: "id"
                 }
             },
             data: {
@@ -47,6 +47,6 @@ module.exports = {
         });
     },
     down: async (queryInterface, Sequelize) => {
-        await queryInterface.dropTable('Agendamento');
+        await queryInterface.dropTable("Agendamento");
     }
 };
