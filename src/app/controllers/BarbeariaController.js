@@ -153,7 +153,7 @@ module.exports = {
             }
 
             diaFuncionamento = (diaFuncionamento instanceof Array && diaFuncionamento.length > 0) ?
-                filtrarDiasFuncionamento(diaFuncionamento)
+                diaFuncionamento = [...new Set(diaFuncionamento)]
                 : "";
 
             const barbeariaAtualizada = await barbearia.update({
