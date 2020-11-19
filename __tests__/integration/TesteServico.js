@@ -71,7 +71,7 @@ module.exports = () => {
         const response = await request(app)
         .patch("/servicos/9999")
         .set("Authorization", `Bearer ${ModeradorTeste.jwt}`)
-        .send(ServicoTeste)
+        .send(ServicoTeste);
 
         expect(response.status).toBe(400);
         expect(response.body.message).toBe("Serviço não encontrado");

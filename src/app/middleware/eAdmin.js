@@ -1,6 +1,6 @@
 module.exports = (req, res, next) => {
-    const { tipoId } = req;
-    if (tipoId != 3) {
+    const { idTipo } = req;
+    if (idTipo !== 3) {
         return res.status(401).json({ message: "Rota restrita à administradores" });
     }
 
