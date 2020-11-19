@@ -4,18 +4,6 @@ const { Barbearia, Usuario } = require("../models");
 const Sequelize = require("sequelize");
 const { Op } = Sequelize;
 
-
-function filtrarDiasFuncionamento(dias) {
-    // valores de dias permitidos
-    let diasPermitidos = new Set([0, 1, 2, 3, 4, 5, 6]);
-    // Remove os dias duplicados
-    let diaFuncionamento = new Set(dias);
-    // Faz a intersecção dos valores passados com os valores possíveis para os dias 
-    diaFuncionamento = [...diaFuncionamento].filter((dia) => diasPermitidos.has(dia));
-    // Formata os dias para salvar na coluna do banco
-    return diaFuncionamento.join(";");
-}
-
 module.exports = {
     async obterBarbearias(req, res) {
         try {
@@ -105,7 +93,7 @@ module.exports = {
                 return res.status(400).json({ message: "É necessário informar uma lista com os dias de funcionamento da barbearia" });
             }
 
-            diaFuncionamento = filtrarDiasFuncionamento(diaFuncionamento);
+            diaFuncionamento = [...new Set(diaFuncionamento)];
 
             const barberiaExists = await Barbearia.findOne({
                 where: {
