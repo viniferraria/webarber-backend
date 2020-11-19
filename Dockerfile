@@ -1,4 +1,4 @@
-FROM node
+FROM node:14
 LABEL maintainer="viniferraria"
 EXPOSE 3000
 WORKDIR /usr/src/webarber
