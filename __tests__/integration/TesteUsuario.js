@@ -121,9 +121,9 @@ module.exports = () => {
         const response = await request(app)
         .post("/login")
         .set("Authorization", `Bearer ${UsuarioTeste.jwt}`)
-        .send({ email: UsuarioTeste.email, password: UsuarioTeste.password })
+        .send({ email: UsuarioTeste.email, password: UsuarioTeste.password });
 
-        expect(response.status).toBe(400)
+        expect(response.status).toBe(400);
         expect(response.body.message).toBe("Credenciais inválidas");
     });
 };

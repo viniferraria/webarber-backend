@@ -51,16 +51,16 @@ module.exports = {
             
             if (!email) {
                 return res.status(400).json({ message: "É necessário informar um email para criar uma conta" });
-            } else if (idTipo == 1 && !CPF) {
+            } else if (idTipo === 1 && !CPF) {
                 return res.status(400).json({ message: "É necessário informar um CPF para criar uma conta" });
-            } else if (idTipo == 2 && !CNPJ) {
+            } else if (idTipo === 2 && !CNPJ) {
                 return res.status(400).json({ message: "É necessário informar um CNPJ para criar uma conta de moderador" });
             } else if (!validaDocumento(CPF || CNPJ)) {
                 return res.status(400).json({ message: "Documento inválido" });
             }
 
-            CPF = (idTipo == 2)? null : CPF;
-            CNPJ = (idTipo == 1)? null : CNPJ;
+            CPF = (idTipo === 2)? null : CPF;
+            CNPJ = (idTipo === 1)? null : CNPJ;
             
             const user = await Usuario.findOne({
                 where: {
@@ -73,7 +73,6 @@ module.exports = {
             });
             
             if (user) {
-                console.log("Duplicate fields");
                 return res.status(400).json({ message: "Erro ao criar uma conta"});
             }
 
@@ -93,9 +92,9 @@ module.exports = {
 
             if (!email) {
                 return res.status(400).json({ message: "É necessário informar um email para criar uma conta" });
-            } else if (idTipo == 1 && !CPF) {
+            } else if (idTipo === 1 && !CPF) {
                 return res.status(400).json({ message: "É necessário informar um CPF para criar uma conta" });
-            } else if (idTipo == 2 && !CNPJ) {
+            } else if (idTipo === 2 && !CNPJ) {
                 return res.status(400).json({ message: "É necessário informar um CNPJ para criar uma conta de moderador" });
             } else if (!validaDocumento(CPF || CNPJ)) {
                 return res.status(400).json({ message: "Documento inválido" });
@@ -116,7 +115,7 @@ module.exports = {
                 }
             });
 
-            if (repetido && repetido.id != userId) {
+            if (repetido && repetido.id !== userId) {
                 return res.status(400).json({ message: "Erro ao atualizar documentos|email"});
             }
 
@@ -125,11 +124,12 @@ module.exports = {
                 sobrenome: sobrenome || user.sobrenome,
                 email: email || user.email,
                 password: password || user.password,
-                CNPJ: (idTipo == 2)? (CNPJ || user.CNPJ) : null,
-                CPF: (idTipo == 1)? (CPF|| user.CPF) : null,
+                CNPJ: (idTipo === 2)? (CNPJ || user.CNPJ) : null,
+                CPF: (idTipo === 1)? (CPF|| user.CPF) : null,
                 idTipo: idTipo || user.idTipo,
                 icone: icone || user.icone,
-            })
+            });
+            
             delete updatedUser.password;
 
             return res.status(200).json(updatedUser);
@@ -150,7 +150,7 @@ module.exports = {
 
             await user.update({ 
                 ativo: false
-            })
+            });
     
             return res.status(200).json({ message: "Conta desativada"});
         } catch(error) {
@@ -177,14 +177,14 @@ module.exports = {
             }
 
             await user.generateToken();
+
             await user.update({
                 sessionToken: user.sessionToken
             });
 
             return res.status(200).json(user);
         } catch(err) {
-            console.log(err);
-            return res.status(400).json({ message: `Erro ao realizar login`});
+            return res.status(400).json({ message: "Erro ao realizar login"});
         }
     }
 };

@@ -6,7 +6,7 @@ const moment = require("moment");
 const { Op } = Sequelize;
 
 function isDateValid(isoDate) {
-    return typeof(isoDate) === 'string' && isoDate.match(/^(\d{4})-(\d){2}-(\d){2}T(\d{2}?:\d{2}:\d{2}\.\d{3}Z$)/g)
+    return typeof(isoDate) === "string" && isoDate.match(/^(\d{4})-(\d){2}-(\d){2}T(\d{2}?:\d{2}:\d{2}\.\d{3}Z$)/g);
 }
 
 module.exports = {
@@ -93,7 +93,7 @@ module.exports = {
                 // Pega todos os agendamentos do dia de hoje
                 where: { 
 /*                     data:  { 
-                        [Op.gte]: moment().format('YYYY-MM-DD')
+                        [Op.gte]: moment().format("YYYY-MM-DD")
                     }, */
                     idBarbearia: barbearia_id
                 },
@@ -113,7 +113,7 @@ module.exports = {
                     nome_servico: item.servico.titulo,
                     status: item.status.nome,
                     data: item.data.toLocaleString("pt-BR", { timeZone: "America/Sao_Paulo" })
-                }
+                };
             });
             
             if(!response) {
@@ -137,19 +137,23 @@ module.exports = {
                 return res.status(400).json({ message: "Falta dados para completar a ação"});
             }
 
-            if (!isDateValid(data))
-                return res.status(400).json({ message: 'É necessário informar uma data válida no formato ISO para criar um agendamento' })
+            if (!isDateValid(data)) {
+                return res.status(400).json({ message: "É necessário informar uma data válida no formato ISO para criar um agendamento" });
+            }
+
             // Remove os segundos para procurar e salvar. uma vez que os mesmos são irrelevantes
-            data = data.replace(/:\d{2}\.\d{3}Z$/g, 'Z');
+            data = data.replace(/:\d{2}\.\d{3}Z$/g, "Z");
 
             let barbearia = await Barbearia.findByPk(idBarbearia);
-            if (!barbearia)
-                return res.status(400).json({ message: 'Não é possível criar um agendamento para uma barbearia inexistente' });
+            if (!barbearia) {
+                return res.status(400).json({ message: "Não é possível criar um agendamento para uma barbearia inexistente" });
+            }
 
 
-            let servico = await Servico.findByPk(idServico)
-            if (!servico)
-                return res.status(400).json({ message: 'Não é possível criar um agendamento para um serviço inexistente' });
+            let servico = await Servico.findByPk(idServico);
+            if (!servico) {
+                return res.status(400).json({ message: "Não é possível criar um agendamento para um serviço inexistente" });
+            }
 
             let agendamento = await Agendamento.findOne({ 
                 where: {
@@ -157,8 +161,9 @@ module.exports = {
                 }
             });
 
-            if (agendamento)
-                return res.status(400).json({ message: 'Não é possível criar um agendamento, o horário informado já está ocupado'})
+            if (agendamento) {
+                return res.status(400).json({ message: "Não é possível criar um agendamento, o horário informado já está ocupado" });
+            }
 
             const novoAgendamento = await Agendamento.create({ idBarbearia, idUsuario: userId, idServico, data });
             return res.status(201).json(novoAgendamento);
@@ -217,7 +222,7 @@ module.exports = {
                 return res.status(400).json({ message: "Não existe este usuário" });            
             }
             
-            if (agendamento.idUsuario == usuario.id) {
+            if (agendamento.idUsuario === usuario.id) {
                 await agendamento.update({ 
                     idStatus: 4
                 });
