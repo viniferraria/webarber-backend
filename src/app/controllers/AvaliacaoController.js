@@ -1,8 +1,8 @@
-const { Avaliacao } = require('../models');
-const { Usuario } = require('../models');
-const { Agendamento } = require('../models');
-const { Servico } = require('../models');
-const { Barbearia } = require('../models');
+const { Avaliacao } = require("../models");
+const { Usuario } = require("../models");
+const { Agendamento } = require("../models");
+const { Servico } = require("../models");
+const { Barbearia } = require("../models");
 
 module.exports = {
 
@@ -14,13 +14,13 @@ module.exports = {
                     idBarbearia: barbearia_id
                 },
                 order: [
-                    ['id', 'DESC']
+                    ["id", "DESC"]
                 ]
             });
             return res.status(200).json(avaliacoes);
         } catch (error) {
             console.log(error);
-            return res.status(400).json({ message: 'Erro ao buscar avaliações' });
+            return res.status(400).json({ message: "Erro ao buscar avaliações" });
         }
     },
 
@@ -31,27 +31,27 @@ module.exports = {
         const barbearia = await Barbearia.findByPk(idBarbearia);
 
         if(!barbearia) {
-            return res.status(400).json({ message: 'Barbearia inexistente' });
+            return res.status(400).json({ message: "Barbearia inexistente" });
         }
 
         const servico = await Servico.findByPk(idServico);
 
         if(!servico) {
-            return res.status(400).json({ message: 'Serviço inexistente' });
+            return res.status(400).json({ message: "Serviço inexistente" });
         }
 
         const agendamento = await Agendamento.findByPk(idAgendamento);
 
         if(!agendamento) {
-            return res.status(400).json({ message: 'Agendamento inexistente' });
+            return res.status(400).json({ message: "Agendamento inexistente" });
         }
 
         if(agendamento.idUsuario !== userId) {
-            return res.status(400).json({ message: 'Este agendamento pertence à outro usuário' });
+            return res.status(400).json({ message: "Este agendamento pertence à outro usuário" });
         }
 
         if(agendamento.idStatus !== 3) {
-            return res.status(400).json({ message: 'Este agendamento não foi concluído' });
+            return res.status(400).json({ message: "Este agendamento não foi concluído" });
         }
         
         const avaliacao = await Avaliacao.findOne({
@@ -62,7 +62,7 @@ module.exports = {
         });
 
         if(avaliacao) {
-            return res.status(400).json({ message: 'Usuário já realizou esta avaliação' });
+            return res.status(400).json({ message: "Usuário já realizou esta avaliação" });
         }
 
         try {
@@ -77,7 +77,7 @@ module.exports = {
             return res.status(200).json(avaliacao);
         } catch (error) {
             console.log(error);
-            return res.status(400).json({ message: 'Erro ao cadastrar avaliação' });
+            return res.status(400).json({ message: "Erro ao cadastrar avaliação" });
         }
     },
 
@@ -88,11 +88,11 @@ module.exports = {
         const avaliacao = await Avaliacao.findByPk(avaliacao_id);
 
         if(!avaliacao) {
-            return res.status(400).json({ message: 'Avaliação inexistente' });
+            return res.status(400).json({ message: "Avaliação inexistente" });
         }
 
         if(avaliacao.idUsuario !== userId) {
-            return res.status(400).json({ message: 'Avaliação não pertence à este usuário' });
+            return res.status(400).json({ message: "Avaliação não pertence à este usuário" });
         }
 
         try {
@@ -104,10 +104,10 @@ module.exports = {
             
             // TODO: Colocar para atualizar a média da nota da barbearia por trigger aqui
 
-            return res.status(200).json({ message: 'Avaliação deletada com sucesso'});
+            return res.status(200).json({ message: "Avaliação deletada com sucesso"});
         } catch (error) {
             console.log(error);
-            return res.status(400).json({ message: 'Erro ao excluir avaliação' });
+            return res.status(400).json({ message: "Erro ao excluir avaliação" });
         }
     }
 
