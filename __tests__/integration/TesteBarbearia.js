@@ -38,6 +38,26 @@ module.exports = () => {
         const response = await request(app)
         .post("/barbearias")
         .set("Authorization", `Bearer ${ModeradorTeste.jwt}`)
+        .send({ ...BarbeariaTeste, cep: ""});
+
+        expect(response.status).toBe(400);
+        expect(response.body.message).toBe("É necessário informar um endereço, número, bairro, estado, cidade e cep para o comércio");
+    });
+
+    test("Não deve permitir que o moderador crie uma barbearia sem informar uma lista com os dias de funcionamento", async () => {
+        const response = await request(app)
+        .post("/barbearias")
+        .set("Authorization", `Bearer ${ModeradorTeste.jwt}`)
+        .send({ ...BarbeariaTeste, diaFuncionamento: ""});
+
+        expect(response.status).toBe(400);
+        expect(response.body.message).toBe("É necessário informar uma lista com os dias de funcionamento da barbearia");
+    });
+
+    test("Deve permitir que um moderador crie uma barberia", async () => {
+        const response = await request(app)
+        .post("/barbearias")
+        .set("Authorization", `Bearer ${ModeradorTeste.jwt}`)
         .send(BarbeariaTeste);
 
         expect(response.status).toBe(201);
