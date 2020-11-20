@@ -136,7 +136,7 @@ module.exports = () => {
     test("Deve excluir uma avaliação que seja do usuário", async () => {
         const response = await request(app)
         .delete(`/avaliacoes/${AvaliacaoTeste.id}`)
-        .set("Authorization", `Bearer ${UsuarioTeste.jwt}`)
+        .set("Authorization", `Bearer ${UsuarioTeste.jwt}`);
 
         expect(response.status).toBe(200);
         expect(response.body.message).toBe("Avaliação deletada com sucesso");
