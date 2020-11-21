@@ -43,8 +43,8 @@ routes.post("/agendamentos/", AgendamentoController.criarAgendamento);
 routes.delete("/agendamentos/", AgendamentoController.cancelarAgendamento);
 
 // Rotas de avaliação
-routes.post('/avaliacoes/', AvaliacaoController.criarAvaliacao);
-routes.delete('/avaliacoes/:avaliacao_id', AvaliacaoController.excluirAvaliacao);
+routes.post("/avaliacoes/", AvaliacaoController.criarAvaliacao);
+routes.delete("/avaliacoes/:avaliacao_id", AvaliacaoController.excluirAvaliacao);
 
 /* ROTAS DO MODERADOR */
 

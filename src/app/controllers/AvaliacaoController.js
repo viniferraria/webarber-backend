@@ -57,7 +57,7 @@ module.exports = {
         const avaliacao = await Avaliacao.findOne({
             where: {
                 idUsuario: userId,
-                idAgendamento: idAgendamento
+                idAgendamento
             }
         });
 
@@ -111,4 +111,4 @@ module.exports = {
         }
     }
 
-}
+};
