@@ -225,8 +225,8 @@ module.exports = () => {
 
     test("Não deve deletar uma barbearia já deletada", async () => {
         const response = await request(app)
-        .delete(`/barbearias`)
-        .set("Authorization", `Bearer ${ModeradorTeste.jwt}`)
+        .delete("/barbearias")
+        .set("Authorization", `Bearer ${ModeradorTeste.jwt}`);
 
         expect(response.status).toBe(400);
         expect(response.body.message).toBe("Barbearia não encontrada");
@@ -234,9 +234,9 @@ module.exports = () => {
 
     test("Não deve atualizar uma barbearia deletada", async () => {
         const response = await request(app)
-        .patch(`/barbearias`)
+        .patch("/barbearias")
         .set("Authorization", `Bearer ${ModeradorTeste.jwt}`)
-        .send(BarbeariaTeste)
+        .send(BarbeariaTeste);
 
         expect(response.status).toBe(400);
         expect(response.body.message).toBe("Barbearia não existe ou foi desativada");
