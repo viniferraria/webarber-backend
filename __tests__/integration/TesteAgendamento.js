@@ -5,7 +5,7 @@ let { AgendamentoTeste, AgendamentoTesteFalha, ModeradorTeste, UsuarioTeste, Bar
 
 module.exports = () => {
     test("Deve criar um agendamento", async () => {
-        AgendamentoTeste.idBarbearia = BarbeariaTeste.id
+        AgendamentoTeste.idBarbearia = BarbeariaTeste.id;
         const response = await request(app)
         .post("/agendamentos")
         .set("Authorization", `Bearer ${UsuarioTeste.jwt}`)

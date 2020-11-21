@@ -205,9 +205,9 @@ module.exports = () => {
         BarbeariaTeste.nome = "Barbearia atualizada";
         BarbeariaTeste.endereco = 1;
         const response = await request(app)
-        .patch(`/barbearias`)
+        .patch("/barbearias")
         .set("Authorization", `Bearer ${ModeradorTeste.jwt}`)
-        .send(BarbeariaTeste)
+        .send(BarbeariaTeste);
 
         expect(response.status).toBe(400);
         expect(response.body.message).toBe("Erro ao atualizar barbearia");
@@ -216,8 +216,8 @@ module.exports = () => {
 
     test("Deve deletar uma barberia", async () => {
         const response = await request(app)
-        .delete(`/barbearias`)
-        .set("Authorization", `Bearer ${ModeradorTeste.jwt}`)
+        .delete("/barbearias")
+        .set("Authorization", `Bearer ${ModeradorTeste.jwt}`);
 
         expect(response.status).toBe(200);
         expect(response.body.message).toBe("Barbearia deletada");
@@ -244,15 +244,16 @@ module.exports = () => {
 
     test("Não deve retornar uma barberia que foi deletada", async () => {
         const response = await request(app)
-        .get(`/barbearias/${BarbeariaTeste.id}`)
+        .get(`/barbearias/${BarbeariaTeste.id}`);
+
         expect(response.status).toBe(400);
         expect(response.body.message).toBe("Esta barberia não está disponível");
     });
 
     test("Deve retornar que o moderador não tem uma barbearia", async () => {
         const response = await request(app)
-        .get(`/barbearia`)
-        .set("Authorization", `Bearer ${ModeradorTeste.jwt}`)
+        .get("/barbearia")
+        .set("Authorization", `Bearer ${ModeradorTeste.jwt}`);
 
         expect(response.status).toBe(400);
         expect(response.body.message).toBe("Nenhuma barberia encontrada");
@@ -294,4 +295,4 @@ module.exports = () => {
         expect(response.body.cidade).toBe(BarbeariaTeste.cidade);
         expect(response.body.estado).toBe(BarbeariaTeste.estado);
     });
-}
+};

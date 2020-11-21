@@ -72,7 +72,7 @@ module.exports = {
                     user_id: userId,
                     ativo: true
                 }
-            })
+            });
 
             if(!barbearia) {
                 return res.status(400).json({ message: "Usuário não tem barbearia" });

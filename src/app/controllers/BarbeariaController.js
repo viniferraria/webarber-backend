@@ -146,7 +146,7 @@ module.exports = {
             });
 
             if (!barbearia || !barbearia.ativo) {
-                return res.status(400).json({ message: 'Barbearia não existe ou foi desativada' });
+                return res.status(400).json({ message: "Barbearia não existe ou foi desativada" });
             }
 
             let barbeariaExists; 
