@@ -1,26 +1,26 @@
-'use strict'
+"use strict";
 
-const { Barbearia, Usuario } = require('../models');
-const Sequelize = require('sequelize');
+const { Barbearia, Usuario } = require("../models");
+const Sequelize = require("sequelize");
 const { Op } = Sequelize;
 
 
 function filtrarDiasFuncionamento(dias) {
-    // Valores de dias permitidos
-    let diasPermitidos = new Set([0, 1, 2, 3, 4, 5, 6])
+    // valores de dias permitidos
+    let diasPermitidos = new Set([0, 1, 2, 3, 4, 5, 6]);
     // Remove os dias duplicados
     let diaFuncionamento = new Set(dias);
     // Faz a intersecção dos valores passados com os valores possíveis para os dias 
-    diaFuncionamento = [...diaFuncionamento].filter(dia => diasPermitidos.has(dia));
+    diaFuncionamento = [...diaFuncionamento].filter((dia) => diasPermitidos.has(dia));
     // Formata os dias para salvar na coluna do banco
-    return diaFuncionamento.join(';');
+    return diaFuncionamento.join(";");
 }
 
 module.exports = {
     async obterBarbearias(req, res) {
         try {
             let { nome } = req.query;
-            nome = (nome) ? nome.replace('+', ' ') : '';
+            nome = (nome) ? nome.replace("+", " ") : "";
             const barbearia = await Barbearia.findAll({
                 where: {
                     nome: {
@@ -30,10 +30,14 @@ module.exports = {
                 }
             });
 
+            if (!barbearia) {
+                return res.status(400).json({ message: "Nenhuma barberia encontrada" });
+            }
+
             return res.status(200).json(barbearia);
         } catch (error) {
             console.log(error);
-            return res.status(400).json({ message: 'Erro ao buscar barberia' });
+            return res.status(400).json({ message: "Erro ao buscar barberia" });
         }
     },
 
@@ -48,13 +52,13 @@ module.exports = {
             });
 
             if (!barbearia) {
-                return res.status(400).json({ message: 'Nenhuma barberia encontrada' });
+                return res.status(400).json({ message: "Nenhuma barberia encontrada" });
             }
 
             return res.status(200).json(barbearia);
         } catch (error) {
             console.log(error);
-            return res.status(400).json({ message: 'Erro ao buscar barberia' });
+            return res.status(400).json({ message: "Erro ao buscar barberia" });
         }
     },
 
@@ -68,17 +72,17 @@ module.exports = {
             });
 
             if (!barbearia) {
-                return res.status(400).json({ message: 'Nenhuma barberia encontrada' });
+                return res.status(400).json({ message: "Nenhuma barberia encontrada" });
             }
 
             if (!barbearia.ativo) {
-                return res.status(400).json({ message: 'Esta barberia não está disponível' });
+                return res.status(400).json({ message: "Esta barberia não está disponível" });
             }
 
             return res.status(200).json(barbearia);
         } catch (error) {
             console.log(error);
-            return res.status(400).json({ message: 'Erro ao buscar barberias' });
+            return res.status(400).json({ message: "Erro ao buscar barberias" });
         }
     },
 
@@ -96,14 +100,15 @@ module.exports = {
             });
 
             if (barberia) {
-                return res.status(400).json({ message: 'Usuário já possui uma barbearia ativa' });
+                return res.status(400).json({ message: "Usuário já possui uma barbearia ativa" });
             }
 
-            if (!endereco || !numero || !cep || !bairro || !cidade || !estado)
-                return res.status(400).json({ message: 'É necessário informar um endereço, número, bairro, estado, cidade e cep para o comércio' });
+            if (!endereco || !numero || !cep || !bairro || !cidade || !estado) {
+                return res.status(400).json({ message: "É necessário informar um endereço, número, bairro, estado, cidade e cep para o comércio" });
+            }
 
-            if (!(diaFuncionamento instanceof Array) || diaFuncionamento.length == 0) {
-                return res.status(400).json({ message: 'É necessário informar uma lista com os dias de funcionamento da barbearia' });
+            if (!(diaFuncionamento instanceof Array) || diaFuncionamento.length === 0) {
+                return res.status(400).json({ message: "É necessário informar uma lista com os dias de funcionamento da barbearia" });
             }
 
             diaFuncionamento = filtrarDiasFuncionamento(diaFuncionamento);
@@ -117,16 +122,15 @@ module.exports = {
                 }
             });
 
-            // Não deve permitir que o moderador crie uma barbearia caso já exista uma barbearia ativa no mesmo endereço
             if (barberiaExists) {
-                return res.status(400).json({ message: 'Esta barbearia já existe' });
+                return res.status(400).json({ message: "Esta barbearia já existe" });
             }
 
             const novaBarbearia = await Barbearia.create({ nome, endereco, telefone, horarioAbertura, horarioFechamento, icone, user_id: userId, complemento, numero, bloco, cep, bairro, cidade, estado, diaFuncionamento });
             return res.status(201).json(novaBarbearia);
         } catch (error) {
             console.log(error);
-            return res.status(400).json({ message: 'Erro ao criar uma barbearia' });
+            return res.status(400).json({ message: "Erro ao criar uma barbearia" });
         }
 
     },
@@ -145,23 +149,26 @@ module.exports = {
                 return res.status(400).json({ message: 'Barbearia não existe ou foi desativada' });
             }
 
-            const barbeariaExists = await Barbearia.findOne({
-                where: {
-                    [Op.or]: [
-                        { endereco },
-                        { cep }
-                    ]
-                }
-            });
+            let barbeariaExists; 
+            if (endereco || cep) {
+                barbeariaExists = await Barbearia.findOne({
+                    where: {
+                        [Op.or]: [
+                            { endereco },
+                            { cep }
+                        ]
+                    }
+                });
+            }
 
             // Não deve permitir que o moderador crie uma barbearia caso já exista uma barbearia ativa no mesmo endereço
-            if (barbeariaExists && barbeariaExists.ativo && barbeariaExists.user_id != userId) {
-                return res.status(400).json({ message: 'O novo endereço informado já está cadastrado' });
+            if (barbeariaExists && barbeariaExists.ativo && barbeariaExists.user_id !== userId) {
+                return res.status(400).json({ message: "O novo endereço informado já está cadastrado " });
             }
 
             diaFuncionamento = (diaFuncionamento instanceof Array && diaFuncionamento.length > 0) ?
                 filtrarDiasFuncionamento(diaFuncionamento)
-                : ''
+                : "";
 
             const barbeariaAtualizada = await barbearia.update({
                 nome: nome || barbearia.nome,
@@ -183,7 +190,7 @@ module.exports = {
             return res.status(200).json(barbeariaAtualizada);
         } catch (error) {
             console.log(error);
-            return res.status(400).json({ message: 'Erro ao atualizar barbearia' })
+            return res.status(400).json({ message: "Erro ao atualizar barbearia" });
         }
     },
 
@@ -198,17 +205,17 @@ module.exports = {
             });
 
             if (!barbearia) {
-                return res.status(400).json({ message: 'Barbearia não encontrada' });
+                return res.status(400).json({ message: "Barbearia não encontrada" });
             }
 
             await barbearia.update({
                 ativo: false
-            })
+            });
 
-            return res.status(200).json({ message: 'Barbearia deletada' });
+            return res.status(200).json({ message: "Barbearia deletada" });
         } catch (error) {
             console.log(error);
-            return res.status(400).json({ message: 'Erro ao deletar barberia' });
+            return res.status(400).json({ message: "Erro ao deletar barberia" });
         }
     }
 };
