@@ -18,5 +18,5 @@ module.exports = (id) => {
         }
 
         return next();
-    }
+    };
 };
