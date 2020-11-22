@@ -111,7 +111,7 @@ module.exports = {
         }
     },
     
-    async obterTodosModeradores(req, res) {
+    async obterTodosModeradores(_, res) {
         try {
             const users = await Usuario.findAll({
                 where: {
