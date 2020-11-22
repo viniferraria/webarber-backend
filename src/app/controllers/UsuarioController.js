@@ -1,4 +1,4 @@
-const { Usuario } = require("../models");
+const { Usuario, Agendamento } = require("../models");
 const Sequelize = require("sequelize");
 const { Op } = Sequelize;
 
@@ -42,6 +42,94 @@ module.exports = {
         } catch (error) {
             console.log(error);
             return res.status(400).json({ message: "Erro ao obter usuário" });
+        }
+    },
+
+    async obterUsuarioFiltro(req, res) {
+        try {
+            let { nome, CPF, data, CNPJ } = req.query;
+            nome = (nome) ? nome.replace("+", " ") : "";
+            
+            if(nome) {
+                const usuarios = await Usuario.findAll({
+                    where: {
+                        nome: {
+                            [Op.iLike]: `%${nome}%`
+                        },
+                        ativo: true
+                    }
+                });
+    
+                return res.status(200).json(usuarios);
+            } else if(CPF) {
+                const usuarios = await Usuario.findAll({
+                    where: {
+                        CPF,
+                        ativo: true
+                    }
+                });
+    
+                return res.status(200).json(usuarios);
+            } else if(data) {
+                if (!isDateValid(data)) {
+                    return res.status(400).json({ message: "É necessário informar uma data válida no formato ISO para criar um agendamento" });
+                }
+    
+                // Remove os segundos para procurar e salvar. uma vez que os mesmos são irrelevantes
+                data = data.replace(/:\d{2}\.\d{3}Z$/g, "Z");
+
+                const usuarios = await Agendamento.findAll({
+                    include : [
+                        {
+                            model: Usuario,
+                            required: true,
+                            as: "usuario"
+                        }
+                    ],
+                    where: {
+                        data
+                    }
+                });
+    
+                return res.status(200).json(usuarios);
+            } else if(CNPJ) {
+                const usuarios = await Usuario.findAll({
+                    where: {
+                        CNPJ,
+                        ativo: true
+                    }
+                });
+    
+                return res.status(200).json(usuarios);
+            }
+    
+            return res.status(400).json({ message: "Nenhum filtro aplicado" });
+            
+        } catch (error) {
+            console.log(error);
+            return res.status(400).json({ message: "Erro ao buscar usuarios" });
+        }
+    },
+    
+    async obterTodosModeradores(_, res) {
+        try {
+            const users = await Usuario.findAll({
+                where: {
+                    idTipo: 2
+                },
+                order: [
+                    ["id", "ASC"]
+                ]
+            })
+    
+            if (!users) {
+                return res.status(404).json({ message: "Não existem moderadores cadastrados" });
+            }
+    
+            return res.status(200).json(users);
+        } catch(error) {
+            console.log(error);
+            return res.status(400).json({ message: "Erro ao obter moderadores" });
         }
     },
 
