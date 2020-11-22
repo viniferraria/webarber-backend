@@ -90,8 +90,12 @@ module.exports = {
                         data
                     }
                 });
+
+                const response = usuarios.map((item) => {
+                    return item.usuario;
+                });
     
-                return res.status(200).json(usuarios);
+                return res.status(200).json(response);
             } else if(CNPJ) {
                 const usuarios = await Usuario.findAll({
                     where: {
