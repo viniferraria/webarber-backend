@@ -195,7 +195,7 @@ module.exports = {
 
             const agendamento = await Agendamento.findByPk(id);
 
-            if(!agendamento) {
+            if (!agendamento) {
                 return res.status(400).json({ message: "Não existe este agendamento" });            
             }
             
