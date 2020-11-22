@@ -13,7 +13,8 @@ module.exports = {
                 where: {
                     nome: {
                         [Op.iLike]: `%${nome}%`
-                    }
+                    },
+                    ativo: true
                 }
             });
 
@@ -33,7 +34,8 @@ module.exports = {
             const { userId } = req;
             const barbearia = await Barbearia.findOne({
                 where: {
-                    user_id: userId
+                    user_id: userId,
+                    ativo: true
                 }
             });
 
@@ -61,6 +63,10 @@ module.exports = {
                 return res.status(400).json({ message: "Nenhuma barberia encontrada" });
             }
 
+            if (!barbearia.ativo) {
+                return res.status(400).json({ message: "Esta barberia não está disponível" });
+            }
+
             return res.status(200).json(barbearia);
         } catch (error) {
             console.log(error);
@@ -76,12 +82,12 @@ module.exports = {
             // Procurar se o moderador já possui uma barbearia
             const barberia = await Barbearia.findOne({
                 where: {
-                    user_id: userId
+                    user_id: userId,
+                    ativo: true
                 }
             });
 
-            // Não deve permitir que o moderador crie uma barbearia caso ele já tenha uma barbearia e mesma estiver ativa
-            if (barberia && barberia.ativo) {
+            if (barberia) {
                 return res.status(400).json({ message: "Usuário já possui uma barbearia ativa" });
             }
 
@@ -104,8 +110,7 @@ module.exports = {
                 }
             });
 
-            // Não deve permitir que o moderador crie uma barbearia caso já exista uma barbearia ativa no mesmo endereço
-            if (barberiaExists && barberiaExists.ativo) {
+            if (barberiaExists) {
                 return res.status(400).json({ message: "Esta barbearia já existe" });
             }
 
@@ -124,12 +129,9 @@ module.exports = {
             let { nome, endereco, telefone, horarioAbertura, horarioFechamento, icone, complemento, numero, bloco, cep, bairro, cidade, estado, diaFuncionamento } = req.body;
             const barbearia = await Barbearia.findOne({
                 where: {
-                    [Op.or]: [
-                        { user_id: userId },
-                    ]
+                    user_id: userId
                 }
             });
-
 
             if (!barbearia || !barbearia.ativo) {
                 return res.status(400).json({ message: "Barbearia não existe ou foi desativada" });
@@ -185,9 +187,8 @@ module.exports = {
             const { userId } = req;
             const barbearia = await Barbearia.findOne({
                 where: {
-                    [Op.or]: [
-                        { user_id: userId },
-                    ]
+                    user_id: userId,
+                    ativo: true
                 }
             });
 

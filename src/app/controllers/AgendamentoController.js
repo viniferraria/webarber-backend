@@ -65,7 +65,18 @@ module.exports = {
 
     async obterAgendamentosBarbearia(req, res) {
         try {
-            const { barbearia_id } = req.params;
+            let { userId } = req;
+
+            const barbearia = await Barbearia.findOne({
+                where: {
+                    user_id: userId,
+                    ativo: true
+                }
+            });
+
+            if(!barbearia) {
+                return res.status(400).json({ message: "Usuário não tem barbearia" });
+            }
 
             const agendamentos = await Agendamento.findAll({
                 include : [
@@ -95,7 +106,7 @@ module.exports = {
 /*                     data:  { 
                         [Op.gte]: moment().format("YYYY-MM-DD")
                     }, */
-                    idBarbearia: barbearia_id
+                    idBarbearia: barbearia.id
                 },
                 order: [
                     ["data", "ASC"]
