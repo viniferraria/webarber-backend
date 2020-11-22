@@ -1,10 +1,10 @@
-'use strict';
+"use strict";
 
 module.exports = {
   up: async (queryInterface, Sequelize) => {
     await queryInterface.addColumn(
-      'Servico', 
-      'ativo',
+      "Servico", 
+      "ativo",
       {
         type: Sequelize.BOOLEAN,
         allowNull: false,
@@ -14,6 +14,6 @@ module.exports = {
   },
 
   down: async (queryInterface, Sequelize) => {
-    await queryInterface.removeColumn('Servico', 'ativo');
+    await queryInterface.removeColumn("Servico", "ativo");
   }
 };

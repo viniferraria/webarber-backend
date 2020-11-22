@@ -1,5 +1,5 @@
 module.exports = (sequelize, DataTypes) => {
-    const Agendamento = sequelize.define('Agendamento', {
+    const Agendamento = sequelize.define("Agendamento", {
         id: {
             type: DataTypes.INTEGER,
             primaryKey: true,
@@ -16,12 +16,10 @@ module.exports = (sequelize, DataTypes) => {
     });
 
     Agendamento.associate = function (models) {
-        Agendamento.belongsTo(models.Barbearia, { foreignKey: 'idBarbearia', as: 'barbearia' });
-        Agendamento.belongsTo(models.Usuario, { foreignKey: 'idUsuario', as: 'usuario' });
-        Agendamento.belongsTo(models.StatusAgendamento, { foreignKey: 'idStatus', as: 'status' });
-        Agendamento.belongsTo(models.Servico, { foreignKey: 'idServico', as: 'servico' });
+        Agendamento.belongsTo(models.Barbearia, { foreignKey: "idBarbearia", as: "barbearia" });
+        Agendamento.belongsTo(models.Usuario, { foreignKey: "idUsuario", as: "usuario" });
+        Agendamento.belongsTo(models.StatusAgendamento, { foreignKey: "idStatus", as: "status" });
+        Agendamento.belongsTo(models.Servico, { foreignKey: "idServico", as: "servico" });
     };
-
-
     return Agendamento;
 };

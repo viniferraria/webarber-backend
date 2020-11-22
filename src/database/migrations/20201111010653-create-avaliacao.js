@@ -1,19 +1,24 @@
 "use strict";
 module.exports = {
     up: async (queryInterface, Sequelize) => {
-        await queryInterface.createTable("Agendamento", {
+        await queryInterface.createTable("Avaliacao", {
             id: {
                 type: Sequelize.INTEGER,
                 primaryKey: true,
                 autoIncrement: true,
                 allowNull: false,
             },
-            idBarbearia: {
-                type: Sequelize.INTEGER,
-                references: {
-                    model: "Barbearia",
-                    key: "id"
-                }
+            titulo: {
+                type: Sequelize.STRING,
+                allowNull: false
+            },
+            descricao: {
+                type: Sequelize.STRING,
+                allowNull: false
+            },
+            nota: {
+                type: Sequelize.FLOAT,
+                allowNull: false
             },
             idUsuario: {
                 type: Sequelize.INTEGER,
@@ -22,13 +27,12 @@ module.exports = {
                     key: "id"
                 }
             },
-            idStatus: {
+            idBarbearia: {
                 type: Sequelize.INTEGER,
                 references: {
-                    model: "StatusAgendamento",
+                    model: "Barbearia",
                     key: "id"
-                },
-                defaultValue: 1
+                }
             },
             idServico: {
                 type: Sequelize.INTEGER,
@@ -37,9 +41,12 @@ module.exports = {
                     key: "id"
                 }
             },
-            data: {
-                type: Sequelize.DATE,
-                allowNull: false
+            idAgendamento: {
+                type: Sequelize.INTEGER,
+                references: {
+                    model: "Agendamento",
+                    key: "id"
+                }
             }
         }, {
             timestamps: false,
@@ -47,6 +54,6 @@ module.exports = {
         });
     },
     down: async (queryInterface, Sequelize) => {
-        await queryInterface.dropTable("Agendamento");
+        await queryInterface.dropTable("Avaliacao");
     }
 };

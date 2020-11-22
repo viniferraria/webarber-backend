@@ -1,6 +1,9 @@
-
 module.exports = (sequelize, DataTypes) => {
-    const Barbearia = sequelize.define('Barbearia', {
+    const enumDiaFuncionamento = DataTypes.ENUM([
+        "segunda", "terca", "quarta", "quinta", "sexta", "sabado", "domingo"
+    ]);
+
+    const Barbearia = sequelize.define("Barbearia", {
         id: {
             type: DataTypes.INTEGER,
             primaryKey: true,
@@ -18,19 +21,20 @@ module.exports = (sequelize, DataTypes) => {
         complemento: DataTypes.STRING,
         numero: DataTypes.INTEGER,
         bloco: DataTypes.STRING,
-        cep: DataTypes.STRING
+        cep: DataTypes.STRING,
+        media: DataTypes.FLOAT,
+        bairro: DataTypes.STRING,
+        cidade: DataTypes.STRING,
+        estado: DataTypes.STRING,
+        diaFuncionamento: DataTypes.ARRAY(enumDiaFuncionamento)
     }, {
         timestamps: true
     });
 
     Barbearia.associate = function (models) {
-        // associations can be defined here
-        // Barbearia.hasOne(models.Agenda);
-        // Barbearia.belongsTo(models.Agendamentos);
-        // Barbearia.belongsTo(models.AvaliacaoUsuario);
 
         Barbearia.hasOne(models.Usuario, {
-            foreignKey: 'id'
+            foreignKey: "id"
         });
     };
 

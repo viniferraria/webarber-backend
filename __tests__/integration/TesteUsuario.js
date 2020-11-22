@@ -3,13 +3,13 @@ const app = require("../../src/app");
 let { UsuarioTeste, ModeradorTeste } = require("../cases");
 
 module.exports = () => {
-    test('Deve criar uma conta', async () =>{
+    test("Deve criar uma conta", async () => {
         const response = await request(app)
-        .post('/users')
+        .post("/cadastro")
         .send(UsuarioTeste);
 
         expect(response.status).toBe(201);
-        expect(response.body).toHaveProperty('id');
+        expect(response.body).toHaveProperty("id");
         expect(response.body.nome).toBe(UsuarioTeste.nome);
         expect(response.body.sobrenome).toBe(UsuarioTeste.sobrenome);
         expect(response.body.email).toBe(UsuarioTeste.email);
@@ -20,13 +20,13 @@ module.exports = () => {
         expect(response.body.idTipo).toBe(UsuarioTeste.idTipo);
     });
 
-    test('Deve criar uma conta de moderador', async () =>{
+    test("Deve criar uma conta de moderador", async () => {
         const response = await request(app)
-        .post('/users')
+        .post("/cadastro")
         .send(ModeradorTeste);
 
         expect(response.status).toBe(201);
-        expect(response.body).toHaveProperty('id');
+        expect(response.body).toHaveProperty("id");
         expect(response.body.nome).toBe(ModeradorTeste.nome);
         expect(response.body.sobrenome).toBe(ModeradorTeste.sobrenome);
         expect(response.body.email).toBe(ModeradorTeste.email);
@@ -40,63 +40,63 @@ module.exports = () => {
     test("Deve autenticar um usuário", async () => {
         const response = await request(app)
         .post("/login")
-        .send({ email: UsuarioTeste.email, password: UsuarioTeste.password })
+        .send({ email: UsuarioTeste.email, password: UsuarioTeste.password });
 
-        expect(response.status).toBe(200)
-        expect(response.body).toHaveProperty('id');
-        expect(response.body).toHaveProperty('sessionToken');
+        expect(response.status).toBe(200);
+        expect(response.body).toHaveProperty("id");
+        expect(response.body).toHaveProperty("sessionToken");
         UsuarioTeste.jwt = response.body.sessionToken;
     });
 
     test("Deve autenticar um moderador", async () => {
         const response = await request(app)
         .post("/login")
-        .send({ email: ModeradorTeste.email, password: ModeradorTeste.password })
+        .send({ email: ModeradorTeste.email, password: ModeradorTeste.password });
 
-        expect(response.status).toBe(200)
-        expect(response.body).toHaveProperty('id');
-        expect(response.body).toHaveProperty('sessionToken');
+        expect(response.status).toBe(200);
+        expect(response.body).toHaveProperty("id");
+        expect(response.body).toHaveProperty("sessionToken");
         ModeradorTeste.jwt = response.body.sessionToken;
     });
 
     test("Não deve autenticar um usuário com senha inválida", async () => {
         const response = await request(app)
         .post("/login")
-        .send({ email: UsuarioTeste.email, password: "lalala" })
+        .send({ email: UsuarioTeste.email, password: "lalala" });
 
-        expect(response.status).toBe(400)
-        expect(response.body.message).toBe('Credenciais inválidas');
+        expect(response.status).toBe(400);
+        expect(response.body.message).toBe("Credenciais inválidas");
     });
     
     test("Não deve autenticar um usuário inexistente", async () => {
         const response = await request(app)
         .post("/login")
-        .send({ email: "fake@mail.com", password: "lalala" })
+        .send({ email: "fake@mail.com", password: "lalala" });
 
-        expect(response.status).toBe(401)
-        expect(response.body.message).toBe('User not found');
+        expect(response.status).toBe(404);
+        expect(response.body.message).toBe("Usuário não cadastrado");
     });
     
     test("Não deve permitir cadastros com  CPF/CNPJ/Email repetidos", async () => {
         const response = await request(app)
-        .post('/users')
+        .post("/cadastro")
         .send(UsuarioTeste);
 
         expect(response.status).toBe(400);
-        expect(response.body.message).toBe('Erro ao criar uma conta')
+        expect(response.body.message).toBe("Erro ao criar uma conta");
     });
 
     test("Deve atualizar as informações de um usuário", async () => {
         UsuarioTeste.nome = "updatedName";
         UsuarioTeste.sobrenome = "updatedLastName";
         const response = await request(app)
-        .patch(`/users/`)
-        .set('Authorization', `Bearer ${UsuarioTeste.jwt}`)
-        .send(UsuarioTeste)
+        .patch("/conta")
+        .set("Authorization", `Bearer ${UsuarioTeste.jwt}`)
+        .send(UsuarioTeste);
 
-        expect(response.status).toBe(200)
-        expect(response.body.nome).toBe('updatedName');
-        expect(response.body.sobrenome).toBe('updatedLastName');
+        expect(response.status).toBe(200);
+        expect(response.body.nome).toBe("updatedName");
+        expect(response.body.sobrenome).toBe("updatedLastName");
     });
 
     // test("Não deve atualizar as informações um usuário inexistente", async () => {
@@ -105,25 +105,25 @@ module.exports = () => {
     //     .send(UsuarioTeste)
 
     //     expect(response.status).toBe(404);
-    //     expect(response.body.message).toBe('Usuário não encontrado');
+    //     expect(response.body.message).toBe("Usuário não encontrado");
     // });
 
     test("Deve excluir o próprio usuário", async () => {
         const response = await request(app)
-        .delete(`/users/`)
-        .set('Authorization', `Bearer ${UsuarioTeste.jwt}`)
+        .delete("/conta")
+        .set("Authorization", `Bearer ${UsuarioTeste.jwt}`);
 
         expect(response.status).toBe(200);
-        expect(response.body.message).toBe('User deleted');
+        expect(response.body.message).toBe("Conta desativada");
     });
 
     test("Não deve autenticar um usuário com conta inativa", async () => {
         const response = await request(app)
         .post("/login")
-        .set('Authorization', `Bearer ${UsuarioTeste.jwt}`)
-        .send({ email: UsuarioTeste.email, password: UsuarioTeste.password })
+        .set("Authorization", `Bearer ${UsuarioTeste.jwt}`)
+        .send({ email: UsuarioTeste.email, password: UsuarioTeste.password });
 
-        expect(response.status).toBe(400)
-        expect(response.body.message).toBe('Credenciais inválidas');
+        expect(response.status).toBe(400);
+        expect(response.body.message).toBe("Credenciais inválidas");
     });
-}
+};
