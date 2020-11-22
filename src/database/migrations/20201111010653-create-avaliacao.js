@@ -13,8 +13,8 @@ module.exports = {
                 allowNull: false
             },
             descricao: {
-              type: Sequelize.STRING,
-              allowNull: false
+                type: Sequelize.STRING,
+                allowNull: false
             },
             nota: {
                 type: Sequelize.FLOAT,

@@ -7,7 +7,6 @@ module.exports = {
       allowNull: true
     });
   },
-
   down: async (queryInterface, Sequelize) => {
     await queryInterface.removeColumn("Barbearia", "media");
   }

@@ -25,8 +25,6 @@ module.exports = () => {
         expect(response.body.titulo).toBe(AvaliacaoTeste.titulo);
         expect(response.body.descricao).toBe(AvaliacaoTeste.descricao);
         expect(response.body.nota).toBe(AvaliacaoTeste.nota);
-        expect(response.body.idBarbearia).toBe(AvaliacaoTeste.idBarbearia);
-        expect(response.body.idServico).toBe(AvaliacaoTeste.idServico);
         expect(response.body.idAgendamento).toBe(AvaliacaoTeste.idAgendamento);
     });
 
@@ -40,8 +38,6 @@ module.exports = () => {
         expect(response.body[0].titulo).toBe(AvaliacaoTeste.titulo);
         expect(response.body[0].descricao).toBe(AvaliacaoTeste.descricao);
         expect(response.body[0].nota).toBe(AvaliacaoTeste.nota);
-        expect(response.body[0].idBarbearia).toBe(AvaliacaoTeste.idBarbearia);
-        expect(response.body[0].idServico).toBe(AvaliacaoTeste.idServico);
         expect(response.body[0].idAgendamento).toBe(AvaliacaoTeste.idAgendamento);
     });
 
@@ -53,26 +49,6 @@ module.exports = () => {
 
         expect(response.status).toBe(400);
         expect(response.body.message).toBe("Usuário já realizou esta avaliação");
-    });
-
-    test("Não deve cadastrar uma avaliação para barbearia inválida", async () => {
-        const response = await request(app)
-        .post("/avaliacoes")
-        .set("Authorization", `Bearer ${UsuarioTeste.jwt}`)
-        .send({ ...AvaliacaoTeste, idBarbearia: 99 });
-
-        expect(response.status).toBe(400);
-        expect(response.body.message).toBe("Barbearia inexistente");
-    });
-
-    test("Não deve cadastrar uma avaliação para serviço inválid0", async () => {
-        const response = await request(app)
-        .post("/avaliacoes")
-        .set("Authorization", `Bearer ${UsuarioTeste.jwt}`)
-        .send({ ...AvaliacaoTeste, idServico: 99 });
-
-        expect(response.status).toBe(400);
-        expect(response.body.message).toBe("Serviço inexistente");
     });
 
     test("Não deve cadastrar uma avaliação para agendamento inválido", async () => {

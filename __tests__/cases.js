@@ -67,8 +67,6 @@ var AvaliacaoTeste = {
     "titulo": "Um titulo",
     "descricao": "Uma descrição",
     "nota": 8,
-    "idBarbearia": BarbeariaTeste.id,
-    "idServico": ServicoTeste.id,
     "idAgendamento": AgendamentoTeste.id
 };
 
