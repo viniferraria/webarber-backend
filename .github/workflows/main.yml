@@ -60,3 +60,4 @@ jobs:
           DB_USERNAME: webarber
           DB_PASSWORD: webarber
           APP_SECRET: cyberbarber-2077
+          TOKEN_EXP: 1h
