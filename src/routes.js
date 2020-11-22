@@ -26,6 +26,8 @@ routes.get("/barbearias/:barbearia_id/", BarbeariaController.obterBarbeariaPorId
 routes.get("/servicos/barbearia/:barbearia_id/", ServicoController.obterServicosBarbearia);
 routes.get("/servicos/:servico_id/", ServicoController.obterServicoPorId);
 routes.get("/avaliacoes/:barbearia_id/", AvaliacaoController.obterAvaliacoesBarbearia);
+routes.get("/filtro/", UsuarioController.obterUsuarioFiltro);
+routes.get("/moderadores/", UsuarioController.obterTodosModeradores);
 
 
 /* ROTAS QUE PRECISAM DE AUTENTICAÇÃO */
