@@ -61,7 +61,7 @@ routes.patch("/servicos/:servico_id/", ServicoController.atualizarServico);
 routes.delete("/servicos/:servico_id/", ServicoController.excluirServico);
 
 // Rotas Agendamento
-routes.get("/agendamentos/barbearia/:barbearia_id/", AgendamentoController.obterAgendamentosBarbearia);
+routes.get("/agendamentos/barbearia/", AgendamentoController.obterAgendamentosBarbearia);
 routes.patch("/agendamentos/", AgendamentoController.atualizarStatusAgendamento);
 
 module.exports = routes;
