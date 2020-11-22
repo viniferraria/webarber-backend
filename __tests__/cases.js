@@ -37,8 +37,6 @@ var BarbeariaTeste = {
     ]
 };
 
-
-
 let ServicoTeste = {
     "id": 1,
     "titulo": "Testing",

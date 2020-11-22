@@ -95,12 +95,17 @@ module.exports = {
                 return res.status(400).json({ message: "É necessário informar um endereço, número, bairro, estado, cidade e cep para o comércio" });
             }
 
-            if (!(diaFuncionamento instanceof Array) || diaFuncionamento.length === 0) {
+            if (!(diaFuncionamento instanceof Array)) {
                 return res.status(400).json({ message: "É necessário informar uma lista com os dias de funcionamento da barbearia" });
             }
 
             diaFuncionamento = [...new Set(diaFuncionamento)];
+            diaFuncionamento = diaFuncionamento.filter((dia) => ["segunda","terca", "quarta", "quinta", "sexta", "sabado","domingo"].includes(dia));
 
+            if (diaFuncionamento.length === 0) {
+                return res.status(400).json({ message: "É necessário informar pelo menos um dia de funcionamento" });
+            }
+            
             const barberiaExists = await Barbearia.findOne({
                 where: {
                     [Op.or]: [

@@ -28,39 +28,27 @@ module.exports = () => {
         const response = await request(app)
         .post("/barbearias")
         .set("Authorization", `Bearer ${ModeradorTeste.jwt}`)
-        .send({ ...BarbeariaTeste, diaFuncionamento: ""});
+        .send({ ...BarbeariaTeste, diaFuncionamento: null});
 
         expect(response.status).toBe(400);
         expect(response.body.message).toBe("É necessário informar uma lista com os dias de funcionamento da barbearia");
     });
 
-    test("Não deve permitir que um moderador crie uma barberia com falta de dados nos dias de funcionamento", async () => {
+    test("Não deve permitir que um moderador crie uma barberia com um dia inválido", async () => {
         BarbeariaTeste.endereco = "Testing";
-        BarbeariaTeste.diaFuncionamento = null;
+        BarbeariaTeste.diaFuncionamento = [1];
         const response = await request(app)
         .post("/barbearias")
         .set("Authorization", `Bearer ${ModeradorTeste.jwt}`)
         .send(BarbeariaTeste);
 
         expect(response.status).toBe(400);
-        expect(response.body.message).toBe("É necessário informar uma lista com os dias de funcionamento da barbearia");
-    });
-
-    test("Deve dar erro ao criar uma barbearia com dados inválidos", async () => {
-        BarbeariaTeste.endereco = 1;
-        BarbeariaTeste.diaFuncionamento = [0,1,2,3,4,5];
-        const response = await request(app)
-        .post("/barbearias")
-        .set("Authorization", `Bearer ${ModeradorTeste.jwt}`)
-        .send(BarbeariaTeste);
-
-        expect(response.status).toBe(400);
-        expect(response.body.message).toBe("Erro ao criar uma barbearia");
+        expect(response.body.message).toBe("É necessário informar pelo menos um dia de funcionamento");
     });
 
     test("Deve permitir que um moderador crie uma barberia", async () => {
         BarbeariaTeste.endereco = "Testing";
-        BarbeariaTeste.diaFuncionamento = [0,1,2,3,4,5];
+        BarbeariaTeste.diaFuncionamento = ["segunda","terca", "quarta", "quinta", "sexta", "sabado","domingo"];
         const response = await request(app)
         .post("/barbearias")
         .set("Authorization", `Bearer ${ModeradorTeste.jwt}`)
@@ -292,7 +280,7 @@ module.exports = () => {
     test("Deve permitir que um moderador crie uma barberia depois de deletar outra", async () => {
         BarbeariaTeste.endereco = "Novo Endereço";
         BarbeariaTeste.cep = "Novo Cep";
-        BarbeariaTeste.diaFuncionamento = [0,1,2,3,4,5];
+        BarbeariaTeste.diaFuncionamento = ["segunda","terca", "quarta", "quinta", "sexta", "sabado","domingo"];
         const response = await request(app)
         .post("/barbearias")
         .set("Authorization", `Bearer ${ModeradorTeste.jwt}`)
