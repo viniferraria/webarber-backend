@@ -5,6 +5,7 @@ let { AgendamentoTeste, AgendamentoTesteFalha, ModeradorTeste, UsuarioTeste, Bar
 
 module.exports = () => {
     test("Deve criar um agendamento", async () => {
+        AgendamentoTeste.idBarbearia = BarbeariaTeste.id;
         const response = await request(app)
         .post("/agendamentos")
         .set("Authorization", `Bearer ${UsuarioTeste.jwt}`)
@@ -137,7 +138,7 @@ module.exports = () => {
         const response = await request(app)
         .get("/agendamentos")
         .set("Authorization", `Bearer ${UsuarioTeste.jwt}`);
-        
+
         expect(response.status).toBe(200);
         expect(response.body.length).toBeGreaterThanOrEqual(0);
         expect(response.body[0].idBarbearia).toBe(AgendamentoTeste.idBarbearia);
@@ -146,7 +147,7 @@ module.exports = () => {
 
     test("Deve resgatar todos os agendamentos da barbearia", async () => {
         const response = await request(app)
-        .get(`/agendamentos/barbearia/${BarbeariaTeste.id}`)
+        .get("/agendamentos/barbearia/")
         .set("Authorization", `Bearer ${ModeradorTeste.jwt}`);
         
         expect(response.status).toBe(200);
