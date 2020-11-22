@@ -21,7 +21,5 @@ module.exports = (sequelize, DataTypes) => {
         Agendamento.belongsTo(models.StatusAgendamento, { foreignKey: "idStatus", as: "status" });
         Agendamento.belongsTo(models.Servico, { foreignKey: "idServico", as: "servico" });
     };
-
-
     return Agendamento;
 };
