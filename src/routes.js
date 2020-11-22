@@ -9,7 +9,7 @@ const AgendamentoController = require("./app/controllers/AgendamentoController")
 const StatusAgendamentoController = require("./app/controllers/StatusAgendamentoController");
 const AvaliacaoController = require("./app/controllers/AvaliacaoController");
 const MiddlewareAutenticacao = require("./app/middleware/auth");
-const eModerador = require("./app/middleware/eModerador");
+const permitirTipoUsuario = require("./app/middleware/permitirTipoUsuario");
 
 /* ROTAS ABERTAS */
 // Rotas Tipo
@@ -26,42 +26,40 @@ routes.get("/barbearias/:barbearia_id/", BarbeariaController.obterBarbeariaPorId
 routes.get("/servicos/barbearia/:barbearia_id/", ServicoController.obterServicosBarbearia);
 routes.get("/servicos/:servico_id/", ServicoController.obterServicoPorId);
 routes.get("/avaliacoes/:barbearia_id/", AvaliacaoController.obterAvaliacoesBarbearia);
+routes.get("/filtro/", UsuarioController.obterUsuarioFiltro);
+routes.get("/moderadores/", UsuarioController.obterTodosModeradores);
+
 
 /* ROTAS QUE PRECISAM DE AUTENTICAÇÃO */
-// Middleware
-routes.use(MiddlewareAutenticacao);
-
 // Rotas Usuários
-routes.get("/usuarios/", UsuarioController.obterTodosUsuarios);
-routes.get("/conta/", UsuarioController.obterUsuario);
-routes.patch("/conta/", UsuarioController.atualizarUsuario);
-routes.delete("/conta/", UsuarioController.desativarUsuario);
+routes.get("/usuarios/", MiddlewareAutenticacao, UsuarioController.obterTodosUsuarios);
+routes.get("/conta/", MiddlewareAutenticacao, UsuarioController.obterUsuario);
+routes.patch("/conta/", MiddlewareAutenticacao, UsuarioController.atualizarUsuario);
+routes.delete("/conta/", MiddlewareAutenticacao, UsuarioController.desativarUsuario);
 
 // Rotas Status de agendamentos
-routes.get("/agendamentos/", AgendamentoController.obterAgendamentosUsuario);
-routes.post("/agendamentos/", AgendamentoController.criarAgendamento);
-routes.delete("/agendamentos/", AgendamentoController.cancelarAgendamento);
+routes.get("/agendamentos/", MiddlewareAutenticacao, permitirTipoUsuario(1), AgendamentoController.obterAgendamentosUsuario);
+routes.post("/agendamentos/", MiddlewareAutenticacao, permitirTipoUsuario(1), AgendamentoController.criarAgendamento);
+routes.delete("/agendamentos/", MiddlewareAutenticacao, permitirTipoUsuario(1), AgendamentoController.cancelarAgendamento);
 
 // Rotas de avaliação
-routes.post("/avaliacoes/", AvaliacaoController.criarAvaliacao);
-routes.delete("/avaliacoes/:avaliacao_id", AvaliacaoController.excluirAvaliacao);
+routes.post("/avaliacoes/", MiddlewareAutenticacao, permitirTipoUsuario(1), AvaliacaoController.criarAvaliacao);
+routes.delete("/avaliacoes/:avaliacao_id", MiddlewareAutenticacao, permitirTipoUsuario(1), AvaliacaoController.excluirAvaliacao);
 
 /* ROTAS DO MODERADOR */
-
-routes.use(eModerador);
 // Rotas de barbearia
-routes.get("/barbearia/", BarbeariaController.obterBarbeariaModerador);
-routes.post("/barbearias/", BarbeariaController.cadastrarBarbearia);
-routes.patch("/barbearias/", BarbeariaController.atualizarBarbearia);
-routes.delete("/barbearias/", BarbeariaController.desativarBarbearia);
+routes.get("/barbearia/", MiddlewareAutenticacao, permitirTipoUsuario(2), BarbeariaController.obterBarbeariaModerador);
+routes.post("/barbearias/", MiddlewareAutenticacao, permitirTipoUsuario(2), BarbeariaController.cadastrarBarbearia);
+routes.patch("/barbearias/", MiddlewareAutenticacao, permitirTipoUsuario(2), BarbeariaController.atualizarBarbearia);
+routes.delete("/barbearias/", MiddlewareAutenticacao, permitirTipoUsuario(2), BarbeariaController.desativarBarbearia);
 
 // Rotas serviço
-routes.post("/servicos/", ServicoController.criarServico);
-routes.patch("/servicos/:servico_id/", ServicoController.atualizarServico);
-routes.delete("/servicos/:servico_id/", ServicoController.excluirServico);
+routes.post("/servicos/", MiddlewareAutenticacao, permitirTipoUsuario(2), ServicoController.criarServico);
+routes.patch("/servicos/:servico_id/", MiddlewareAutenticacao, permitirTipoUsuario(2), ServicoController.atualizarServico);
+routes.delete("/servicos/:servico_id/", MiddlewareAutenticacao, permitirTipoUsuario(2), ServicoController.excluirServico);
 
 // Rotas Agendamento
-routes.get("/agendamentos/barbearia/", AgendamentoController.obterAgendamentosBarbearia);
-routes.patch("/agendamentos/", AgendamentoController.atualizarStatusAgendamento);
+routes.get("/agendamentos/barbearia/", MiddlewareAutenticacao, permitirTipoUsuario(2), AgendamentoController.obterAgendamentosBarbearia);
+routes.patch("/agendamentos/", MiddlewareAutenticacao, permitirTipoUsuario(2), AgendamentoController.atualizarStatusAgendamento);
 
 module.exports = routes;
