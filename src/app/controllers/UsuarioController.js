@@ -6,6 +6,10 @@ function validaDocumento(documento) {
     return documento.match(/^(\d{3}\.?){2}(\d{3})-?(\d{2})$|^\d{2}\.?\d{3}\.?\d{3}\/?\d{4}\-?\d{2}$/);
 }
 
+function isDateValid(isoDate) {
+    return typeof(isoDate) === "string" && isoDate.match(/^(\d{4})-(\d){2}-(\d){2}T(\d{2}?:\d{2}:\d{2}\.\d{3}Z$)/g);
+}
+
 module.exports = {
 
     async obterTodosUsuarios(_, res) {
@@ -124,7 +128,7 @@ module.exports = {
                 order: [
                     ["id", "ASC"]
                 ]
-            })
+            });
     
             if (!users) {
                 return res.status(404).json({ message: "Não existem moderadores cadastrados" });
