@@ -7,6 +7,7 @@ const BarbeariaController = require("./app/controllers/BarbeariaController");
 const ServicoController = require("./app/controllers/ServicoController");
 const AgendamentoController = require("./app/controllers/AgendamentoController");
 const StatusAgendamentoController = require("./app/controllers/StatusAgendamentoController");
+const AvaliacaoController = require("./app/controllers/AvaliacaoController");
 const MiddlewareAutenticacao = require("./app/middleware/auth");
 const eModerador = require("./app/middleware/eModerador");
 
@@ -24,7 +25,7 @@ routes.get("/barbearias/", BarbeariaController.obterBarbearias);
 routes.get("/barbearias/:barbearia_id/", BarbeariaController.obterBarbeariaPorId);
 routes.get("/servicos/barbearia/:barbearia_id/", ServicoController.obterServicosBarbearia);
 routes.get("/servicos/:servico_id/", ServicoController.obterServicoPorId);
-
+routes.get("/avaliacoes/:barbearia_id/", AvaliacaoController.obterAvaliacoesBarbearia);
 
 /* ROTAS QUE PRECISAM DE AUTENTICAÇÃO */
 // Middleware
@@ -41,6 +42,9 @@ routes.get("/agendamentos/", AgendamentoController.obterAgendamentosUsuario);
 routes.post("/agendamentos/", AgendamentoController.criarAgendamento);
 routes.delete("/agendamentos/", AgendamentoController.cancelarAgendamento);
 
+// Rotas de avaliação
+routes.post("/avaliacoes/", AvaliacaoController.criarAvaliacao);
+routes.delete("/avaliacoes/:avaliacao_id", AvaliacaoController.excluirAvaliacao);
 
 /* ROTAS DO MODERADOR */
 
@@ -57,7 +61,7 @@ routes.patch("/servicos/:servico_id/", ServicoController.atualizarServico);
 routes.delete("/servicos/:servico_id/", ServicoController.excluirServico);
 
 // Rotas Agendamento
-routes.get("/agendamentos/barbearia/:barbearia_id/", AgendamentoController.obterAgendamentosBarbearia);
+routes.get("/agendamentos/barbearia/", AgendamentoController.obterAgendamentosBarbearia);
 routes.patch("/agendamentos/", AgendamentoController.atualizarStatusAgendamento);
 
 module.exports = routes;
