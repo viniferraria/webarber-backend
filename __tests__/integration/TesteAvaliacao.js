@@ -61,14 +61,14 @@ module.exports = () => {
         expect(response.body.message).toBe("Agendamento inexistente");
     });
 
-    test("Não deve cadastrar uma avaliação para agendamento que não seja do usuário", async () => {
+    test("Não deve permetir que um moderador cadastre uma avaliação", async () => {
         const response = await request(app)
         .post("/avaliacoes")
         .set("Authorization", `Bearer ${ModeradorTeste.jwt}`)
         .send(AvaliacaoTeste);
 
-        expect(response.status).toBe(400);
-        expect(response.body.message).toBe("Este agendamento pertence à outro usuário");
+        expect(response.status).toBe(401);
+        expect(response.body.message).toBe("Rota restrita à usuários");
     });
 
     test("Deve atualizar um agendamento para andamento", async () => {
@@ -100,13 +100,13 @@ module.exports = () => {
         expect(response.body.message).toBe("Avaliação inexistente");
     });
 
-    test("Não deve excluir uma avaliação que não seja do usuário", async () => {
+    test("Não deve permitir que um moderar exclua uma avaliação", async () => {
         const response = await request(app)
         .delete(`/avaliacoes/${AvaliacaoTeste.id}`)
         .set("Authorization", `Bearer ${ModeradorTeste.jwt}`);
 
-        expect(response.status).toBe(400);
-        expect(response.body.message).toBe("Avaliação não pertence à este usuário");
+        expect(response.status).toBe(401);
+        expect(response.body.message).toBe("Rota restrita à usuários");
     });
 
     test("Deve excluir uma avaliação que seja do usuário", async () => {
