@@ -26,13 +26,9 @@ routes.get("/barbearias/:barbearia_id/", BarbeariaController.obterBarbeariaPorId
 routes.get("/servicos/barbearia/:barbearia_id/", ServicoController.obterServicosBarbearia);
 routes.get("/servicos/:servico_id/", ServicoController.obterServicoPorId);
 routes.get("/avaliacoes/:barbearia_id/", AvaliacaoController.obterAvaliacoesBarbearia);
-routes.get("/filtro/", UsuarioController.obterUsuarioFiltro);
-routes.get("/moderadores/", UsuarioController.obterTodosModeradores);
-
 
 /* ROTAS QUE PRECISAM DE AUTENTICAÇÃO */
 // Rotas Usuários
-routes.get("/usuarios/", MiddlewareAutenticacao, UsuarioController.obterTodosUsuarios);
 routes.get("/conta/", MiddlewareAutenticacao, UsuarioController.obterUsuario);
 routes.patch("/conta/", MiddlewareAutenticacao, UsuarioController.atualizarUsuario);
 routes.delete("/conta/", MiddlewareAutenticacao, UsuarioController.desativarUsuario);
@@ -61,5 +57,10 @@ routes.delete("/servicos/:servico_id/", MiddlewareAutenticacao, permitirTipoUsua
 // Rotas Agendamento
 routes.get("/agendamentos/barbearia/", MiddlewareAutenticacao, permitirTipoUsuario(2), AgendamentoController.obterAgendamentosBarbearia);
 routes.patch("/agendamentos/", MiddlewareAutenticacao, permitirTipoUsuario(2), AgendamentoController.atualizarStatusAgendamento);
+
+// Rotas de filtro
+routes.get("/filtro/", MiddlewareAutenticacao, permitirTipoUsuario(2), UsuarioController.obterUsuarioFiltro);
+routes.get("/moderadores/", MiddlewareAutenticacao, permitirTipoUsuario(2), UsuarioController.obterTodosModeradores);
+routes.get("/usuarios/", MiddlewareAutenticacao, permitirTipoUsuario(2), UsuarioController.obterTodosUsuarios);
 
 module.exports = routes;
