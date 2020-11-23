@@ -50,7 +50,7 @@ module.exports = (sequelize, DataTypes) => {
             idTipo: this.idTipo 
         }, process.env.APP_SECRET, { 
             algorithm: "HS256",
-            expiresIn: process.env.TOKEN_EXP
+            expiresIn: process.env.TOKEN_EXP || "1h"
         });
     };
 

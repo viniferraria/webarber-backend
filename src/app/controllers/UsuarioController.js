@@ -54,7 +54,7 @@ module.exports = {
             let { nome, CPF, data, CNPJ } = req.query;
             nome = (nome) ? nome.replace("+", " ") : "";
             
-            if(nome) {
+            if (nome) {
                 const usuarios = await Usuario.findAll({
                     where: {
                         nome: {
@@ -186,28 +186,28 @@ module.exports = {
             const { userId } = req;
             let { nome, sobrenome, email, password, CNPJ, CPF, idTipo, icone } = req.body;
 
-            if (!email) {
-                return res.status(400).json({ message: "É necessário informar um email para criar uma conta" });
-            } else if (idTipo === 1 && !CPF) {
-                return res.status(400).json({ message: "É necessário informar um CPF para criar uma conta" });
-            } else if (idTipo === 2 && !CNPJ) {
-                return res.status(400).json({ message: "É necessário informar um CNPJ para criar uma conta de moderador" });
-            } else if (!validaDocumento(CPF || CNPJ)) {
+            /* if ((CPF || CNPJ) && !validaDocumento(CPF || CNPJ)) {
                 return res.status(400).json({ message: "Documento inválido" });
-            }
+            } */
 
             let user = await Usuario.findByPk(userId);
             if (!user) {
                 return res.status(404).json({ message: "Usuário não encontrado"});
             }
-            // TODO validar se o cpf, ou CPNJ ou email já estão associados a outro usuário
+
+            let condicoes = [];
+            (email)? condicoes.push({ email }) : "";
+
+            /* if (idTipo === 1) {
+                (CPF)? condicoes.push({ CPF }) : "";
+            } else {
+                (CNPJ)? condicoes.push({ CNPJ }) : "";
+            } */
+
             const repetido = await Usuario.findOne({
                 where: {
-                    [Op.or]: [
-                        { email },
-                        { CPF: CPF || "" },
-                        { CNPJ: CNPJ || "" }
-                    ]
+                    [Op.or]: condicoes,
+                    ativo: true
                 }
             });
 
@@ -220,10 +220,10 @@ module.exports = {
                 sobrenome: sobrenome || user.sobrenome,
                 email: email || user.email,
                 password: password || user.password,
-                CNPJ: (idTipo === 2)? (CNPJ || user.CNPJ) : null,
-                CPF: (idTipo === 1)? (CPF|| user.CPF) : null,
-                idTipo: idTipo || user.idTipo,
-                icone: icone || user.icone,
+                /* CNPJ: (idTipo === 2)? (CNPJ || user.CNPJ) : null,
+                CPF: (idTipo === 1)? (CPF || user.CPF) : null,
+                idTipo: idTipo || user.idTipo, 
+                icone: icone || user.icone, */
             });
             
             delete updatedUser.password;
