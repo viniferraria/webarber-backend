@@ -33,7 +33,7 @@ jobs:
       matrix:
         node-version: [12.x, 14.x]
         include:
-          - node: 13
+          - node: 13.x
             os: ubuntu-18.04
             experimental: true
 
