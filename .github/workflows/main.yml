@@ -32,9 +32,14 @@ jobs:
     strategy:
       matrix:
         node-version: [12.x, 14.x]
+        include:
+          - node: 13
+            os: ubuntu-18.04
+            experimental: true
 
     steps:
-      - name: Check out repository code
+      - id: step-1
+        name: Check out repository code
         uses: actions/checkout@v2
 
       - name: Use Node.js ${{ matrix.node-version }}
