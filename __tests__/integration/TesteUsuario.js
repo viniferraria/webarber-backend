@@ -8,6 +8,7 @@ module.exports = () => {
         .post("/cadastro")
         .send(UsuarioTeste);
 
+        console.log(response);
         expect(response.status).toBe(201);
         expect(response.body).toHaveProperty("id");
         expect(response.body.nome).toBe(UsuarioTeste.nome);

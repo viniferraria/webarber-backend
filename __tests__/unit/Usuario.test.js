@@ -3,8 +3,6 @@ const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const { promisify } = require("util");
 
-describe( "User", () => {} );
-
 let mockUsuario = {
     id: 1,
     nome: "viniteste1",
@@ -16,22 +14,26 @@ let mockUsuario = {
 
 let usuario;
 
-it("Deve criptografar a senha de um usuário", async () => {
-    usuario = await Usuario.create(mockUsuario);
-    
-    const compareHash = await bcrypt.compare("123456", user.password_hash);
-    expect(compareHash).toBe(true);
-});
+describe("User", () => {
+    describe( "Teste senha", () => {
+        it("Deve criptografar a senha de um usuário", async () => {
+            usuario = await Usuario.create(mockUsuario);
+            mockUsuario.id = usuario.id;
+            const compareHash = await bcrypt.compare(mockUsuario.password, usuario.password_hash);
+            expect(compareHash).toBe(true);
+        });
+    });
 
-it("Deve gerar um token válido para um usuário", async () => {    
-    let token = usuario.generateToken();
-    let decoded;
-    try {
-        decoded = await promisify(jwt.verify)(token, process.env.APP_SECRET);
-    } catch (err) {
-        console.error(err);
-    }
-    
-    expect(decoded.id).toBe(usuario.id);
-    expect(decoded.idTipo).toBe(usuario.idTipo);
+    describe("Teste token", () => {
+        it("Deve gerar um token válido para um usuário", async () => {    
+            try {
+                usuario.generateToken();
+                let decoded = await promisify(jwt.verify)(usuario.sessionToken, process.env.APP_SECRET);
+                expect(decoded.id).toBe(mockUsuario.id);
+                expect(decoded.idTipo).toBe(mockUsuario.idTipo);
+            } catch (err) {
+                console.error(err);
+            }
+        });
+    });
 });

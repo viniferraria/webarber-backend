@@ -274,9 +274,9 @@ module.exports = {
 
             await user.generateToken();
 
-            await user.update({
+            /* await user.update({
                 sessionToken: user.sessionToken
-            });
+            }); */
 
             return res.status(200).json(user);
         } catch(err) {

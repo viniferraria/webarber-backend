@@ -61,8 +61,8 @@ jobs:
         env:
           DB_HOST: localhost
           DB_PORT: 5432
-          DB_NAME: webarber
-          DB_USERNAME: webarber
-          DB_PASSWORD: webarber
-          APP_SECRET: cyberbarber-2077
-          TOKEN_EXP: 1h
+          DB_NAME: ${{secrets.dbName}}
+          DB_USERNAME: ${{secrets.dbUserName}}
+          DB_PASSWORD: ${{secrets.dbPassword}}
+          APP_SECRET: ${{secrets.appSecret}}
+          TOKEN_EXP: ${{secrets.tokenExp}}
