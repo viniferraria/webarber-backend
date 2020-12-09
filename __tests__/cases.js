@@ -1,3 +1,13 @@
+let UsuarioTesteIntegration = {
+    "nome": "viniteste1",
+    "sobrenome": "teste",
+    "email": "viniteste@teste.com",
+    "password": "123456",
+    "CPF": "999.123.444-88",
+    "idTipo": 1,
+    "jwt": null
+};
+
 let UsuarioTeste = {
     "nome": "Testing",
     "sobrenome": "123",
@@ -71,6 +81,7 @@ var AvaliacaoTeste = {
 };
 
 module.exports = {
+    UsuarioTesteIntegration,
     UsuarioTeste,
     ModeradorTeste,
     BarbeariaTeste,
