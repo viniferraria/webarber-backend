@@ -22,7 +22,7 @@ describe("User", () => {
             expect(decoded.id).toBe(UsuarioTesteIntegration.id);
             expect(decoded.idTipo).toBe(UsuarioTesteIntegration.idTipo);
         } catch (err) {
-            console.error(err);
+            return err;
         }
     });
 });
